@@ -1,0 +1,92 @@
+---
+
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="#" class="footer__logo">
+          <img src="/logo.png" alt="Getolog" class="logo-img" />
+          <span>Getolog</span>
+        </a>
+        <p class="footer__tagline">Telegram kanalingizni monetizatsiya qiling</p>
+      </div>
+      <div class="footer__links">
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener">Bot</a>
+        <a href="https://t.me/getolog_support" target="_blank" rel="noopener">Yordam</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>&copy; 2026 Getolog. Barcha huquqlar himoyalangan.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid rgba(230, 233, 255, 0.06);
+    padding: 48px 0 32px;
+  }
+
+  .footer__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .footer__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .logo-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .footer__tagline {
+    font-size: 0.9rem;
+    color: var(--dark-600);
+  }
+
+  .footer__links {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer__links a {
+    font-size: 0.95rem;
+    color: var(--light-400);
+    transition: color var(--transition);
+  }
+
+  .footer__links a:hover {
+    color: var(--light);
+  }
+
+  .footer__bottom {
+    padding-top: 24px;
+    border-top: 1px solid rgba(230, 233, 255, 0.06);
+  }
+
+  .footer__bottom p {
+    font-size: 0.85rem;
+    color: var(--dark-600);
+  }
+
+  @media (max-width: 768px) {
+    .footer__top {
+      flex-direction: column;
+      gap: 24px;
+    }
+  }
+</style>

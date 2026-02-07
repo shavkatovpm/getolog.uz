@@ -1,0 +1,139 @@
+---
+const faqs = [
+  {
+    q: "Getolog qanday ishlaydi?",
+    a: "Siz @BotFather orqali Telegram bot yaratib, tokenini Getolog'ga yuborasiz. Getolog shu token orqali avtomatlashtirilgan sotuvchi bot yaratadi. Kanalingizga kirmoqchi bo'lganlar shu bot orqali to'lov qiladi va bir martalik invite link oladi.",
+  },
+  {
+    q: "To'lov qayerga tushadi?",
+    a: "To'lov to'g'ridan-to'g'ri sizning karta raqamingizga tushadi. Getolog to'lovga tegmaydi — faqat bot va obuna boshqaruvini ta'minlaydi.",
+  },
+  {
+    q: "Invite link'ni boshqalarga ulashsa nima bo'ladi?",
+    a: "Har bir invite link faqat 1 marta ishlaydi (Telegram API cheklovi). Birinchi foydalanuvchi kirganidan keyin link avtomatik bekor bo'ladi.",
+  },
+  {
+    q: "Obuna muddati tugaganda nima bo'ladi?",
+    a: "Muddat tugashiga 3 kun va 1 kun qolganda foydalanuvchiga ogohlantirish yuboriladi. Muddat tugagach, foydalanuvchi avtomatik kanaldan chiqariladi.",
+  },
+  {
+    q: "Bepul tarifda qanday cheklovlar bor?",
+    a: "Bepul tarifda barcha funksiyalar ishlaydi. Yagona farq — end userlar bot'ga kirganda Getolog reklamasi ko'rsatiladi. Pullik tarifda reklama yo'q.",
+  },
+  {
+    q: "Bot tokenimni berib xavfsizmi?",
+    a: "Ha. Tokeningiz Fernet shifrlash bilan himoyalanadi. Hech kim — hatto biz ham — tokeningizni ochiq ko'rmaymiz. Xohlagan vaqtda tokenni almashtirishingiz mumkin.",
+  },
+];
+---
+
+<section class="section section--alt" id="faq">
+  <div class="container">
+    <div class="section__header">
+      <span class="section__tag">FAQ</span>
+      <h2 class="section__title">Ko'p so'raladigan savollar</h2>
+    </div>
+
+    <div class="faq-list">
+      {
+        faqs.map((faq) => (
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>{faq.q}</span>
+              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-item__answer">
+              <p>{faq.a}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-list {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .faq-item {
+    background: var(--dark-800);
+    border: 1px solid rgba(230, 233, 255, 0.06);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color var(--transition);
+  }
+
+  .faq-item.open {
+    border-color: rgba(139, 142, 255, 0.2);
+  }
+
+  .faq-item__question {
+    width: 100%;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: none;
+    border: none;
+    color: var(--light);
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.4;
+  }
+
+  .faq-chevron {
+    min-width: 20px;
+    transition: transform var(--transition);
+    color: var(--light-400);
+  }
+
+  .faq-item.open .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--accent);
+  }
+
+  .faq-item__answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+  }
+
+  .faq-item.open .faq-item__answer {
+    max-height: 300px;
+  }
+
+  .faq-item__answer p {
+    padding: 0 24px 20px;
+    font-size: 0.95rem;
+    color: var(--light-400);
+    line-height: 1.7;
+  }
+</style>
+
+<script>
+  document.querySelectorAll(".faq-item__question").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = btn.parentElement!;
+      const isOpen = item.classList.contains("open");
+
+      // Close all
+      document.querySelectorAll(".faq-item").forEach((el) => el.classList.remove("open"));
+
+      // Toggle current
+      if (!isOpen) {
+        item.classList.add("open");
+      }
+    });
+  });
+</script>

@@ -1,0 +1,171 @@
+---
+
+---
+
+<nav class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <a href="#" class="navbar__logo">
+      <img src="/logo.png" alt="Getolog" class="logo-img" />
+      <span>Getolog</span>
+    </a>
+    <ul class="navbar__links" id="navLinks">
+      <li><a href="#problems">Muammolar</a></li>
+      <li><a href="#how-it-works">Qanday ishlaydi</a></li>
+      <li><a href="#pricing">Tariflar</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="https://t.me/getolog_bot" target="_blank" rel="noopener" class="btn btn--primary navbar__cta">Boshlash</a>
+    <button class="navbar__burger" id="burgerBtn" aria-label="Menyu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 16px 0;
+    transition: all var(--transition);
+    background: transparent;
+  }
+
+  .navbar.scrolled {
+    background: rgba(35, 32, 35, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(230, 233, 255, 0.06);
+    padding: 12px 0;
+  }
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .navbar__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  .logo-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  .navbar__links {
+    display: flex;
+    gap: 32px;
+  }
+
+  .navbar__links a {
+    font-size: 0.95rem;
+    color: var(--light-400);
+    transition: color var(--transition);
+  }
+
+  .navbar__links a:hover {
+    color: var(--light);
+  }
+
+  .navbar__cta {
+    padding: 10px 24px;
+    font-size: 0.9rem;
+  }
+
+  .navbar__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .navbar__burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--light);
+    border-radius: 2px;
+    transition: all var(--transition);
+  }
+
+  .navbar__burger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .navbar__burger.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .navbar__burger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 768px) {
+    .navbar__links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      flex-direction: column;
+      gap: 0;
+      background: rgba(35, 32, 35, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 8px 24px 24px;
+      border-bottom: 1px solid rgba(230, 233, 255, 0.06);
+    }
+
+    .navbar__links.open {
+      display: flex;
+    }
+
+    .navbar__links a {
+      padding: 12px 0;
+      font-size: 1.05rem;
+    }
+
+    .navbar__cta {
+      display: none;
+    }
+
+    .navbar__burger {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const navbar = document.getElementById("navbar")!;
+  const burger = document.getElementById("burgerBtn")!;
+  const navLinks = document.getElementById("navLinks")!;
+
+  window.addEventListener("scroll", () => {
+    navbar.classList.toggle("scrolled", window.scrollY > 40);
+  });
+
+  burger.addEventListener("click", () => {
+    burger.classList.toggle("active");
+    navLinks.classList.toggle("open");
+  });
+
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      burger.classList.remove("active");
+      navLinks.classList.remove("open");
+    });
+  });
+</script>
