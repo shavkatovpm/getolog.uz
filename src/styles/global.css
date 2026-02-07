@@ -169,11 +169,50 @@ img {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+
   .section {
-    padding: 72px 0;
+    padding: 64px 0;
   }
 
   .section__header {
-    margin-bottom: 48px;
+    margin-bottom: 40px;
+  }
+
+  .section__title {
+    font-size: 1.75rem;
+  }
+
+  .section__subtitle {
+    font-size: 1rem;
+  }
+
+  .btn--lg {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .section {
+    padding: 56px 0;
+  }
+
+  .section__header {
+    margin-bottom: 32px;
+  }
+
+  .section__title {
+    font-size: 1.5rem;
+  }
+
+  .section__subtitle {
+    font-size: 0.95rem;
   }
 }
