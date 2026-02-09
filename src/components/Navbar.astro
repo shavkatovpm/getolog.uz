@@ -251,19 +251,30 @@
     burger.classList.toggle("active");
     navLinks.classList.toggle("open");
 
-    // Prevent body scroll when menu is open
+    // iOS-compatible body scroll lock
     if (navLinks.classList.contains("open")) {
-      document.body.style.overflow = "hidden";
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
     } else {
-      document.body.style.overflow = "";
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
     }
   });
 
   navLinks.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
+      const scrollY = document.body.style.top;
       burger.classList.remove("active");
       navLinks.classList.remove("open");
-      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
     });
   });
 </script>
