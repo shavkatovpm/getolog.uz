@@ -24,8 +24,13 @@ const {
     <meta property="og:url" content="https://getolog.uz" />
     <meta property="og:image" content="https://getolog.uz/logo.png" />
 
-    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo.png" />
+
+    <!-- Fonts for different themes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Work+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <slot />
@@ -35,3 +40,28 @@ const {
 <style is:global>
   @import "../styles/global.css";
 </style>
+
+<script>
+  // Scroll reveal animation
+  const revealElements = document.querySelectorAll('.reveal');
+
+  const revealOnScroll = () => {
+    const windowHeight = window.innerHeight;
+    const revealPoint = 100;
+
+    revealElements.forEach((element) => {
+      const elementTop = element.getBoundingClientRect().top;
+
+      if (elementTop < windowHeight - revealPoint) {
+        element.classList.add('active');
+      }
+    });
+  };
+
+  // Initial check
+  revealOnScroll();
+
+  // Check on scroll
+  window.addEventListener('scroll', revealOnScroll);
+
+</script>
