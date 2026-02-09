@@ -10,7 +10,7 @@
     </div>
 
     <div class="pricing-grid">
-      <div class="pricing-card">
+      <div class="pricing-card reveal">
         <div class="pricing-card__header">
           <h3 class="pricing-card__name">Bepul</h3>
           <div class="pricing-card__price">
@@ -29,34 +29,12 @@
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener" class="btn btn--outline btn--full">Boshlash</a>
       </div>
 
-      <div class="pricing-card pricing-card--popular">
-        <div class="pricing-card__badge">Tavsiya</div>
+      <div class="pricing-card reveal">
         <div class="pricing-card__header">
-          <h3 class="pricing-card__name">3 oylik</h3>
-          <div class="pricing-card__price">
-            <span class="price-amount">67 000</span>
-            <span class="price-currency">so'm/bot/oy</span>
-          </div>
-          <div class="price-total">201 000 so'm — bir to'lovda</div>
-        </div>
-        <ul class="pricing-card__features">
-          <li class="included">To'liq funksionallik</li>
-          <li class="included">Karta orqali to'lov</li>
-          <li class="included">Bir martalik invite link</li>
-          <li class="included">Avtomatik obuna boshqaruvi</li>
-          <li class="included">Statistika</li>
-          <li class="included">Reklama yo'q</li>
-          <li class="included">23% tejaysiz</li>
-        </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener" class="btn btn--primary btn--full">Boshlash</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="pricing-card__header">
-          <h3 class="pricing-card__name">1 oylik</h3>
+          <h3 class="pricing-card__name">Premium</h3>
           <div class="pricing-card__price">
             <span class="price-amount">87 000</span>
-            <span class="price-currency">so'm/bot</span>
+            <span class="price-currency">so'm/bot/oy</span>
           </div>
         </div>
         <ul class="pricing-card__features">
@@ -67,7 +45,7 @@
           <li class="included">Statistika</li>
           <li class="included">Reklama yo'q</li>
         </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener" class="btn btn--outline btn--full">Boshlash</a>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener" class="btn btn--primary btn--full">Boshlash</a>
       </div>
     </div>
 
@@ -78,63 +56,43 @@
 <style>
   .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    max-width: 800px;
+    margin: 0 auto;
   }
 
   .pricing-card {
     background: var(--dark-800);
     border: 1px solid rgba(230, 233, 255, 0.06);
     border-radius: var(--radius-lg);
-    padding: 36px 28px;
+    padding: 40px 32px;
     transition: all var(--transition);
     position: relative;
   }
 
   .pricing-card:hover {
+    border-color: rgba(139, 142, 255, 0.2);
     transform: translateY(-4px);
-  }
-
-  .pricing-card--popular {
-    border-color: var(--accent);
-    box-shadow: 0 0 40px var(--accent-glow);
-    transform: scale(1.04);
-  }
-
-  .pricing-card--popular:hover {
-    transform: scale(1.04) translateY(-4px);
-  }
-
-  .pricing-card__badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 4px 20px;
-    background: var(--accent);
-    color: var(--white);
-    border-radius: 100px;
-    font-size: 0.8rem;
-    font-weight: 700;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
 
   .pricing-card__header {
     text-align: center;
-    margin-bottom: 28px;
-    padding-bottom: 28px;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
     border-bottom: 1px solid rgba(230, 233, 255, 0.06);
   }
 
   .pricing-card__name {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--light-400);
-    margin-bottom: 12px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--light);
+    margin-bottom: 16px;
   }
 
   .price-amount {
-    font-size: 2.5rem;
+    font-size: 2.75rem;
     font-weight: 800;
     color: var(--white);
   }
@@ -145,25 +103,18 @@
     margin-left: 4px;
   }
 
-  .price-total {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: var(--accent);
-    font-weight: 600;
-  }
-
   .pricing-card__features {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin-bottom: 32px;
+    gap: 16px;
+    margin-bottom: 36px;
   }
 
   .pricing-card__features li {
     font-size: 0.95rem;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
 
   .pricing-card__features li::before {
@@ -197,48 +148,42 @@
 
   .pricing-note {
     text-align: center;
-    margin-top: 32px;
+    margin-top: 40px;
     font-size: 0.9rem;
-    color: var(--dark-600);
+    color: var(--light-400);
   }
 
   @media (max-width: 768px) {
     .pricing-grid {
       grid-template-columns: 1fr;
       max-width: 400px;
-      margin: 0 auto;
-      gap: 16px;
+      gap: 20px;
     }
 
     .pricing-card {
-      padding: 28px 22px;
+      padding: 32px 24px;
     }
 
     .pricing-card:hover {
       transform: none;
     }
 
-    .pricing-card--popular {
-      transform: none;
-      order: -1;
-    }
-
-    .pricing-card--popular:hover {
-      transform: none;
-    }
-
     .pricing-card__header {
-      margin-bottom: 20px;
-      padding-bottom: 20px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+    }
+
+    .pricing-card__name {
+      font-size: 1.2rem;
     }
 
     .price-amount {
-      font-size: 2rem;
+      font-size: 2.25rem;
     }
 
     .pricing-card__features {
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 14px;
+      margin-bottom: 28px;
     }
 
     .pricing-card__features li {
