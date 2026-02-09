@@ -34,8 +34,7 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
-  -webkit-overflow-scrolling: touch;
-  overflow-y: scroll;
+  height: 100%;
 }
 
 body {
@@ -46,7 +45,8 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   position: relative;
-  min-height: 100vh;
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 h1, h2, h3, h4, h5, h6 {

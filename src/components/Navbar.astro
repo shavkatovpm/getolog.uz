@@ -242,39 +242,46 @@
   const navbar = document.getElementById("navbar")!;
   const burger = document.getElementById("burgerBtn")!;
   const navLinks = document.getElementById("navLinks")!;
+  let scrollPosition = 0;
 
   window.addEventListener("scroll", () => {
-    navbar.classList.toggle("scrolled", window.scrollY > 40);
+    if (!navLinks.classList.contains("open")) {
+      navbar.classList.toggle("scrolled", window.scrollY > 40);
+    }
   });
+
+  function lockScroll() {
+    scrollPosition = window.pageYOffset;
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = "100%";
+  }
+
+  function unlockScroll() {
+    document.body.style.removeProperty("overflow");
+    document.body.style.removeProperty("position");
+    document.body.style.removeProperty("top");
+    document.body.style.removeProperty("width");
+    window.scrollTo(0, scrollPosition);
+  }
 
   burger.addEventListener("click", () => {
     burger.classList.toggle("active");
     navLinks.classList.toggle("open");
 
-    // iOS-compatible body scroll lock
     if (navLinks.classList.contains("open")) {
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
+      lockScroll();
     } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      unlockScroll();
     }
   });
 
   navLinks.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-      const scrollY = document.body.style.top;
       burger.classList.remove("active");
       navLinks.classList.remove("open");
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      unlockScroll();
     });
   });
 </script>
