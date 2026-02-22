@@ -42,7 +42,7 @@ body {
   color: var(--light);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
   -webkit-overflow-scrolling: touch;
 }
