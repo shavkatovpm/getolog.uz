@@ -43,9 +43,8 @@
     width: 100%;
     z-index: 100;
     padding: 16px 0;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+    transition: all var(--transition);
     background: transparent;
-    transform: translateY(0);
   }
 
   .navbar.scrolled {
@@ -55,10 +54,6 @@
     border-bottom: 1px solid rgba(230, 233, 255, 0.08);
     padding: 12px 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  }
-
-  .navbar.hidden {
-    transform: translateY(-100%);
   }
 
   .navbar__inner {
@@ -162,40 +157,38 @@
     }
 
     .navbar__links {
-      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100dvh;
+      height: auto;
+      max-height: 0;
+      overflow: hidden;
       flex-direction: column;
       gap: 0;
-      background: rgba(35, 32, 35, 0.98);
+      background: rgba(35, 32, 35, 0.95);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
-      padding: 100px 32px 40px;
+      padding: 0 32px;
       justify-content: flex-start;
-      opacity: 0;
-      transform: translateX(-100%);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .navbar__links.open {
-      display: flex;
-      opacity: 1;
-      transform: translateX(0);
+      max-height: 100dvh;
+      padding: 90px 32px 40px;
     }
 
     .navbar__links li {
       width: 100%;
       opacity: 0;
-      transform: translateX(-20px);
+      transform: translateY(-10px);
       transition: all 0.3s ease-out;
     }
 
     .navbar__links.open li {
       opacity: 1;
-      transform: translateX(0);
+      transform: translateY(0);
     }
 
     .navbar__links.open li:nth-child(1) { transition-delay: 0.1s; }
@@ -228,6 +221,8 @@
     .navbar__links-cta a {
       border-bottom: none;
       padding: 0;
+      text-align: center;
+      justify-content: center;
     }
 
     .navbar__cta {
@@ -241,7 +236,11 @@
 
   @media (max-width: 480px) {
     .navbar__links {
-      padding: 90px 24px 32px;
+      padding: 0 24px;
+    }
+
+    .navbar__links.open {
+      padding: 80px 24px 32px;
     }
 
     .navbar__links a {
@@ -257,30 +256,14 @@
   const navLinks = document.getElementById("navLinks")!;
   let scrollPosition = 0;
 
-  // Scroll direction detection: hide on scroll down, show on scroll up
-  let lastScrollY = 0;
+  // Scroll detection with throttle
   let ticking = false;
-
   window.addEventListener("scroll", () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        const currentScrollY = window.scrollY;
-
         if (!navLinks.classList.contains("open")) {
-          // Scrolled class for background
-          navbar.classList.toggle("scrolled", currentScrollY > 40);
-
-          // Hide/show based on direction
-          if (currentScrollY > lastScrollY && currentScrollY > 80) {
-            // Scrolling down & past 80px — hide
-            navbar.classList.add("hidden");
-          } else {
-            // Scrolling up — show
-            navbar.classList.remove("hidden");
-          }
+          navbar.classList.toggle("scrolled", window.scrollY > 40);
         }
-
-        lastScrollY = currentScrollY;
         ticking = false;
       });
       ticking = true;
@@ -307,7 +290,6 @@
     burger.classList.add("active");
     burger.setAttribute("aria-expanded", "true");
     navLinks.classList.add("open");
-    navbar.classList.remove("hidden");
     lockScroll();
     const firstLink = navLinks.querySelector("a");
     if (firstLink) firstLink.focus();
