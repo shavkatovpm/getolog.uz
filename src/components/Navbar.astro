@@ -15,7 +15,7 @@
       <li role="none"><a href="#faq" role="menuitem">FAQ</a></li>
       <li class="navbar__links-cta" role="none">
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full" role="menuitem">
-          Bepul boshlash
+          Boshlash
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </li>
@@ -43,8 +43,9 @@
     width: 100%;
     z-index: 100;
     padding: 16px 0;
-    transition: all var(--transition);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
     background: transparent;
+    transform: translateY(0);
   }
 
   .navbar.scrolled {
@@ -54,6 +55,10 @@
     border-bottom: 1px solid rgba(230, 233, 255, 0.08);
     padding: 12px 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar.hidden {
+    transform: translateY(-100%);
   }
 
   .navbar__inner {
@@ -252,14 +257,30 @@
   const navLinks = document.getElementById("navLinks")!;
   let scrollPosition = 0;
 
-  // Scroll detection with throttle
+  // Scroll direction detection: hide on scroll down, show on scroll up
+  let lastScrollY = 0;
   let ticking = false;
+
   window.addEventListener("scroll", () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+
         if (!navLinks.classList.contains("open")) {
-          navbar.classList.toggle("scrolled", window.scrollY > 40);
+          // Scrolled class for background
+          navbar.classList.toggle("scrolled", currentScrollY > 40);
+
+          // Hide/show based on direction
+          if (currentScrollY > lastScrollY && currentScrollY > 80) {
+            // Scrolling down & past 80px — hide
+            navbar.classList.add("hidden");
+          } else {
+            // Scrolling up — show
+            navbar.classList.remove("hidden");
+          }
         }
+
+        lastScrollY = currentScrollY;
         ticking = false;
       });
       ticking = true;
@@ -286,8 +307,8 @@
     burger.classList.add("active");
     burger.setAttribute("aria-expanded", "true");
     navLinks.classList.add("open");
+    navbar.classList.remove("hidden");
     lockScroll();
-    // Focus first menu link
     const firstLink = navLinks.querySelector("a");
     if (firstLink) firstLink.focus();
   }
@@ -309,14 +330,12 @@
     }
   });
 
-  // Escape tugmasi bilan yopish
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && navLinks.classList.contains("open")) {
       closeMenu();
     }
   });
 
-  // Link bosilganda menyuni yopish
   navLinks.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
       closeMenu();
