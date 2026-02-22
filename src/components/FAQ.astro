@@ -33,17 +33,27 @@ const faqs = [
       <h2 class="section__title">Ko'p so'raladigan savollar</h2>
     </div>
 
-    <div class="faq-list">
+    <div class="faq-list" role="list">
       {
-        faqs.map((faq) => (
-          <div class="faq-item">
-            <button class="faq-item__question" aria-expanded="false">
+        faqs.map((faq, index) => (
+          <div class="faq-item" role="listitem">
+            <button
+              class="faq-item__question"
+              aria-expanded="false"
+              aria-controls={`faq-answer-${index}`}
+              id={`faq-btn-${index}`}
+            >
               <span>{faq.q}</span>
-              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div class="faq-item__answer">
+            <div
+              class="faq-item__answer"
+              id={`faq-answer-${index}`}
+              role="region"
+              aria-labelledby={`faq-btn-${index}`}
+            >
               <p>{faq.a}</p>
             </div>
           </div>
@@ -103,20 +113,26 @@ const faqs = [
   }
 
   .faq-item__answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.3s ease;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease;
   }
 
   .faq-item.open .faq-item__answer {
-    max-height: 300px;
+    grid-template-rows: 1fr;
   }
 
-  .faq-item__answer p {
-    padding: 0 24px 20px;
+  .faq-item__answer > p {
+    overflow: hidden;
+    padding: 0 24px;
     font-size: 0.95rem;
     color: var(--light-400);
     line-height: 1.7;
+    transition: padding 0.3s ease;
+  }
+
+  .faq-item.open .faq-item__answer > p {
+    padding: 0 24px 20px;
   }
 
   @media (max-width: 768px) {
@@ -130,25 +146,36 @@ const faqs = [
       gap: 12px;
     }
 
-    .faq-item__answer p {
-      padding: 0 18px 16px;
+    .faq-item__answer > p {
+      padding: 0 18px;
       font-size: 0.9rem;
+    }
+
+    .faq-item.open .faq-item__answer > p {
+      padding: 0 18px 16px;
     }
   }
 </style>
 
 <script>
-  document.querySelectorAll(".faq-item__question").forEach((btn) => {
+  const faqItems = document.querySelectorAll(".faq-item");
+
+  faqItems.forEach((item) => {
+    const btn = item.querySelector(".faq-item__question")!;
+
     btn.addEventListener("click", () => {
-      const item = btn.parentElement!;
       const isOpen = item.classList.contains("open");
 
       // Close all
-      document.querySelectorAll(".faq-item").forEach((el) => el.classList.remove("open"));
+      faqItems.forEach((el) => {
+        el.classList.remove("open");
+        el.querySelector(".faq-item__question")?.setAttribute("aria-expanded", "false");
+      });
 
       // Toggle current
       if (!isOpen) {
         item.classList.add("open");
+        btn.setAttribute("aria-expanded", "true");
       }
     });
   });

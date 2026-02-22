@@ -18,21 +18,55 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
 
+    <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://getolog.uz" />
     <meta property="og:image" content="https://getolog.uz/logo.png" />
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://getolog.uz/logo.png" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo.png" />
 
-    <!-- Fonts for different themes -->
+    <!-- Fonts: faqat ishlatilgan Inter & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Work+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Getolog",
+      "url": "https://getolog.uz",
+      "description": description,
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Bepul",
+          "price": "0",
+          "priceCurrency": "UZS"
+        },
+        {
+          "@type": "Offer",
+          "name": "Premium",
+          "price": "87000",
+          "priceCurrency": "UZS",
+          "unitText": "bot/oy"
+        }
+      ]
+    })} />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Asosiy kontentga o'tish</a>
     <slot />
   </body>
 </html>
@@ -42,26 +76,20 @@ const {
 </style>
 
 <script>
-  // Scroll reveal animation
+  // Scroll reveal with IntersectionObserver (scroll listener o'rniga)
   const revealElements = document.querySelectorAll('.reveal');
 
-  const revealOnScroll = () => {
-    const windowHeight = window.innerHeight;
-    const revealPoint = 100;
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -80px 0px' }
+  );
 
-    revealElements.forEach((element) => {
-      const elementTop = element.getBoundingClientRect().top;
-
-      if (elementTop < windowHeight - revealPoint) {
-        element.classList.add('active');
-      }
-    });
-  };
-
-  // Initial check
-  revealOnScroll();
-
-  // Check on scroll
-  window.addEventListener('scroll', revealOnScroll);
-
+  revealElements.forEach((el) => revealObserver.observe(el));
 </script>

@@ -2,8 +2,8 @@
 
 ---
 
-<section class="hero">
-  <div class="hero__floating-lights">
+<section class="hero" id="main-content">
+  <div class="hero__floating-lights" aria-hidden="true">
     <div class="light light--2"></div>
     <div class="light light--3"></div>
     <div class="light light--4"></div>
@@ -12,37 +12,37 @@
   </div>
   <div class="container hero__inner">
     <div class="hero__content">
-      <h1 class="hero__title fade-in-up" style="animation-delay: 0.1s">
+      <h1 class="hero__title fade-in-up delay-1">
         Yopiq Telegram <span class="hero__br"></span>kanallaringizni <span class="hero__br"></span><span class="highlight">avtomatlashtiring</span>
       </h1>
-      <p class="hero__subtitle fade-in-up" style="animation-delay: 0.2s">
+      <p class="hero__subtitle fade-in-up delay-2">
         To'lov qabul qilish, invite link berish, obuna nazorati - <span class="hero__br"></span>barchasini bot bajaradi. Siz faqat kontent joylang.
       </p>
-      <div class="hero__actions fade-in-up" style="animation-delay: 0.3s">
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener" class="btn btn--primary btn--lg">
+      <div class="hero__actions fade-in-up delay-3">
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--lg">
           Bepul boshlash
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
         <a href="#how-it-works" class="btn btn--ghost btn--lg">Qanday ishlaydi?</a>
       </div>
-      <div class="hero__stats fade-in-up" style="animation-delay: 0.4s">
+      <div class="hero__stats fade-in-up delay-4">
         <div class="stat">
           <span class="stat__number">2 daqiqa</span>
           <span class="stat__label">sozlash</span>
         </div>
-        <div class="stat__divider"></div>
+        <div class="stat__divider" aria-hidden="true"></div>
         <div class="stat">
           <span class="stat__number">0 so'm</span>
           <span class="stat__label">boshlash uchun</span>
         </div>
-        <div class="stat__divider"></div>
+        <div class="stat__divider" aria-hidden="true"></div>
         <div class="stat">
           <span class="stat__number">24/7</span>
           <span class="stat__label">bot ishlaydi</span>
         </div>
       </div>
     </div>
-    <div class="hero__visual fade-in" style="animation-delay: 0.3s">
+    <div class="hero__visual fade-in delay-3" aria-hidden="true">
       <div class="phone-mockup">
         <div class="phone-mockup__notch"></div>
         <div class="phone-mockup__screen">
@@ -108,8 +108,9 @@
   .light {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(139, 142, 255, 0.3) 0%, rgba(139, 142, 255, 0.1) 40%, transparent 70%);
-    filter: blur(20px);
+    background: radial-gradient(circle, rgba(139, 142, 255, 0.25) 0%, rgba(139, 142, 255, 0.08) 40%, transparent 70%);
+    filter: blur(15px);
+    will-change: transform, opacity;
     animation: float-around 20s ease-in-out infinite;
   }
 
@@ -165,15 +166,15 @@
     }
     25% {
       transform: translate(-100px, 80px) scale(1.2);
-      opacity: 0.4;
+      opacity: 0.35;
     }
     50% {
       transform: translate(120px, -60px) scale(0.9);
-      opacity: 0.25;
+      opacity: 0.2;
     }
     75% {
       transform: translate(-80px, 100px) scale(1.1);
-      opacity: 0.35;
+      opacity: 0.3;
     }
   }
 
@@ -270,6 +271,7 @@
     margin: 0 auto;
     background: rgba(45, 42, 45, 0.6);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 48px;
     padding: 16px;
     border: 1px solid rgba(139, 142, 255, 0.15);
@@ -282,6 +284,7 @@
     animation-delay: 0.5s;
     transform: perspective(1000px) rotateY(-2deg) rotateX(1deg);
     transform-style: preserve-3d;
+    will-change: transform;
   }
 
   .phone-mockup::before {
@@ -291,9 +294,9 @@
     left: -10%;
     width: 50%;
     height: 80%;
-    background: linear-gradient(135deg, rgba(139, 142, 255, 0.15) 0%, transparent 60%);
+    background: linear-gradient(135deg, rgba(139, 142, 255, 0.12) 0%, transparent 60%);
     border-radius: 50%;
-    filter: blur(40px);
+    filter: blur(30px);
     z-index: -1;
     animation: pulse 4s ease-in-out infinite;
   }
@@ -351,6 +354,7 @@
     background: linear-gradient(180deg, rgba(58, 55, 58, 0.4) 0%, transparent 100%);
     border-bottom: 1px solid rgba(139, 142, 255, 0.06);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .chat-header__avatar {
@@ -410,6 +414,7 @@
   .chat-msg--bot .chat-msg__bubble {
     background: rgba(58, 55, 58, 0.6);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom-left-radius: 6px;
     border: 1px solid rgba(139, 142, 255, 0.08);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -427,6 +432,7 @@
     border: 1px solid rgba(74, 222, 128, 0.3);
     background: rgba(74, 222, 128, 0.12);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 2px 12px rgba(74, 222, 128, 0.15);
   }
 
@@ -457,6 +463,7 @@
     padding: 11px 17px;
     background: rgba(139, 142, 255, 0.1);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(139, 142, 255, 0.25);
     border-radius: 12px;
     font-size: 0.78rem;

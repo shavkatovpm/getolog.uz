@@ -18,15 +18,15 @@
             <span class="price-currency">so'm</span>
           </div>
         </div>
-        <ul class="pricing-card__features">
-          <li class="included">To'liq funksionallik</li>
-          <li class="included">Karta orqali to'lov</li>
-          <li class="included">Bir martalik invite link</li>
-          <li class="included">Avtomatik obuna boshqaruvi</li>
-          <li class="included">Statistika</li>
-          <li class="excluded">Reklama ko'rsatiladi</li>
+        <ul class="pricing-card__features" aria-label="Bepul tarif xususiyatlari">
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> To'liq funksionallik</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Karta orqali to'lov</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Bir martalik invite link</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Avtomatik obuna boshqaruvi</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Statistika</li>
+          <li class="excluded"><span class="feature-icon feature-icon--cross" aria-hidden="true"></span> Reklama ko'rsatiladi</li>
         </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener" class="btn btn--outline btn--full">Boshlash</a>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
       </div>
 
       <div class="pricing-card reveal">
@@ -37,15 +37,15 @@
             <span class="price-currency">so'm/bot/oy</span>
           </div>
         </div>
-        <ul class="pricing-card__features">
-          <li class="included">To'liq funksionallik</li>
-          <li class="included">Karta orqali to'lov</li>
-          <li class="included">Bir martalik invite link</li>
-          <li class="included">Avtomatik obuna boshqaruvi</li>
-          <li class="included">Statistika</li>
-          <li class="included">Reklama yo'q</li>
+        <ul class="pricing-card__features" aria-label="Premium tarif xususiyatlari">
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> To'liq funksionallik</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Karta orqali to'lov</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Bir martalik invite link</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Avtomatik obuna boshqaruvi</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Statistika</li>
+          <li class="included"><span class="feature-icon feature-icon--check" aria-hidden="true"></span> Reklama yo'q</li>
         </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener" class="btn btn--primary btn--full">Boshlash</a>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">Boshlash</a>
       </div>
     </div>
 
@@ -108,6 +108,8 @@
     flex-direction: column;
     gap: 16px;
     margin-bottom: 36px;
+    list-style: none;
+    padding: 0;
   }
 
   .pricing-card__features li {
@@ -117,33 +119,32 @@
     gap: 12px;
   }
 
-  .pricing-card__features li::before {
-    content: "";
+  .feature-icon {
     width: 20px;
     height: 20px;
     min-width: 20px;
     border-radius: 50%;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .included::before {
-    background: rgba(74, 222, 128, 0.15);
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='3'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
+  }
+
+  .feature-icon--check {
+    background-color: rgba(74, 222, 128, 0.15);
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='3'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+  }
+
+  .feature-icon--cross {
+    background-color: rgba(248, 113, 113, 0.1);
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23f87171' stroke-width='3'%3E%3Cpath d='M18 6L6 18M6 6l12 12'/%3E%3C/svg%3E");
   }
 
   .excluded {
-    color: var(--dark-600);
-  }
-
-  .excluded::before {
-    background: rgba(248, 113, 113, 0.1);
-    background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23f87171' stroke-width='3'%3E%3Cpath d='M18 6L6 18M6 6l12 12'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
+    color: var(--light-400);
+    text-decoration: line-through;
+    text-decoration-color: var(--dark-600);
   }
 
   .pricing-note {
