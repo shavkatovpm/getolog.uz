@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, timezone
+
 from sqlalchemy import select, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -55,6 +57,11 @@ async def get_moderator_stats(session: AsyncSession) -> dict:
 
 async def get_admin_stats(session: AsyncSession, user_bot_id: int) -> dict:
     """Statistics for a specific User Admin's bot."""
+    now = datetime.now(timezone.utc)
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    three_days_later = now + timedelta(days=3)
+
     total_users = (await session.execute(
         select(func.count(EndUser.id)).where(EndUser.user_bot_id == user_bot_id)
     )).scalar()
@@ -77,9 +84,60 @@ async def get_admin_stats(session: AsyncSession, user_bot_id: int) -> dict:
         )
     )).scalar()
 
+    rejected_payments = (await session.execute(
+        select(func.count(Payment.id)).where(
+            and_(Payment.user_bot_id == user_bot_id, Payment.status == PaymentStatus.REJECTED)
+        )
+    )).scalar()
+
+    active_subs = (await session.execute(
+        select(func.count(Subscription.id)).where(
+            and_(
+                Subscription.channel.has(user_bot_id=user_bot_id),
+                Subscription.status == SubStatus.ACTIVE,
+            )
+        )
+    )).scalar()
+
+    today_revenue = (await session.execute(
+        select(func.coalesce(func.sum(Payment.amount), 0)).where(
+            and_(
+                Payment.user_bot_id == user_bot_id,
+                Payment.status == PaymentStatus.APPROVED,
+                Payment.approved_at >= today_start,
+            )
+        )
+    )).scalar()
+
+    month_revenue = (await session.execute(
+        select(func.coalesce(func.sum(Payment.amount), 0)).where(
+            and_(
+                Payment.user_bot_id == user_bot_id,
+                Payment.status == PaymentStatus.APPROVED,
+                Payment.approved_at >= month_start,
+            )
+        )
+    )).scalar()
+
+    expiring_soon = (await session.execute(
+        select(func.count(Subscription.id)).where(
+            and_(
+                Subscription.channel.has(user_bot_id=user_bot_id),
+                Subscription.status == SubStatus.ACTIVE,
+                Subscription.expires_at is not None,
+                Subscription.expires_at <= three_days_later,
+            )
+        )
+    )).scalar()
+
     return {
         "total_users": total_users,
         "total_payments": total_payments,
         "total_revenue": float(total_revenue),
         "pending_payments": pending_payments,
+        "rejected_payments": rejected_payments,
+        "active_subs": active_subs,
+        "today_revenue": float(today_revenue),
+        "month_revenue": float(month_revenue),
+        "expiring_soon": expiring_soon,
     }

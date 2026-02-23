@@ -1,8 +1,9 @@
 from aiogram import Router, F
+from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
-from config import config
 from db.engine import async_session
+from moderator.handlers.dashboard import is_mod_authenticated
 from moderator.keyboards.inline import mod_back_kb
 from services.admin_service import get_all_admins, ban_admin, unban_admin
 from db.models import UserAdmin
@@ -11,9 +12,9 @@ router = Router()
 
 
 @router.callback_query(F.data == "mod_admins")
-async def show_admins(callback: CallbackQuery):
-    if callback.from_user.id not in config.moderator_ids:
-        await callback.answer("⛔")
+async def show_admins(callback: CallbackQuery, state: FSMContext):
+    if not await is_mod_authenticated(state):
+        await callback.answer("⛔ Avval /modlog orqali kiring.", show_alert=True)
         return
 
     async with async_session() as session:
@@ -49,9 +50,9 @@ async def show_admins(callback: CallbackQuery):
 
 
 @router.callback_query(F.data.startswith("mod_toggle_"))
-async def toggle_admin_ban(callback: CallbackQuery):
-    if callback.from_user.id not in config.moderator_ids:
-        await callback.answer("⛔")
+async def toggle_admin_ban(callback: CallbackQuery, state: FSMContext):
+    if not await is_mod_authenticated(state):
+        await callback.answer("⛔ Avval /modlog orqali kiring.", show_alert=True)
         return
 
     admin_id = int(callback.data.split("_")[2])
@@ -69,4 +70,4 @@ async def toggle_admin_ban(callback: CallbackQuery):
                 await ban_admin(session, admin_id)
                 await callback.answer("🚫 Bloklandi!")
 
-    await show_admins(callback)
+    await show_admins(callback, state)

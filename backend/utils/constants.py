@@ -28,6 +28,11 @@ class SupportStates(StatesGroup):
     waiting_message = State()
 
 
+class ModeratorStates(StatesGroup):
+    waiting_password = State()
+    waiting_new_password = State()
+
+
 # Duration options
 DURATION_OPTIONS = {
     1: "1 oy",

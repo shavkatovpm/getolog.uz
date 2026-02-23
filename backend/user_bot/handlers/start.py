@@ -1,5 +1,6 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from db.engine import async_session
@@ -12,7 +13,10 @@ router = Router()
 
 
 @router.message(CommandStart())
-async def cmd_start(message: Message):
+async def cmd_start(message: Message, state: FSMContext):
+    # Clear any active FSM state (e.g. payment flow)
+    await state.clear()
+
     # Find which user_bot this is
     bot_info = await message.bot.get_me()
     async with async_session() as session:

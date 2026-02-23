@@ -1,6 +1,7 @@
 import logging
 
 from aiogram import Router, F
+from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
@@ -87,14 +88,31 @@ async def pay_card(callback: CallbackQuery, state: FSMContext):
         )
         user_bot = result.scalar_one_or_none()
 
-    card = decrypt_card(user_bot.card_number) if user_bot.card_number else "—"
+    if not user_bot or not user_bot.card_number:
+        await callback.message.edit_text(
+            "❌ Bot egasi hali to'lov sozlamalarini o'rnatmagan.\n"
+            "Iltimos, keyinroq qayta urinib ko'ring."
+        )
+        await state.clear()
+        await callback.answer()
+        return
+
+    card = decrypt_card(user_bot.card_number)
     await callback.message.edit_text(
         f"💳 <b>Karta orqali to'lov</b>\n\n"
         f"Quyidagi karta raqamiga pul o'tkazing:\n\n"
         f"<code>{card}</code>\n\n"
-        "✅ O'tkazgandan keyin <b>chek rasmini</b> yuboring (screenshot)."
+        "✅ O'tkazgandan keyin <b>chek rasmini</b> yuboring (screenshot).\n\n"
+        "Bekor qilish uchun /cancel bosing."
     )
     await state.set_state(PaymentStates.waiting_screenshot)
+    await callback.answer()
+
+
+@router.callback_query(F.data == "cancel_payment")
+async def cancel_payment(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.message.edit_text("❌ To'lov bekor qilindi.")
     await callback.answer()
 
 
@@ -158,9 +176,16 @@ async def process_screenshot(message: Message, state: FSMContext):
     await state.clear()
 
 
+@router.message(PaymentStates.waiting_screenshot, Command("cancel"))
+async def cancel_screenshot(message: Message, state: FSMContext):
+    await state.clear()
+    await message.answer("❌ To'lov bekor qilindi.")
+
+
 @router.message(PaymentStates.waiting_screenshot)
 async def wrong_screenshot(message: Message):
     await message.answer(
         "❌ Iltimos, <b>rasm</b> (screenshot) yuboring.\n"
-        "Matnli xabar qabul qilinmaydi."
+        "Matnli xabar qabul qilinmaydi.\n\n"
+        "Bekor qilish uchun /cancel bosing."
     )

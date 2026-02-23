@@ -58,10 +58,11 @@ class SchedulerService:
         now = datetime.now(timezone.utc)
 
         async with async_session() as session:
+            # Find ACTIVE expired + EXPIRED not-yet-kicked (retry)
             result = await session.execute(
                 select(Subscription).where(
                     and_(
-                        Subscription.status == SubStatus.ACTIVE,
+                        Subscription.status.in_([SubStatus.ACTIVE, SubStatus.EXPIRED]),
                         Subscription.expires_at is not None,
                         Subscription.expires_at <= now,
                     )
@@ -70,45 +71,57 @@ class SchedulerService:
             expired_subs = result.scalars().all()
 
             for sub in expired_subs:
+                # Always mark as EXPIRED first (business state)
+                if sub.status == SubStatus.ACTIVE:
+                    sub.status = SubStatus.EXPIRED
+                    logger.info(f"Subscription {sub.id} expired")
+
+                # Attempt to kick from channel (best effort with retry)
                 try:
                     from core.invite_link import kick_member
 
-                    # Get the bot for this channel
                     channel = sub.channel
                     bot = self.bot_manager.bots.get(channel.user_bot_id)
-                    if bot:
-                        success = await kick_member(
-                            bot, channel.telegram_chat_id, sub.end_user.telegram_id
+                    if not bot:
+                        logger.warning(
+                            f"Bot {channel.user_bot_id} not available for kick sub={sub.id}, will retry"
                         )
-                        if success:
-                            sub.status = SubStatus.KICKED
-                            sub.kicked_at = now
-                            logger.info(
-                                f"Kicked user {sub.end_user.telegram_id} from {channel.title}"
-                            )
+                        continue
 
-                            # Notify end user
-                            try:
-                                await bot.send_message(
-                                    sub.end_user.telegram_id,
-                                    "⏰ Obuna muddatingiz tugadi. Qayta obuna bo'lish uchun /start bosing.",
-                                )
-                            except Exception:
-                                pass
+                    success = await kick_member(
+                        bot, channel.telegram_chat_id, sub.end_user.telegram_id
+                    )
+                    if success:
+                        sub.status = SubStatus.KICKED
+                        sub.kicked_at = now
+                        logger.info(
+                            f"Kicked user {sub.end_user.telegram_id} from {channel.title}"
+                        )
+                    else:
+                        logger.warning(f"Kick failed for sub={sub.id}, will retry next run")
 
-                            # Notify admin
-                            try:
-                                admin_tg_id = channel.bot.admin.telegram_id
-                                username = sub.end_user.username or sub.end_user.telegram_id
-                                await bot.send_message(
-                                    admin_tg_id,
-                                    f"🚪 <b>Foydalanuvchi chiqarildi</b>\n\n"
-                                    f"👤 @{username}\n"
-                                    f"📢 {channel.title}\n"
-                                    f"📅 Obuna muddati tugagan",
-                                )
-                            except Exception:
-                                pass
+                    # Notify end user
+                    try:
+                        await bot.send_message(
+                            sub.end_user.telegram_id,
+                            "⏰ Obuna muddatingiz tugadi. Qayta obuna bo'lish uchun /start bosing.",
+                        )
+                    except Exception:
+                        pass
+
+                    # Notify admin
+                    try:
+                        admin_tg_id = channel.bot.admin.telegram_id
+                        username = sub.end_user.username or sub.end_user.telegram_id
+                        await bot.send_message(
+                            admin_tg_id,
+                            f"🚪 <b>Foydalanuvchi chiqarildi</b>\n\n"
+                            f"👤 @{username}\n"
+                            f"📢 {channel.title}\n"
+                            f"📅 Obuna muddati tugagan",
+                        )
+                    except Exception:
+                        pass
                 except Exception as e:
                     logger.error(f"Error kicking user sub={sub.id}: {e}")
 

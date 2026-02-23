@@ -94,26 +94,32 @@ async def approve(request: web.Request):
         if not payment or payment.user_bot_id != user_bot_id:
             return web.json_response({"error": "not_found"}, status=404)
 
-        payment = await approve_payment(session, payment_id)
-        if not payment:
+        from utils.constants import PaymentStatus
+        if payment.status != PaymentStatus.PENDING:
             return web.json_response({"error": "already_processed"}, status=400)
 
-        # Re-fetch with relations
-        payment = await get_payment_by_id(session, payment_id)
         channel = payment.channel
         end_user = payment.end_user
         user_bot = await get_bot_by_id(session, user_bot_id)
 
-        # Create invite link
+        # Create invite link BEFORE approving payment
         token = decrypt_token(user_bot.bot_token)
         bot = Bot(token=token)
         try:
             invite_link = await create_invite_link(bot, channel.telegram_chat_id)
         except Exception as e:
             logger.error(f"Failed to create invite link: {e}")
-            return web.json_response({"error": "invite_link_failed"}, status=500)
+            return web.json_response(
+                {"error": "invite_link_failed", "message": "Bot kanalda admin ekanligini tekshiring."},
+                status=500,
+            )
         finally:
             await bot.session.close()
+
+        # Invite link ready — now approve payment
+        payment = await approve_payment(session, payment_id)
+        if not payment:
+            return web.json_response({"error": "already_processed"}, status=400)
 
         # Create subscription
         await create_subscription(
@@ -126,6 +132,7 @@ async def approve(request: web.Request):
         )
 
     # Notify end user
+    notify_failed = False
     bot_manager = request.app.get("bot_manager")
     bot_instance = bot_manager.bots.get(user_bot_id) if bot_manager else None
     if bot_instance:
@@ -142,9 +149,9 @@ async def approve(request: web.Request):
                 f"⚠️ Bu link faqat 1 marta ishlaydi!",
             )
         except Exception:
-            pass
+            notify_failed = True
 
-    return web.json_response({"ok": True})
+    return web.json_response({"ok": True, "notification_sent": not notify_failed})
 
 
 async def reject(request: web.Request):

@@ -9,6 +9,7 @@ from bot.keyboards.inline import back_kb, main_menu_kb
 from db.engine import async_session
 from services.payment_service import get_pending_payments, approve_payment, reject_payment, get_payment_by_id
 from services.subscription_service import create_subscription
+from utils.constants import PaymentStatus
 from core.cache import cache_delete
 from core.invite_link import create_invite_link
 
@@ -69,21 +70,23 @@ async def handle_approve(callback: CallbackQuery):
     payment_id = int(callback.data.split("_")[2])
 
     async with async_session() as session:
-        payment = await approve_payment(session, payment_id)
-        if not payment:
+        # Get payment details FIRST (without approving)
+        payment = await get_payment_by_id(session, payment_id)
+        if not payment or payment.status != PaymentStatus.PENDING:
             await callback.answer("❌ To'lov topilmadi yoki allaqachon ko'rib chiqilgan.")
             return
 
-        # Get payment details
-        payment = await get_payment_by_id(session, payment_id)
         channel = payment.channel
         end_user = payment.end_user
 
         from services.bot_service import get_bot_by_id
         from core.encryption import decrypt_token
         user_bot = await get_bot_by_id(session, payment.user_bot_id)
+        if not user_bot:
+            await callback.answer("❌ Bot topilmadi.")
+            return
 
-        # Create invite link via user's bot
+        # Create invite link BEFORE approving payment
         try:
             token = decrypt_token(user_bot.bot_token)
             temp_bot = Bot(token=token)
@@ -92,11 +95,18 @@ async def handle_approve(callback: CallbackQuery):
         except Exception as e:
             logger.error(f"Failed to create invite link: {e}")
             await callback.message.edit_text(
-                f"⚠️ To'lov #{payment_id} tasdiqlandi, lekin invite link yaratishda xatolik.\n"
-                f"Xatolik: {e}",
+                f"⚠️ Invite link yaratishda xatolik! To'lov tasdiqlanmadi.\n"
+                f"Xatolik: {e}\n\n"
+                f"Bot kanalda admin ekanligini tekshiring.",
                 reply_markup=back_kb(),
             )
             await callback.answer("⚠️ Invite link xatolik!")
+            return
+
+        # Invite link ready — now approve payment
+        payment = await approve_payment(session, payment_id)
+        if not payment:
+            await callback.answer("❌ To'lov allaqachon ko'rib chiqilgan.")
             return
 
         # Create subscription
@@ -110,6 +120,7 @@ async def handle_approve(callback: CallbackQuery):
         )
 
     # Notify end user with invite link
+    notify_failed = False
     try:
         duration_text = {0: "umrbod", 1: "1 oy", 6: "6 oy", 12: "12 oy"}.get(
             channel.duration_months, f"{channel.duration_months} oy"
@@ -125,15 +136,22 @@ async def handle_approve(callback: CallbackQuery):
         )
     except Exception as e:
         logger.error(f"Failed to notify end user: {e}")
+        notify_failed = True
 
     # Invalidate stats cache
     await cache_delete(f"stats:{payment.user_bot_id}")
 
-    await callback.message.edit_text(
+    result_text = (
         f"✅ To'lov #{payment_id} tasdiqlandi!\n"
-        f"👤 @{end_user.username or end_user.telegram_id} ga invite link yuborildi.",
-        reply_markup=back_kb(),
+        f"👤 @{end_user.username or end_user.telegram_id} ga invite link yuborildi."
     )
+    if notify_failed:
+        result_text += (
+            f"\n\n⚠️ Foydalanuvchiga xabar yuborib bo'lmadi. "
+            f"Invite link:\n{invite_link}"
+        )
+
+    await callback.message.edit_text(result_text, reply_markup=back_kb())
     await callback.answer("✅ Tasdiqlandi!")
 
 

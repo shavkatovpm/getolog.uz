@@ -7,6 +7,8 @@ def mod_menu_kb() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="👥 Adminlar", callback_data="mod_admins")],
         [InlineKeyboardButton(text="💳 To'lovlar", callback_data="mod_payments")],
         [InlineKeyboardButton(text="🤖 Botlar", callback_data="mod_bots")],
+        [InlineKeyboardButton(text="🔑 Parolni o'zgartirish", callback_data="mod_change_password")],
+        [InlineKeyboardButton(text="🚪 Chiqish", callback_data="mod_logout")],
     ])
 
 

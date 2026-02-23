@@ -12,6 +12,7 @@ def language_kb() -> InlineKeyboardMarkup:
 def payment_method_kb() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="💳 Karta orqali to'lash", callback_data="pay_card")],
+        [InlineKeyboardButton(text="❌ Bekor qilish", callback_data="cancel_payment")],
     ])
 
 
