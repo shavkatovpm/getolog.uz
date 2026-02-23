@@ -8,6 +8,8 @@ const {
   title,
   description = "Getolog - Telegram kanalingizni pullik qiling. Bot tokeningizni yuboring, biz avtomatlashtirilgan sotuvchi bot yaratamiz.",
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://getolog.uz');
 ---
 
 <!doctype html>
@@ -17,12 +19,15 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL.href} />
+    <link rel="alternate" hreflang="uz" href={canonicalURL.href} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://getolog.uz" />
+    <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:image" content="https://getolog.uz/logo.png" />
 
     <!-- Twitter Card -->
@@ -31,7 +36,7 @@ const {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://getolog.uz/logo.png" />
 
-    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="icon" id="favicon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
 
     <!-- Fonts: faqat ishlatilgan Inter & Outfit -->
@@ -99,4 +104,33 @@ const {
   );
 
   revealElements.forEach((el) => revealObserver.observe(el));
+
+  // Rounded favicon from logo.png
+  const faviconImg = new Image();
+  faviconImg.crossOrigin = 'anonymous';
+  faviconImg.onload = () => {
+    const size = 64;
+    const r = 20;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.beginPath();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(size - r, 0);
+    ctx.quadraticCurveTo(size, 0, size, r);
+    ctx.lineTo(size, size - r);
+    ctx.quadraticCurveTo(size, size, size - r, size);
+    ctx.lineTo(r, size);
+    ctx.quadraticCurveTo(0, size, 0, size - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(faviconImg, 0, 0, size, size);
+    const link = document.getElementById('favicon') as HTMLLinkElement;
+    if (link) link.href = canvas.toDataURL('image/png');
+  };
+  faviconImg.src = '/logo.png';
 </script>

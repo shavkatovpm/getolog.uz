@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://getolog.uz/sitemap-index.xml
