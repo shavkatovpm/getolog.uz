@@ -4,6 +4,7 @@ from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.models import Subscription, Channel
+from utils.constants import SubStatus
 
 
 async def create_subscription(
@@ -52,7 +53,7 @@ async def get_active_subscription(
             and_(
                 Subscription.end_user_id == end_user_id,
                 Subscription.channel_id == channel_id,
-                Subscription.status == "active",
+                Subscription.status == SubStatus.ACTIVE,
             )
         )
     )

@@ -5,6 +5,7 @@ from db.models.end_user import EndUser
 from db.models.payment import Payment
 from db.models.subscription import Subscription
 from db.models.admin_subscription import AdminSubscription
+from db.models.bot_collaborator import BotCollaborator
 
 __all__ = [
     "UserAdmin",
@@ -14,4 +15,5 @@ __all__ = [
     "Payment",
     "Subscription",
     "AdminSubscription",
+    "BotCollaborator",
 ]

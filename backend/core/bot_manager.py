@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 import logging
 
 from aiogram import Bot, Dispatcher, Router
@@ -12,15 +14,24 @@ from core.encryption import decrypt_token
 logger = logging.getLogger(__name__)
 
 
+def _make_webhook_secret(token: str) -> str:
+    """Create a URL-safe secret hash from bot token. Token never appears in URL."""
+    key = (config.encryption_key or "getolog").encode()
+    return hmac.new(key, token.encode(), hashlib.sha256).hexdigest()[:32]
+
+
 class BotManager:
     """Manages all User Admin bots via webhooks."""
 
     def __init__(self, user_bot_router: Router, storage: RedisStorage):
         self.bots: dict[int, Bot] = {}  # user_bot_id -> Bot
-        self.dispatchers: dict[int, Dispatcher] = {}  # user_bot_id -> Dispatcher
-        self._router = user_bot_router
-        self._storage = storage
-        self._token_to_bot_id: dict[str, int] = {}  # token_hash -> user_bot_id
+        self._secret_to_bot_id: dict[str, int] = {}  # secret_hash -> user_bot_id
+        self._secret_to_bot: dict[str, Bot] = {}  # secret_hash -> Bot
+
+        # Single shared dispatcher for all user bots
+        # FSM state is scoped by (bot_id, chat_id, user_id) in Redis
+        self._dp = Dispatcher(storage=storage)
+        self._dp.include_router(user_bot_router)
 
     async def register_bot(self, user_bot_id: int, encrypted_token: str) -> Bot | None:
         """Register a new bot with webhook."""
@@ -37,18 +48,15 @@ class BotManager:
                 await bot.session.close()
                 return None
 
-            # Create dispatcher
-            dp = Dispatcher(storage=self._storage)
-            dp.include_router(self._router)
-
-            # Set webhook
-            webhook_url = f"{config.webhook_url}/{token}"
+            # Set webhook using secret hash instead of raw token
+            secret = _make_webhook_secret(token)
+            webhook_url = f"{config.webhook_url}/{secret}"
             await bot.set_webhook(webhook_url)
 
             # Store
             self.bots[user_bot_id] = bot
-            self.dispatchers[user_bot_id] = dp
-            self._token_to_bot_id[token] = user_bot_id
+            self._secret_to_bot_id[secret] = user_bot_id
+            self._secret_to_bot[secret] = bot
 
             logger.info(f"Bot registered: @{bot_info.username} (id={user_bot_id})")
             return bot
@@ -57,21 +65,20 @@ class BotManager:
             logger.error(f"Failed to register bot {user_bot_id}: {e}")
             return None
 
-    async def handle_update(self, token: str, update_data: dict) -> bool:
-        """Route incoming webhook update to the correct bot/dispatcher."""
-        bot_id = self._token_to_bot_id.get(token)
+    async def handle_update(self, secret: str, update_data: dict) -> bool:
+        """Route incoming webhook update to the correct bot."""
+        bot_id = self._secret_to_bot_id.get(secret)
         if bot_id is None:
-            logger.warning(f"Update for unknown token")
+            logger.warning("Update for unknown webhook secret")
             return False
 
-        bot = self.bots.get(bot_id)
-        dp = self.dispatchers.get(bot_id)
-        if not bot or not dp:
+        bot = self._secret_to_bot.get(secret)
+        if not bot:
             return False
 
         try:
             update = Update(**update_data)
-            await dp.feed_update(bot, update)
+            await self._dp.feed_update(bot, update)
             return True
         except Exception as e:
             logger.error(f"Error handling update for bot {bot_id}: {e}")
@@ -87,16 +94,16 @@ class BotManager:
                 pass
             await bot.session.close()
 
-            # Remove token mapping
-            token_to_remove = None
-            for token, bid in self._token_to_bot_id.items():
+            # Remove secret mapping
+            secret_to_remove = None
+            for secret, bid in self._secret_to_bot_id.items():
                 if bid == user_bot_id:
-                    token_to_remove = token
+                    secret_to_remove = secret
                     break
-            if token_to_remove:
-                del self._token_to_bot_id[token_to_remove]
+            if secret_to_remove:
+                del self._secret_to_bot_id[secret_to_remove]
+                del self._secret_to_bot[secret_to_remove]
 
-        self.dispatchers.pop(user_bot_id, None)
         logger.info(f"Bot stopped: id={user_bot_id}")
 
     async def health_check(self) -> dict[int, str]:

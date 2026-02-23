@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.models import UserAdmin, AdminSubscription
+from utils.constants import PlanName, SubStatus
 
 
 async def get_or_create_admin(
@@ -37,8 +38,8 @@ async def get_or_create_admin(
     # Create free subscription
     free_sub = AdminSubscription(
         user_admin_id=admin.id,
-        plan="free",
-        status="active",
+        plan=PlanName.FREE,
+        status=SubStatus.ACTIVE,
     )
     session.add(free_sub)
     await session.commit()
@@ -61,10 +62,10 @@ async def get_active_subscription(
     result = await session.execute(
         select(AdminSubscription).where(
             AdminSubscription.user_admin_id == admin_id,
-            AdminSubscription.status == "active",
+            AdminSubscription.status == SubStatus.ACTIVE,
         ).order_by(AdminSubscription.started_at.desc())
     )
-    return result.scalar_first()
+    return result.scalars().first()
 
 
 async def get_all_admins(session: AsyncSession) -> list[UserAdmin]:

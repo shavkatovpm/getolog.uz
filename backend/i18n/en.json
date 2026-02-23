@@ -17,7 +17,7 @@
   "subscription_expired": "⏰ Your subscription has expired. Press /start to subscribe again.",
   "banned": "⛔ You are blocked.",
   "error": "❌ An error occurred.",
-  "support": "📩 Contact admin",
+  "support": "📩 Contact admin", 
   "support_prompt": "📩 Write your message, the admin will respond soon.",
   "support_sent": "✅ Your message has been sent to the admin!",
   "price": "Price",
@@ -26,5 +26,6 @@
   "duration_6m": "6 months",
   "duration_12m": "12 months",
   "duration_lifetime": "Lifetime",
-  "ad_text": "🤖 Powered by Getolog — getolog.uz"
+  "ad_text": "🤖 Powered by Getolog — getolog.uz",
+  "branding_text": "🤖 Powered by @getolog_bot"
 }

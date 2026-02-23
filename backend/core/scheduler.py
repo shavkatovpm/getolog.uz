@@ -7,6 +7,7 @@ from sqlalchemy import select, and_
 from db.engine import async_session
 from db.models import Subscription, AdminSubscription, UserBot
 from core.encryption import decrypt_token
+from utils.constants import PlanName, SubStatus
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +61,7 @@ class SchedulerService:
             result = await session.execute(
                 select(Subscription).where(
                     and_(
-                        Subscription.status == "active",
+                        Subscription.status == SubStatus.ACTIVE,
                         Subscription.expires_at is not None,
                         Subscription.expires_at <= now,
                     )
@@ -80,7 +81,7 @@ class SchedulerService:
                             bot, channel.telegram_chat_id, sub.end_user.telegram_id
                         )
                         if success:
-                            sub.status = "kicked"
+                            sub.status = SubStatus.KICKED
                             sub.kicked_at = now
                             logger.info(
                                 f"Kicked user {sub.end_user.telegram_id} from {channel.title}"
@@ -91,6 +92,20 @@ class SchedulerService:
                                 await bot.send_message(
                                     sub.end_user.telegram_id,
                                     "⏰ Obuna muddatingiz tugadi. Qayta obuna bo'lish uchun /start bosing.",
+                                )
+                            except Exception:
+                                pass
+
+                            # Notify admin
+                            try:
+                                admin_tg_id = channel.bot.admin.telegram_id
+                                username = sub.end_user.username or sub.end_user.telegram_id
+                                await bot.send_message(
+                                    admin_tg_id,
+                                    f"🚪 <b>Foydalanuvchi chiqarildi</b>\n\n"
+                                    f"👤 @{username}\n"
+                                    f"📢 {channel.title}\n"
+                                    f"📅 Obuna muddati tugagan",
                                 )
                             except Exception:
                                 pass
@@ -107,8 +122,8 @@ class SchedulerService:
             result = await session.execute(
                 select(AdminSubscription).where(
                     and_(
-                        AdminSubscription.status == "active",
-                        AdminSubscription.plan != "free",
+                        AdminSubscription.status == SubStatus.ACTIVE,
+                        AdminSubscription.plan != PlanName.FREE,
                         AdminSubscription.expires_at is not None,
                         AdminSubscription.expires_at <= now,
                     )
@@ -117,12 +132,12 @@ class SchedulerService:
             expired = result.scalars().all()
 
             for admin_sub in expired:
-                admin_sub.status = "expired"
+                admin_sub.status = SubStatus.EXPIRED
                 # Create new free subscription
                 free_sub = AdminSubscription(
                     user_admin_id=admin_sub.user_admin_id,
-                    plan="free",
-                    status="active",
+                    plan=PlanName.FREE,
+                    status=SubStatus.ACTIVE,
                 )
                 session.add(free_sub)
                 logger.info(f"Admin {admin_sub.user_admin_id} downgraded to free")
@@ -140,7 +155,7 @@ class SchedulerService:
             result = await session.execute(
                 select(Subscription).where(
                     and_(
-                        Subscription.status == "active",
+                        Subscription.status == SubStatus.ACTIVE,
                         Subscription.notified_3day == False,
                         Subscription.expires_at is not None,
                         Subscription.expires_at <= three_days,
@@ -150,13 +165,27 @@ class SchedulerService:
             )
             for sub in result.scalars().all():
                 try:
-                    bot = self.bot_manager.bots.get(sub.channel.user_bot_id)
+                    channel = sub.channel
+                    bot = self.bot_manager.bots.get(channel.user_bot_id)
                     if bot:
                         await bot.send_message(
                             sub.end_user.telegram_id,
                             "⚠️ Obuna muddatingiz 3 kundan keyin tugaydi. Qayta obuna bo'ling!",
                         )
                         sub.notified_3day = True
+
+                        # Notify admin
+                        try:
+                            admin_tg_id = channel.bot.admin.telegram_id
+                            username = sub.end_user.username or sub.end_user.telegram_id
+                            await bot.send_message(
+                                admin_tg_id,
+                                f"⚠️ <b>Obuna 3 kundan tugaydi</b>\n\n"
+                                f"👤 @{username}\n"
+                                f"📢 {channel.title}",
+                            )
+                        except Exception:
+                            pass
                 except Exception as e:
                     logger.error(f"3-day notification error: {e}")
 
@@ -164,7 +193,7 @@ class SchedulerService:
             result = await session.execute(
                 select(Subscription).where(
                     and_(
-                        Subscription.status == "active",
+                        Subscription.status == SubStatus.ACTIVE,
                         Subscription.notified_1day == False,
                         Subscription.expires_at is not None,
                         Subscription.expires_at <= one_day,
@@ -174,13 +203,27 @@ class SchedulerService:
             )
             for sub in result.scalars().all():
                 try:
-                    bot = self.bot_manager.bots.get(sub.channel.user_bot_id)
+                    channel = sub.channel
+                    bot = self.bot_manager.bots.get(channel.user_bot_id)
                     if bot:
                         await bot.send_message(
                             sub.end_user.telegram_id,
                             "🔴 Obuna muddatingiz ertaga tugaydi! Hoziroq uzaytiring.",
                         )
                         sub.notified_1day = True
+
+                        # Notify admin
+                        try:
+                            admin_tg_id = channel.bot.admin.telegram_id
+                            username = sub.end_user.username or sub.end_user.telegram_id
+                            await bot.send_message(
+                                admin_tg_id,
+                                f"🔴 <b>Obuna ertaga tugaydi</b>\n\n"
+                                f"👤 @{username}\n"
+                                f"📢 {channel.title}",
+                            )
+                        except Exception:
+                            pass
                 except Exception as e:
                     logger.error(f"1-day notification error: {e}")
 

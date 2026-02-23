@@ -4,8 +4,8 @@ from aiogram import Bot
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.encryption import encrypt_token, decrypt_token
-from db.models import UserBot, Channel
+from core.encryption import encrypt_token, decrypt_token, encrypt_card, decrypt_card
+from db.models import UserBot, Channel, BotCollaborator
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,31 @@ async def get_bot_by_admin(session: AsyncSession, admin_id: int) -> UserBot | No
             UserBot.is_active == True,
         )
     )
-    return result.scalar_one_or_none()
+    return result.scalars().first()
+
+
+async def get_bots_by_admin(session: AsyncSession, admin_id: int) -> list[UserBot]:
+    """Get all active bots for an admin."""
+    result = await session.execute(
+        select(UserBot).where(
+            UserBot.user_admin_id == admin_id,
+            UserBot.is_active == True,
+        )
+    )
+    return list(result.scalars().all())
+
+
+async def get_collab_bots(session: AsyncSession, telegram_id: int) -> list[UserBot]:
+    """Get bots where this user is a collaborator."""
+    result = await session.execute(
+        select(UserBot)
+        .join(BotCollaborator, BotCollaborator.user_bot_id == UserBot.id)
+        .where(
+            BotCollaborator.telegram_id == telegram_id,
+            UserBot.is_active == True,
+        )
+    )
+    return list(result.scalars().all())
 
 
 async def get_bot_by_id(session: AsyncSession, bot_id: int) -> UserBot | None:
@@ -97,7 +121,7 @@ async def update_bot_settings(
     if payment_method is not None:
         user_bot.payment_method = payment_method
     if card_number is not None:
-        user_bot.card_number = card_number
+        user_bot.card_number = encrypt_card(card_number)
 
     await session.commit()
     return user_bot

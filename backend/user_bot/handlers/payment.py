@@ -9,6 +9,7 @@ from db.engine import async_session
 from db.models import EndUser, UserBot, Channel
 from services.payment_service import create_payment, approve_payment, get_payment_by_id
 from services.subscription_service import create_subscription, get_active_subscription
+from core.encryption import decrypt_card
 from core.invite_link import create_invite_link
 from user_bot.keyboards.inline import payment_method_kb
 from utils.constants import PaymentStates
@@ -86,7 +87,7 @@ async def pay_card(callback: CallbackQuery, state: FSMContext):
         )
         user_bot = result.scalar_one_or_none()
 
-    card = user_bot.card_number or "—"
+    card = decrypt_card(user_bot.card_number) if user_bot.card_number else "—"
     await callback.message.edit_text(
         f"💳 <b>Karta orqali to'lov</b>\n\n"
         f"Quyidagi karta raqamiga pul o'tkazing:\n\n"
@@ -130,23 +131,29 @@ async def process_screenshot(message: Message, state: FSMContext):
         "⏳ Admin tasdiqlashini kuting. Tasdiqlanganidan keyin invite link yuboriladi."
     )
 
-    # Notify admin
-    try:
-        amount_fmt = f"{float(channel.price):,.0f}".replace(",", " ")
-        await message.bot.send_photo(
-            user_bot.admin.telegram_id,
-            photo=photo.file_id,
-            caption=(
-                f"💳 <b>Yangi to'lov!</b>\n\n"
-                f"👤 @{message.from_user.username or '—'}\n"
-                f"💰 {amount_fmt} UZS\n"
-                f"📢 {channel.title}\n"
-                f"#{payment.id}"
-            ),
-            reply_markup=payment_action_kb(payment.id),
-        )
-    except Exception as e:
-        logger.error(f"Failed to notify admin: {e}")
+    # Notify admin + collaborators
+    amount_fmt = f"{float(channel.price):,.0f}".replace(",", " ")
+    caption = (
+        f"💳 <b>Yangi to'lov!</b>\n\n"
+        f"👤 @{message.from_user.username or '—'}\n"
+        f"💰 {amount_fmt} UZS\n"
+        f"📢 {channel.title}\n"
+        f"#{payment.id}"
+    )
+    notify_ids = [user_bot.admin.telegram_id]
+    for collab in user_bot.collaborators:
+        notify_ids.append(collab.telegram_id)
+
+    for notify_id in notify_ids:
+        try:
+            await message.bot.send_photo(
+                notify_id,
+                photo=photo.file_id,
+                caption=caption,
+                reply_markup=payment_action_kb(payment.id),
+            )
+        except Exception as e:
+            logger.error(f"Failed to notify {notify_id}: {e}")
 
     await state.clear()
 

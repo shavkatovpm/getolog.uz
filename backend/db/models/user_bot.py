@@ -19,7 +19,7 @@ class UserBot(Base):
         default="Assalomu alaykum! Pullik kanalga kirish uchun quyidagi tugmani bosing.",
     )
     payment_method: Mapped[str] = mapped_column(String(50), default="card")
-    card_number: Mapped[str | None] = mapped_column(String(20))
+    card_number: Mapped[str | None] = mapped_column(Text)  # Fernet encrypted
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -33,6 +33,9 @@ class UserBot(Base):
         back_populates="bot", lazy="selectin"
     )
     payments: Mapped[list["Payment"]] = relationship(
+        back_populates="bot", lazy="selectin"
+    )
+    collaborators: Mapped[list["BotCollaborator"]] = relationship(
         back_populates="bot", lazy="selectin"
     )
 

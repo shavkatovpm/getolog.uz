@@ -4,6 +4,7 @@ from sqlalchemy import select, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.models import Payment, EndUser
+from utils.constants import PaymentStatus
 
 
 async def create_payment(
@@ -30,13 +31,15 @@ async def create_payment(
 
 async def approve_payment(session: AsyncSession, payment_id: int) -> Payment | None:
     result = await session.execute(
-        select(Payment).where(Payment.id == payment_id)
+        select(Payment)
+        .where(Payment.id == payment_id)
+        .with_for_update(skip_locked=True)
     )
     payment = result.scalar_one_or_none()
-    if not payment or payment.status != "pending":
+    if not payment or payment.status != PaymentStatus.PENDING:
         return None
 
-    payment.status = "approved"
+    payment.status = PaymentStatus.APPROVED
     payment.approved_at = datetime.now(timezone.utc)
     await session.commit()
     return payment
@@ -44,13 +47,15 @@ async def approve_payment(session: AsyncSession, payment_id: int) -> Payment | N
 
 async def reject_payment(session: AsyncSession, payment_id: int) -> Payment | None:
     result = await session.execute(
-        select(Payment).where(Payment.id == payment_id)
+        select(Payment)
+        .where(Payment.id == payment_id)
+        .with_for_update(skip_locked=True)
     )
     payment = result.scalar_one_or_none()
-    if not payment or payment.status != "pending":
+    if not payment or payment.status != PaymentStatus.PENDING:
         return None
 
-    payment.status = "rejected"
+    payment.status = PaymentStatus.REJECTED
     await session.commit()
     return payment
 
@@ -62,7 +67,7 @@ async def get_pending_payments(
         select(Payment).where(
             and_(
                 Payment.user_bot_id == user_bot_id,
-                Payment.status == "pending",
+                Payment.status == PaymentStatus.PENDING,
             )
         ).order_by(Payment.created_at.desc())
     )
@@ -86,7 +91,7 @@ async def get_payments_stats(session: AsyncSession, user_bot_id: int) -> dict:
         ).where(
             and_(
                 Payment.user_bot_id == user_bot_id,
-                Payment.status == "approved",
+                Payment.status == PaymentStatus.APPROVED,
             )
         )
     )

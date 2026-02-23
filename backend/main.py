@@ -8,10 +8,12 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.redis import RedisStorage
+from aiogram.types import MenuButtonWebApp, WebAppInfo
 from redis.asyncio import Redis
 
 from config import config
 from core.bot_manager import BotManager
+from core.cache import init_cache
 from core.scheduler import SchedulerService
 from core.webhook_server import create_webhook_app
 from bot.handlers import get_main_bot_router
@@ -19,7 +21,6 @@ from bot.middlewares.ban_check import BanCheckMiddleware
 from bot.middlewares.rate_limit import RateLimitMiddleware
 from moderator.handlers import get_moderator_router
 from user_bot.handlers import get_user_bot_router
-from user_bot.middlewares.ad_inject import AdInjectMiddleware
 from db.engine import async_session, engine
 from db.base import Base
 from services.bot_service import get_all_active_bots
@@ -57,12 +58,14 @@ async def main():
     # Redis
     redis = Redis.from_url(config.redis_url, decode_responses=True)
     storage = RedisStorage(redis)
+    init_cache(redis)
     logger.info("Redis connected")
 
-    # Create database tables
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database tables created")
+    # Create database tables (dev fallback; use `alembic upgrade head` in production)
+    if not config.is_production:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Database tables ensured (dev mode)")
 
     # Main Getolog bot
     main_bot = Bot(
@@ -85,43 +88,89 @@ async def main():
     # Bot Manager
     bot_manager = BotManager(user_bot_router, storage)
 
-    # Set webhook for main bot
-    main_webhook_url = f"{config.webhook_url}/main"
-    await main_bot.set_webhook(main_webhook_url)
-    logger.info(f"Main bot webhook: {main_webhook_url}")
+    # Make bot_manager accessible in handlers via dispatcher data
+    main_dp["bot_manager"] = bot_manager
 
-    # Register all existing active bots
-    await on_startup(bot_manager)
+    # Set Menu Button for Mini App (left side of input field)
+    if config.server_url.startswith("https://"):
+        try:
+            await main_bot.set_chat_menu_button(
+                menu_button=MenuButtonWebApp(
+                    text="Dashboard",
+                    web_app=WebAppInfo(url=f"{config.server_url}/webapp"),
+                )
+            )
+            logger.info("Menu button set for Mini App")
+        except Exception as e:
+            logger.warning(f"Failed to set menu button: {e}")
 
-    # Scheduler
-    scheduler = SchedulerService(bot_manager)
-    scheduler.start()
+    if config.is_production:
+        # === PRODUCTION: Webhook mode ===
+        main_webhook_url = f"{config.webhook_url}/main"
+        await main_bot.set_webhook(main_webhook_url)
+        logger.info(f"Main bot webhook: {main_webhook_url}")
 
-    # Webhook server
-    app = create_webhook_app(bot_manager, main_bot, main_dp)
+        await on_startup(bot_manager)
 
-    # Run
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", config.webhook_port)
-    await site.start()
+        scheduler = SchedulerService(bot_manager)
+        scheduler.start()
 
-    logger.info(f"Server started on port {config.webhook_port}")
+        app = create_webhook_app(bot_manager, main_bot, main_dp)
+        runner = web.AppRunner(app)
+        await runner.setup()
+        site = web.TCPSite(runner, "0.0.0.0", config.webhook_port)
+        await site.start()
 
-    try:
-        await asyncio.Event().wait()  # Run forever
-    except (KeyboardInterrupt, SystemExit):
-        pass
-    finally:
-        logger.info("Shutting down...")
-        scheduler.stop()
-        await bot_manager.shutdown()
-        await main_bot.delete_webhook()
-        await main_bot.session.close()
-        await runner.cleanup()
-        await redis.close()
-        await engine.dispose()
-        logger.info("Shutdown complete")
+        logger.info(f"Webhook server started on port {config.webhook_port}")
+
+        try:
+            await asyncio.Event().wait()
+        except (KeyboardInterrupt, SystemExit):
+            pass
+        finally:
+            logger.info("Shutting down...")
+            scheduler.stop()
+            await bot_manager.shutdown()
+            await main_bot.delete_webhook()
+            await main_bot.session.close()
+            await runner.cleanup()
+            await redis.close()
+            await engine.dispose()
+            logger.info("Shutdown complete")
+    else:
+        # === DEVELOPMENT: Polling + Mini App server ===
+        await main_bot.delete_webhook(drop_pending_updates=True)
+
+        # Start webapp/API server in dev mode too
+        app = create_webhook_app(bot_manager, main_bot, main_dp)
+        runner = web.AppRunner(app)
+        await runner.setup()
+        site = web.TCPSite(runner, "0.0.0.0", config.webhook_port)
+        await site.start()
+        logger.info(f"Dev server started: http://localhost:{config.webhook_port}/webapp")
+
+        # Register existing user bots
+        await on_startup(bot_manager)
+
+        # Start scheduler in dev mode too
+        scheduler = SchedulerService(bot_manager)
+        scheduler.start()
+
+        # Run polling in parallel with the web server
+        logger.info("Development mode: polling started")
+
+        try:
+            await main_dp.start_polling(main_bot)
+        except (KeyboardInterrupt, SystemExit):
+            pass
+        finally:
+            scheduler.stop()
+            await bot_manager.shutdown()
+            await runner.cleanup()
+            await main_bot.session.close()
+            await redis.close()
+            await engine.dispose()
+            logger.info("Shutdown complete")
 
 
 if __name__ == "__main__":

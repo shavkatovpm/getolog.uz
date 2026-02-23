@@ -1,4 +1,6 @@
 # FSM States
+from enum import StrEnum
+
 from aiogram.fsm.state import State, StatesGroup
 
 
@@ -6,6 +8,7 @@ class RegisterStates(StatesGroup):
     waiting_token = State()
     waiting_card = State()
     waiting_channel = State()
+    waiting_channel_manual = State()
     waiting_price = State()
     waiting_duration = State()
 
@@ -14,6 +17,7 @@ class SettingsStates(StatesGroup):
     waiting_welcome = State()
     waiting_card = State()
     waiting_price = State()
+    waiting_collab_id = State()
 
 
 class PaymentStates(StatesGroup):
@@ -36,3 +40,21 @@ DURATION_OPTIONS = {
 PAYMENT_METHODS = {
     "card": "💳 Karta orqali",
 }
+
+
+class PaymentStatus(StrEnum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+
+class PlanName(StrEnum):
+    FREE = "free"
+    STANDARD = "standard"
+    PREMIUM = "premium"
+
+
+class SubStatus(StrEnum):
+    ACTIVE = "active"
+    EXPIRED = "expired"
+    KICKED = "kicked"

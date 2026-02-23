@@ -26,6 +26,9 @@ class Config:
     server_url: str = os.getenv("SERVER_URL", "https://getolog.uz")
     webhook_port: int = int(os.getenv("WEBHOOK_PORT", "8443"))
 
+    # Getolog payment card
+    getolog_card: str = os.getenv("GETOLOG_CARD", "8600 0000 0000 0000")
+
     # Sentry
     sentry_dsn: str = os.getenv("SENTRY_DSN", "")
 

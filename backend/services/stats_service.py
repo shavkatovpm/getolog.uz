@@ -2,6 +2,7 @@ from sqlalchemy import select, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.models import UserAdmin, UserBot, EndUser, Payment, Subscription, AdminSubscription
+from utils.constants import PaymentStatus, PlanName, SubStatus
 
 
 async def get_moderator_stats(session: AsyncSession) -> dict:
@@ -19,24 +20,24 @@ async def get_moderator_stats(session: AsyncSession) -> dict:
     )).scalar()
 
     total_payments = (await session.execute(
-        select(func.count(Payment.id)).where(Payment.status == "approved")
+        select(func.count(Payment.id)).where(Payment.status == PaymentStatus.APPROVED)
     )).scalar()
 
     total_revenue = (await session.execute(
         select(func.coalesce(func.sum(Payment.amount), 0)).where(
-            Payment.status == "approved"
+            Payment.status == PaymentStatus.APPROVED
         )
     )).scalar()
 
     active_subs = (await session.execute(
-        select(func.count(Subscription.id)).where(Subscription.status == "active")
+        select(func.count(Subscription.id)).where(Subscription.status == SubStatus.ACTIVE)
     )).scalar()
 
     paid_admins = (await session.execute(
         select(func.count(AdminSubscription.id)).where(
             and_(
-                AdminSubscription.status == "active",
-                AdminSubscription.plan != "free",
+                AdminSubscription.status == SubStatus.ACTIVE,
+                AdminSubscription.plan != PlanName.FREE,
             )
         )
     )).scalar()
@@ -60,19 +61,19 @@ async def get_admin_stats(session: AsyncSession, user_bot_id: int) -> dict:
 
     total_payments = (await session.execute(
         select(func.count(Payment.id)).where(
-            and_(Payment.user_bot_id == user_bot_id, Payment.status == "approved")
+            and_(Payment.user_bot_id == user_bot_id, Payment.status == PaymentStatus.APPROVED)
         )
     )).scalar()
 
     total_revenue = (await session.execute(
         select(func.coalesce(func.sum(Payment.amount), 0)).where(
-            and_(Payment.user_bot_id == user_bot_id, Payment.status == "approved")
+            and_(Payment.user_bot_id == user_bot_id, Payment.status == PaymentStatus.APPROVED)
         )
     )).scalar()
 
     pending_payments = (await session.execute(
         select(func.count(Payment.id)).where(
-            and_(Payment.user_bot_id == user_bot_id, Payment.status == "pending")
+            and_(Payment.user_bot_id == user_bot_id, Payment.status == PaymentStatus.PENDING)
         )
     )).scalar()
 

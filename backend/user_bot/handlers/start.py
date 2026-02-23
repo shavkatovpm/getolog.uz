@@ -43,15 +43,19 @@ async def cmd_start(message: Message):
             session.add(end_user)
             await session.commit()
 
-            # Notify admin about new user
-            try:
-                await message.bot.send_message(
-                    user_bot.admin.telegram_id,
-                    f"🆕 Yangi foydalanuvchi: @{message.from_user.username or '—'}\n"
-                    f"Bot: @{user_bot.bot_username}",
-                )
-            except Exception:
-                pass
+            # Notify admin + collaborators about new user
+            notify_text = (
+                f"🆕 Yangi foydalanuvchi: @{message.from_user.username or '—'}\n"
+                f"Bot: @{user_bot.bot_username}"
+            )
+            notify_ids = [user_bot.admin.telegram_id]
+            for collab in user_bot.collaborators:
+                notify_ids.append(collab.telegram_id)
+            for notify_id in notify_ids:
+                try:
+                    await message.bot.send_message(notify_id, notify_text)
+                except Exception:
+                    pass
 
             await message.answer(
                 "🌐 Tilni tanlang / Выберите язык / Choose language:",
