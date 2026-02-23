@@ -1,0 +1,299 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import { type Lang, meta, langPrefix } from "../i18n/translations";
+
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+const prefix = langPrefix(lang);
+
+const pageTitle = { uz: "Ommaviy oferta", ru: "Публичная оферта" };
+const pageDesc = {
+  uz: "Xizmat ko'rsatish shartnomasi",
+  ru: "Договор оказания услуг",
+};
+const lastUpdated = { uz: "Oxirgi yangilanish: 2026-yil 24-fevral", ru: "Последнее обновление: 24 февраля 2026 г." };
+
+const sections = [
+  {
+    title: { uz: "1. Umumiy qoidalar", ru: "1. Общие положения" },
+    html: {
+      uz: `<p>1.1. Ushbu hujjat «Getolog» xizmati (keyingi o'rinlarda — «Xizmat ko'rsatuvchi») tomonidan jismoniy va yuridik shaxslarga ko'rsatiladigan xizmatlar shartlarini belgilovchi ommaviy ofertadir.</p>
+<p>1.2. Xizmatdan foydalanishni boshlash (botga /start buyrug'ini yuborish) ushbu oferta shartlarini to'liq qabul qilish hisoblanadi.</p>
+<p>1.3. Xizmat O'zbekiston Respublikasi amaldagi qonunchiligiga muvofiq faoliyat yuritadi.</p>`,
+      ru: `<p>1.1. Настоящий документ является публичной офертой, определяющей условия оказания услуг сервисом «Getolog» (далее — «Исполнитель») физическим и юридическим лицам.</p>
+<p>1.2. Начало использования Сервиса (отправка команды /start боту) является полным принятием условий настоящей оферты.</p>
+<p>1.3. Сервис осуществляет деятельность в соответствии с действующим законодательством Республики Узбекистан.</p>`,
+    },
+  },
+  {
+    title: { uz: "2. Atamalar va ta'riflar", ru: "2. Термины и определения" },
+    html: {
+      uz: `<p>2.1. <strong>Xizmat ko'rsatuvchi</strong> — Getolog platformasi.</p>
+<p>2.2. <strong>Foydalanuvchi</strong> — Xizmatdan foydalanuvchi jismoniy yoki yuridik shaxs (kanal yoki guruh egasi).</p>
+<p>2.3. <strong>Obunachi</strong> — Foydalanuvchining pullik kanaliga kirish uchun to'lov qiluvchi shaxs.</p>
+<p>2.4. <strong>Bot</strong> — Foydalanuvchi tomonidan BotFather orqali yaratilgan va Getolog platformasiga ulangan Telegram bot.</p>
+<p>2.5. <strong>Token</strong> — Botni boshqarish uchun BotFather bergan maxfiy kalit.</p>`,
+      ru: `<p>2.1. <strong>Исполнитель</strong> — платформа Getolog.</p>
+<p>2.2. <strong>Пользователь</strong> — физическое или юридическое лицо, использующее Сервис (владелец канала или группы).</p>
+<p>2.3. <strong>Подписчик</strong> — лицо, оплачивающее доступ к платному каналу Пользователя.</p>
+<p>2.4. <strong>Бот</strong> — Telegram-бот, созданный Пользователем через BotFather и подключённый к платформе Getolog.</p>
+<p>2.5. <strong>Токен</strong> — секретный ключ, выданный BotFather для управления ботом.</p>`,
+    },
+  },
+  {
+    title: { uz: "3. Xizmat predmeti", ru: "3. Предмет оферты" },
+    html: {
+      uz: `<p>3.1. Xizmat ko'rsatuvchi Foydalanuvchiga quyidagi xizmatlarni taqdim etadi:</p>
+<ul>
+<li>Telegram bot orqali pullik kanalga obunani avtomatlashtirilgan boshqaruvi;</li>
+<li>To'lovlarni qabul qilish va tasdiqlash tizimi;</li>
+<li>Obuna muddatini nazorat qilish va avtomatik boshqarish;</li>
+<li>Bir martalik invite havolalar yaratish;</li>
+<li>Statistika va hisobotlar.</li>
+</ul>`,
+      ru: `<p>3.1. Исполнитель предоставляет Пользователю следующие услуги:</p>
+<ul>
+<li>автоматизированное управление платными подписками через Telegram-бот;</li>
+<li>система приёма и подтверждения оплаты;</li>
+<li>контроль сроков подписки и автоматическое управление;</li>
+<li>генерация одноразовых invite-ссылок;</li>
+<li>статистика и отчёты.</li>
+</ul>`,
+    },
+  },
+  {
+    title: { uz: "4. Xizmatdan foydalanish tartibi", ru: "4. Порядок использования сервиса" },
+    html: {
+      uz: `<p>4.1. Xizmatdan foydalanish uchun Foydalanuvchi @getolog_bot ga murojaat qilib, bot tokenini va kerakli ma'lumotlarni taqdim etishi lozim.</p>
+<p>4.2. Foydalanuvchi o'z botini yaratish, sozlash va kerakli kanallarga admin sifatida qo'shish uchun javobgardir.</p>
+<p>4.3. To'lovlar bevosita Foydalanuvchining karta raqamiga tushadi. Xizmat ko'rsatuvchi obunachi to'lovlariga tegmaydi.</p>`,
+      ru: `<p>4.1. Для использования Сервиса Пользователь обращается к @getolog_bot и предоставляет токен бота и необходимые данные.</p>
+<p>4.2. Пользователь несёт ответственность за создание, настройку бота и добавление его администратором в необходимые каналы.</p>
+<p>4.3. Оплата поступает напрямую на карту Пользователя. Исполнитель не участвует в обработке платежей подписчиков.</p>`,
+    },
+  },
+  {
+    title: { uz: "5. Tariflar va to'lov", ru: "5. Тарифы и оплата" },
+    html: {
+      uz: `<p>5.1. Xizmat Bepul, Standart va Premium tarif rejalari bilan taqdim etiladi.</p>
+<p>5.2. Tarif narxlari va imkoniyatlari <a href="${prefix}/price">getolog.uz/price</a> sahifasida ko'rsatilgan.</p>
+<p>5.3. Pullik tarifga o'tish ixtiyoriy. Bepul tarifda reklama va brending mavjud.</p>
+<p>5.4. To'lov har oylik asosda amalga oshiriladi. To'lov qilinmasa, tarif bepulga qaytariladi.</p>`,
+      ru: `<p>5.1. Сервис предоставляется по тарифным планам: Бесплатный, Стандарт и Премиум.</p>
+<p>5.2. Стоимость и возможности тарифов указаны на странице <a href="${prefix}/price">getolog.uz/price</a>.</p>
+<p>5.3. Переход на платный тариф добровольный. В бесплатном тарифе присутствует реклама и брендинг.</p>
+<p>5.4. Оплата производится ежемесячно. При неоплате тариф возвращается к бесплатному.</p>`,
+    },
+  },
+  {
+    title: { uz: "6. Tomonlarning huquq va majburiyatlari", ru: "6. Права и обязанности сторон" },
+    html: {
+      uz: `<h3>6.1. Xizmat ko'rsatuvchi:</h3>
+<ul>
+<li>Xizmatning uzluksiz ishlashini ta'minlashga harakat qiladi;</li>
+<li>Foydalanuvchi ma'lumotlarini himoya qiladi;</li>
+<li>Texnik muammolarni imkon qadar tezkor hal qiladi.</li>
+</ul>
+<h3>6.2. Foydalanuvchi:</h3>
+<ul>
+<li>Xizmatdan faqat qonuniy maqsadlarda foydalanadi;</li>
+<li>Bot tokenini uchinchi shaxslarga bermaydi;</li>
+<li>Noqonuniy kontent tarqatish uchun xizmatdan foydalanmaydi.</li>
+</ul>`,
+      ru: `<h3>6.1. Исполнитель:</h3>
+<ul>
+<li>прилагает усилия для обеспечения бесперебойной работы Сервиса;</li>
+<li>обеспечивает защиту данных Пользователя;</li>
+<li>устраняет технические неполадки в кратчайшие сроки.</li>
+</ul>
+<h3>6.2. Пользователь:</h3>
+<ul>
+<li>использует Сервис исключительно в законных целях;</li>
+<li>не передаёт токен бота третьим лицам;</li>
+<li>не использует Сервис для распространения незаконного контента.</li>
+</ul>`,
+    },
+  },
+  {
+    title: { uz: "7. Javobgarlik", ru: "7. Ответственность" },
+    html: {
+      uz: `<p>7.1. Xizmat ko'rsatuvchi Foydalanuvchi va Obunachi o'rtasidagi moliyaviy munosabatlar uchun javobgar emas.</p>
+<p>7.2. Xizmat ko'rsatuvchi Telegram platformasi tomonidan yuzaga keladigan uzilishlar uchun javobgar emas.</p>
+<p>7.3. Xizmat «bor holaticha» (as is) taqdim etiladi. Xizmat ko'rsatuvchi xizmatning to'xtovsiz yoki xatosiz ishlashiga kafolat bermaydi.</p>`,
+      ru: `<p>7.1. Исполнитель не несёт ответственности за финансовые отношения между Пользователем и Подписчиком.</p>
+<p>7.2. Исполнитель не несёт ответственности за перебои, вызванные платформой Telegram.</p>
+<p>7.3. Сервис предоставляется «как есть» (as is). Исполнитель не гарантирует бесперебойную или безошибочную работу Сервиса.</p>`,
+    },
+  },
+  {
+    title: { uz: "8. Shaxsiy ma'lumotlar", ru: "8. Персональные данные" },
+    html: {
+      uz: `<p>8.1. Xizmat foydalanuvchining Telegram ID, bot tokeni va karta raqamini saqlaydi.</p>
+<p>8.2. Barcha maxfiy ma'lumotlar shifrlangan holda saqlanadi.</p>
+<p>8.3. Ma'lumotlar uchinchi shaxslarga berilmaydi, qonun tomonidan talab qilingan holatlar bundan mustasno.</p>`,
+      ru: `<p>8.1. Сервис хранит Telegram ID пользователя, токен бота и номер карты.</p>
+<p>8.2. Все конфиденциальные данные хранятся в зашифрованном виде.</p>
+<p>8.3. Данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством.</p>`,
+    },
+  },
+  {
+    title: { uz: "9. Shartnomani bekor qilish", ru: "9. Расторжение договора" },
+    html: {
+      uz: `<p>9.1. Foydalanuvchi istalgan vaqtda xizmatdan foydalanishni to'xtatishi mumkin.</p>
+<p>9.2. Xizmat ko'rsatuvchi oferta shartlarini buzgan Foydalanuvchining hisobini to'xtatish huquqiga ega.</p>
+<p>9.3. Tarif muddati tugashidan oldin to'xtatilgan taqdirda, to'lov qaytarilmaydi.</p>`,
+      ru: `<p>9.1. Пользователь может прекратить использование Сервиса в любое время.</p>
+<p>9.2. Исполнитель вправе приостановить аккаунт Пользователя при нарушении условий оферты.</p>
+<p>9.3. При досрочном прекращении тарифа оплата не возвращается.</p>`,
+    },
+  },
+  {
+    title: { uz: "10. Yakuniy qoidalar", ru: "10. Заключительные положения" },
+    html: {
+      uz: `<p>10.1. Xizmat ko'rsatuvchi ushbu ofertaga o'zgartirish kiritish huquqini o'zida saqlaydi. O'zgarishlar getolog.uz saytida e'lon qilinadi.</p>
+<p>10.2. Xizmatdan foydalanishni davom ettirish yangilangan shartlarni qabul qilish hisoblanadi.</p>
+<p>10.3. Ushbu oferta bo'yicha yuzaga keladigan nizolar muzokaralar yo'li bilan hal qilinadi.</p>`,
+      ru: `<p>10.1. Исполнитель оставляет за собой право вносить изменения в настоящую оферту. Изменения публикуются на сайте getolog.uz.</p>
+<p>10.2. Продолжение использования Сервиса означает принятие обновлённых условий.</p>
+<p>10.3. Споры, возникающие по настоящей оферте, разрешаются путём переговоров.</p>`,
+    },
+  },
+];
+---
+
+<Layout title={meta.offertaTitle[lang]} description={meta.offertaDesc[lang]} lang={lang}>
+  <Navbar lang={lang} />
+
+  <article class="doc-page">
+    <div class="container">
+      <header class="doc-hero">
+        <h1 class="doc-hero__title">{pageTitle[lang]}</h1>
+        <p class="doc-hero__subtitle">{pageDesc[lang]}</p>
+        <p class="doc-hero__date">{lastUpdated[lang]}</p>
+      </header>
+
+      <div class="doc-content">
+        {sections.map((s) => (
+          <section class="doc-section">
+            <h2>{s.title[lang]}</h2>
+            <div set:html={s.html[lang]} />
+          </section>
+        ))}
+      </div>
+    </div>
+  </article>
+
+  <Footer lang={lang} />
+</Layout>
+
+<style>
+  .doc-page {
+    padding-top: 120px;
+    padding-bottom: 80px;
+  }
+
+  .doc-hero {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(230, 233, 255, 0.06);
+  }
+
+  .doc-hero__title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .doc-hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--light-400);
+  }
+
+  .doc-hero__date {
+    font-size: 0.85rem;
+    color: var(--light-400);
+    opacity: 0.6;
+    margin-top: 12px;
+  }
+
+  .doc-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .doc-section {
+    margin-bottom: 40px;
+  }
+
+  .doc-section h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--white);
+  }
+
+  .doc-section h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--light);
+  }
+
+  .doc-section p {
+    font-size: 0.93rem;
+    color: var(--light-400);
+    line-height: 1.8;
+    margin-bottom: 8px;
+  }
+
+  .doc-section strong {
+    color: var(--light);
+  }
+
+  .doc-section a {
+    color: var(--accent);
+    transition: all var(--transition);
+  }
+
+  .doc-section a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .doc-section ul {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+
+  .doc-section li {
+    font-size: 0.93rem;
+    color: var(--light-400);
+    line-height: 1.7;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 768px) {
+    .doc-page {
+      padding-top: 100px;
+      padding-bottom: 60px;
+    }
+
+    .doc-hero {
+      margin-bottom: 40px;
+      padding-bottom: 32px;
+    }
+
+    .doc-section {
+      margin-bottom: 32px;
+    }
+
+    .doc-section h2 {
+      font-size: 1.15rem;
+    }
+  }
+</style>

@@ -1,0 +1,304 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import { type Lang, meta, langPrefix } from "../i18n/translations";
+
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+const prefix = langPrefix(lang);
+
+const sections = [
+  {
+    title: { uz: "Getolog nima?", ru: "Что такое Getolog?" },
+    html: {
+      uz: `<p>Getolog — Telegram kanal yoki guruh egalariga o'z kontentini pullik qilish imkonini beruvchi xizmat. Siz bot ishlab chiqib, narx belgilaysiz. Obunachi to'lov qiladi — kanalga avtomatik kiradi. Muddat tugadi — avtomatik chiqariladi. Hammasi botingiz orqali ishlaydi, siz qo'lda hech narsa qilmaysiz.</p>`,
+      ru: `<p>Getolog — сервис, позволяющий владельцам Telegram-каналов и групп монетизировать свой контент. Вы создаёте бота, устанавливаете цену. Подписчик оплачивает — автоматически получает доступ к каналу. Срок истекает — автоматически удаляется. Всё работает через вашего бота, вам не нужно ничего делать вручную.</p>`,
+    },
+  },
+  {
+    title: { uz: "Qanday muammoni hal qiladi?", ru: "Какую проблему решает?" },
+    html: {
+      uz: `<p>Pullik kanal yuritgan odamlar har bir yangi obunachida bir xil ishni takrorlaydi: to'lov screenshotini kutish, tekshirish, qo'lda kanalga qo'shish, obuna muddatini biror joyga yozib qo'yish, keyin muddati tugaganlarni eslab chiqarib turish.</p>
+<p>2–3 kishi bo'lganda bu aytarli emas. Lekin obunchilar soni o'sganda bu ishning o'zi alohida yuk bo'lib qoladi va kontentga vaqt qolmaydi.</p>
+<p>Getolog aynan shu muammoni hal qiladi. To'lovni qabul qilishdan tortib, kanalga qo'shish va chiqarishgacha — hammasi avtomatik. Siz faqat kontentingizga e'tibor qarataverasiz.</p>`,
+      ru: `<p>Владельцы платных каналов при каждом новом подписчике повторяют одни и те же действия: ждут скриншот оплаты, проверяют, вручную добавляют в канал, записывают срок подписки, затем удаляют тех, у кого срок истёк.</p>
+<p>При 2–3 подписчиках это не критично. Но когда число подписчиков растёт, это становится отдельной нагрузкой, и на контент не остаётся времени.</p>
+<p>Getolog решает именно эту проблему. От приёма оплаты до добавления и удаления из канала — всё автоматически. Вы сосредотачиваетесь только на контенте.</p>`,
+    },
+  },
+  {
+    title: { uz: "Kimga mo'ljallangan?", ru: "Для кого предназначен?" },
+    html: {
+      uz: `<ul>
+<li><strong>Pullik kanal va guruh egalari.</strong> Signal kanallar, VIP guruhlar, maxfiy kontentlar — har qanday pullik Telegram resurs egasi uchun.</li>
+<li><strong>Kurs va ta'lim beruvchilar.</strong> Kursni Telegram kanal orqali beradigan va obunachilarga avtomatik ruxsat bermoqchi bo'lgan o'qituvchilar uchun.</li>
+<li><strong>Hamjamiyat va mastermind egalari.</strong> Pullik guruh yuritib, a'zolarni tartibli boshqarmoqchi bo'lganlar uchun.</li>
+</ul>`,
+      ru: `<ul>
+<li><strong>Владельцы платных каналов и групп.</strong> Сигнальные каналы, VIP-группы, закрытый контент — для любого владельца платного Telegram-ресурса.</li>
+<li><strong>Авторы курсов и преподаватели.</strong> Для тех, кто ведёт курсы через Telegram-канал и хочет автоматически предоставлять доступ подписчикам.</li>
+<li><strong>Владельцы сообществ и мастермайнд-групп.</strong> Для тех, кто ведёт платную группу и хочет упорядочить управление участниками.</li>
+</ul>`,
+    },
+  },
+  {
+    title: { uz: "Qanday ishlaydi?", ru: "Как работает?" },
+    html: {
+      uz: `<h3>Siz (kanal egasi) uchun</h3>
+<ol>
+<li>Telegramda @BotFather ga kirib, yangi bot ishlab chiqing.</li>
+<li>@getolog_bot ga kiring va /start bosing.</li>
+<li>BotFather bergan bot tokeningizni yuboring.</li>
+<li>To'lov qabul qiladigan karta raqamingizni kiriting.</li>
+<li>Ishlab chiqilgan botingizni kanalingizga admin qilib qo'shing — kanal avtomatik aniqlanadi.</li>
+<li>Obuna narxini va muddatini belgilang.</li>
+<li>Tayyor — botingiz ishga tushdi.</li>
+</ol>
+<h3>Obunachi uchun</h3>
+<ol>
+<li>Sizning botingizga /start bosadi.</li>
+<li>Tilni tanlaydi: o'zbek, rus yoki ingliz.</li>
+<li>Mavjud kanallarni ko'radi va keraklisini tanlaydi.</li>
+<li>"Sotib olish" tugmasini bosadi — karta raqamingiz chiqadi.</li>
+<li>Pul o'tkazadi va to'lov screenshotini yuboradi.</li>
+<li>Siz (yoki hamkoringiz) to'lovni tasdiqlaysiz.</li>
+<li>Obunachiga bir martalik havola keladi — u orqali kanalga kiradi.</li>
+<li>Obuna muddati tugashi yaqinlashganda avtomatik ogohlantirish boradi.</li>
+<li>Muddat tugaganda kanaldan avtomatik chiqariladi.</li>
+</ol>`,
+      ru: `<h3>Для вас (владельца канала)</h3>
+<ol>
+<li>Зайдите в Telegram к @BotFather и создайте нового бота.</li>
+<li>Зайдите в @getolog_bot и нажмите /start.</li>
+<li>Отправьте токен бота, полученный от BotFather.</li>
+<li>Введите номер карты для приёма оплаты.</li>
+<li>Добавьте созданного бота администратором в свой канал — канал определится автоматически.</li>
+<li>Установите цену и срок подписки.</li>
+<li>Готово — ваш бот запущен.</li>
+</ol>
+<h3>Для подписчика</h3>
+<ol>
+<li>Нажимает /start в вашем боте.</li>
+<li>Выбирает язык: узбекский, русский или английский.</li>
+<li>Видит доступные каналы и выбирает нужный.</li>
+<li>Нажимает «Купить» — появляется номер вашей карты.</li>
+<li>Переводит оплату и отправляет скриншот чека.</li>
+<li>Вы (или ваш помощник) подтверждаете оплату.</li>
+<li>Подписчику приходит одноразовая ссылка — по ней он входит в канал.</li>
+<li>При приближении окончания подписки отправляется предупреждение.</li>
+<li>По истечении срока подписчик автоматически удаляется из канала.</li>
+</ol>`,
+    },
+  },
+  {
+    title: { uz: "Tarif rejalar", ru: "Тарифные планы" },
+    html: {
+      uz: `<div class="doc-tariff">
+<h3>Bepul</h3>
+<p>1 ta bot ishlab chiqish mumkin. Botda Getolog reklamasi va brendingi ko'rinadi. Hamkor qo'shish imkoni yo'q. Xizmatni sinab ko'rish va boshlash uchun yetarli.</p>
+</div>
+<div class="doc-tariff">
+<h3>Standart — 97 000 so'm/oy</h3>
+<p>2 tagacha bot ishlab chiqish mumkin. Reklama olib tashlanadi, lekin Getolog brendingi qoladi. 2 tagacha hamkor qo'shish mumkin.</p>
+</div>
+<div class="doc-tariff">
+<h3>Premium — 197 000 so'm/oy</h3>
+<p>5 tagacha bot ishlab chiqish mumkin. Reklama ham, brending ham olib tashlanadi. 5 tagacha hamkor qo'shish mumkin. Kelajakda Click va Payme orqali avtomatik to'lov qabul qilish imkoniyati qo'shiladi.</p>
+</div>
+<p class="doc-link"><a href="${prefix}/price">Tariflarni batafsil taqqoslash →</a></p>`,
+      ru: `<div class="doc-tariff">
+<h3>Бесплатный</h3>
+<p>Можно создать 1 бота. В боте отображается реклама и брендинг Getolog. Нет возможности добавить помощников. Достаточно для тестирования и начала работы.</p>
+</div>
+<div class="doc-tariff">
+<h3>Стандарт — 97 000 сум/мес</h3>
+<p>До 2 ботов. Реклама убирается, но брендинг Getolog остаётся. Можно добавить до 2 помощников.</p>
+</div>
+<div class="doc-tariff">
+<h3>Премиум — 197 000 сум/мес</h3>
+<p>До 5 ботов. Убирается и реклама, и брендинг. Можно добавить до 5 помощников. В будущем будет добавлена возможность автоматического приёма оплаты через Click и Payme.</p>
+</div>
+<p class="doc-link"><a href="${prefix}/price">Подробное сравнение тарифов →</a></p>`,
+    },
+  },
+  {
+    title: { uz: "Hamkor (yordamchi) nima?", ru: "Что такое помощник?" },
+    html: {
+      uz: `<p>Hamkor — bu siz ishongan odam bo'lib, u sizning botingizdagi to'lovlarni ko'rishi va tasdiqlashi mumkin. Masalan, siz band bo'lganingizda hamkoringiz obunachining to'lovini tasdiqlaydi va u kanalga kiradi. Hamkor botning boshqa sozlamalarini o'zgartira olmaydi.</p>`,
+      ru: `<p>Помощник — это доверенный человек, который может просматривать и подтверждать оплату в вашем боте. Например, когда вы заняты, ваш помощник подтверждает оплату подписчика, и тот получает доступ к каналу. Помощник не может изменять другие настройки бота.</p>`,
+    },
+  },
+  {
+    title: { uz: "Xavfsizlik", ru: "Безопасность" },
+    html: {
+      uz: `<p>Sizning bot tokeningiz va karta raqamingiz shifrlangan holda saqlanadi. Biz ularni ochiq ko'rinishda hech qachon saqlamaymiz va uchinchi tomonlarga bermaymiz.</p>
+<p>Obunachiga beriladigan kanalga kirish havolasi bir martalik bo'lib, faqat bitta odam foydalanishi mumkin. Bu sizning kanalingizga ruxsatsiz kirishning oldini oladi.</p>
+<p>Platforma va botlar o'rtasidagi barcha aloqa himoyalangan. Tashqaridan hech kim sizning botingiz yoki ma'lumotlaringizga kirish imkoniga ega emas.</p>`,
+      ru: `<p>Ваш токен бота и номер карты хранятся в зашифрованном виде. Мы никогда не храним их в открытом виде и не передаём третьим лицам.</p>
+<p>Ссылка для входа в канал, выдаваемая подписчику, является одноразовой и может быть использована только одним человеком. Это предотвращает несанкционированный доступ к вашему каналу.</p>
+<p>Все коммуникации между платформой и ботами защищены. Никто извне не имеет доступа к вашему боту или вашим данным.</p>`,
+    },
+  },
+];
+
+const pageTitle = { uz: "Getolog haqida", ru: "О сервисе Getolog" };
+const pageDesc = {
+  uz: "Telegram kanal va guruhlar uchun avtomatik obuna boshqaruv tizimi",
+  ru: "Автоматическая система управления подписками для Telegram-каналов и групп",
+};
+---
+
+<Layout title={meta.infoTitle[lang]} description={meta.infoDesc[lang]} lang={lang}>
+  <Navbar lang={lang} />
+
+  <article class="doc-page">
+    <div class="container">
+      <header class="doc-hero">
+        <h1 class="doc-hero__title">{pageTitle[lang]}</h1>
+        <p class="doc-hero__subtitle">{pageDesc[lang]}</p>
+      </header>
+
+      <div class="doc-content">
+        {sections.map((s) => (
+          <section class="doc-section">
+            <h2>{s.title[lang]}</h2>
+            <div set:html={s.html[lang]} />
+          </section>
+        ))}
+      </div>
+    </div>
+  </article>
+
+  <Footer lang={lang} />
+</Layout>
+
+<style>
+  .doc-page {
+    padding-top: 120px;
+    padding-bottom: 80px;
+  }
+
+  .doc-hero {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(230, 233, 255, 0.06);
+  }
+
+  .doc-hero__title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .doc-hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--light-400);
+  }
+
+  .doc-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .doc-section {
+    margin-bottom: 48px;
+  }
+
+  .doc-section h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--white);
+  }
+
+  .doc-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    color: var(--light);
+  }
+
+  .doc-section p {
+    font-size: 0.95rem;
+    color: var(--light-400);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .doc-section ul,
+  .doc-section ol {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+
+  .doc-section li {
+    font-size: 0.95rem;
+    color: var(--light-400);
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+
+  .doc-section li strong {
+    color: var(--light);
+  }
+
+  .doc-tariff {
+    background: var(--dark-800);
+    border: 1px solid rgba(230, 233, 255, 0.06);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+
+  .doc-tariff h3 {
+    margin-top: 0;
+  }
+
+  .doc-tariff p {
+    margin-bottom: 0;
+  }
+
+  .doc-link {
+    margin-top: 16px;
+  }
+
+  .doc-link a {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all var(--transition);
+  }
+
+  .doc-link a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .doc-page {
+      padding-top: 100px;
+      padding-bottom: 60px;
+    }
+
+    .doc-hero {
+      margin-bottom: 40px;
+      padding-bottom: 32px;
+    }
+
+    .doc-section {
+      margin-bottom: 36px;
+    }
+
+    .doc-section h2 {
+      font-size: 1.25rem;
+    }
+
+    .doc-tariff {
+      padding: 16px 20px;
+    }
+  }
+</style>

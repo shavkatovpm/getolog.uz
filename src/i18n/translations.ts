@@ -231,6 +231,8 @@ export const footer = {
   tagline: { uz: "Yopiq kanallar uchun avtomatlashtirish", ru: "Автоматизация закрытых каналов" } as T,
   bot: { uz: "Bot", ru: "Бот" } as T,
   help: { uz: "Yordam", ru: "Помощь" } as T,
+  info: { uz: "Ma'lumot", ru: "Информация" } as T,
+  offerta: { uz: "Offerta", ru: "Оферта" } as T,
   copyright: { uz: "© 2026 Getolog. Barcha huquqlar himoyalangan.", ru: "© 2026 Getolog. Все права защищены." } as T,
 };
 
@@ -262,6 +264,16 @@ export const meta = {
     ru: "Тарифные планы Getolog. Подробное сравнение тарифов: Бесплатный, Стандарт и Премиум.",
   } as T,
   skipLink: { uz: "Asosiy kontentga o'tish", ru: "Перейти к основному контенту" } as T,
+  infoTitle: { uz: "Getolog haqida — Ma'lumot", ru: "О сервисе Getolog — Информация" } as T,
+  infoDesc: {
+    uz: "Getolog nima, qanday ishlaydi, kimga mo'ljallangan — batafsil ma'lumot.",
+    ru: "Что такое Getolog, как работает, для кого предназначен — подробная информация.",
+  } as T,
+  offertaTitle: { uz: "Ommaviy oferta — Getolog", ru: "Публичная оферта — Getolog" } as T,
+  offertaDesc: {
+    uz: "Getolog xizmati ommaviy oferta shartnomasi. Xizmat ko'rsatish shartlari.",
+    ru: "Публичная оферта сервиса Getolog. Условия оказания услуг.",
+  } as T,
 };
 
 /* ───── Price page ───── */
