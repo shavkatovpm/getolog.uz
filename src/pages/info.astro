@@ -152,6 +152,62 @@ const pageDesc = {
 <Layout title={meta.infoTitle[lang]} description={meta.infoDesc[lang]} lang={lang}>
   <Navbar lang={lang} />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Getolog",
+        "url": "https://getolog.uz",
+        "logo": "https://getolog.uz/logo.png",
+        "description": pageDesc[lang],
+        "sameAs": [
+          "https://t.me/getolog_bot",
+          "https://t.me/getologbot"
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "name": pageTitle[lang],
+        "description": meta.infoDesc[lang],
+        "url": lang === "uz" ? "https://getolog.uz/info" : "https://getolog.uz/ru/info",
+        "inLanguage": lang,
+        "isPartOf": { "@type": "WebSite", "name": "Getolog", "url": "https://getolog.uz" },
+        "about": {
+          "@type": "SoftwareApplication",
+          "name": "Getolog",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Telegram",
+          "description": pageDesc[lang],
+          "offers": {
+            "@type": "AggregateOffer",
+            "lowPrice": "0",
+            "highPrice": "197000",
+            "priceCurrency": "UZS",
+            "offerCount": 3
+          }
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Getolog",
+            "item": lang === "uz" ? "https://getolog.uz" : "https://getolog.uz/ru"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": pageTitle[lang],
+            "item": lang === "uz" ? "https://getolog.uz/info" : "https://getolog.uz/ru/info"
+          }
+        ]
+      }
+    ]
+  })} />
+
   <article class="doc-page">
     <div class="container">
       <header class="doc-hero">
