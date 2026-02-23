@@ -5,6 +5,7 @@ interface Props { lang?: Lang }
 const lang = Astro.props.lang || "uz" as Lang;
 const alt = alternateLang(lang);
 const prefix = langPrefix(lang);
+const altFlag = alt === "ru" ? "🇷🇺" : "🇺🇿";
 
 // Current page path without lang prefix
 const pathname = Astro.url.pathname.replace(/^\/ru/, '') || '/';
@@ -22,7 +23,7 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
       <li role="none"><a href={prefix + "/#how-it-works"} role="menuitem">{nav.howItWorks[lang]}</a></li>
       <li role="none"><a href={prefix + "/#pricing"} role="menuitem">{nav.pricing[lang]}</a></li>
       <li role="none"><a href={prefix + "/#faq"} role="menuitem">{nav.faq[lang]}</a></li>
-      <li role="none"><a href={altHref} class="navbar__lang" role="menuitem">{alt.toUpperCase()}</a></li>
+      <li class="navbar__links-lang" role="none"><a href={altHref} class="navbar__lang" role="menuitem">{altFlag}</a></li>
       <li class="navbar__links-cta" role="none">
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full" role="menuitem">
           {nav.start[lang]}
@@ -31,7 +32,7 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
       </li>
     </ul>
     <div class="navbar__right">
-      <a href={altHref} class="navbar__lang-desktop">{alt.toUpperCase()}</a>
+      <a href={altHref} class="navbar__lang-desktop">{altFlag}</a>
       <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary navbar__cta">{nav.start[lang]}</a>
     </div>
     <button
@@ -110,18 +111,19 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
   }
 
   .navbar__lang {
-    font-weight: 600 !important;
-    color: var(--accent) !important;
-    font-size: 0.85rem !important;
-    padding: 4px 10px;
-    border: 1px solid rgba(139, 142, 255, 0.3);
+    font-size: 1.35rem !important;
+    line-height: 1;
+    padding: 4px 6px;
     border-radius: 6px;
     transition: all var(--transition);
   }
 
   .navbar__lang:hover {
-    background: rgba(139, 142, 255, 0.1);
-    color: var(--accent) !important;
+    background: rgba(230, 233, 255, 0.08);
+  }
+
+  .navbar__links-lang {
+    display: none;
   }
 
   .navbar__links-cta {
@@ -135,17 +137,15 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
   }
 
   .navbar__lang-desktop {
-    font-weight: 600;
-    color: var(--accent);
-    font-size: 0.85rem;
-    padding: 4px 10px;
-    border: 1px solid rgba(139, 142, 255, 0.3);
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 4px 6px;
     border-radius: 6px;
     transition: all var(--transition);
   }
 
   .navbar__lang-desktop:hover {
-    background: rgba(139, 142, 255, 0.1);
+    background: rgba(230, 233, 255, 0.08);
   }
 
   .navbar__cta {
@@ -263,12 +263,17 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
       padding-left: 8px;
     }
 
+    .navbar__links-lang {
+      display: block;
+    }
+
     .navbar__lang {
       display: inline-block !important;
       width: auto !important;
-      font-size: 1rem !important;
+      font-size: 1.3rem !important;
       padding: 8px 16px;
       text-align: center;
+      border-bottom: none !important;
     }
 
     .navbar__links-cta {
