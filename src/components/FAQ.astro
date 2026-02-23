@@ -160,7 +160,9 @@ const faqs = [
 <script>
   const faqItems = document.querySelectorAll(".faq-item");
 
-  faqItems.forEach((item) => {
+  const faqButtons = document.querySelectorAll(".faq-item__question");
+
+  faqItems.forEach((item, index) => {
     const btn = item.querySelector(".faq-item__question")!;
 
     btn.addEventListener("click", () => {
@@ -177,6 +179,19 @@ const faqs = [
         item.classList.add("open");
         btn.setAttribute("aria-expanded", "true");
       }
+    });
+
+    // Arrow key navigation
+    btn.addEventListener("keydown", (e: KeyboardEvent) => {
+      let target: Element | null = null;
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        target = faqButtons[(index + 1) % faqButtons.length];
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        target = faqButtons[(index - 1 + faqButtons.length) % faqButtons.length];
+      }
+      if (target) (target as HTMLElement).focus();
     });
   });
 </script>

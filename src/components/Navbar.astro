@@ -4,14 +4,14 @@
 
 <nav class="navbar" id="navbar" role="navigation" aria-label="Asosiy navigatsiya">
   <div class="container navbar__inner">
-    <a href="#" class="navbar__logo">
+    <a href="/" class="navbar__logo">
       <img src="/logo.png" alt="Getolog" class="logo-img" />
       <span>Getolog</span>
     </a>
     <ul class="navbar__links" id="navLinks" role="menubar">
       <li role="none"><a href="#features" role="menuitem">Imkoniyatlar</a></li>
       <li role="none"><a href="#how-it-works" role="menuitem">Qanday ishlaydi</a></li>
-      <li role="none"><a href="#pricing" role="menuitem">Tariflar</a></li>
+      <li role="none"><a href="/price" role="menuitem">Tariflar</a></li>
       <li role="none"><a href="#faq" role="menuitem">FAQ</a></li>
       <li class="navbar__links-cta" role="none">
         <a href="https://t.me/getolog_bot?start=web" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full" role="menuitem">
@@ -177,6 +177,8 @@
     .navbar__links.open {
       max-height: 100dvh;
       padding: 90px 32px 40px;
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: auto;
     }
 
     .navbar__links li {
