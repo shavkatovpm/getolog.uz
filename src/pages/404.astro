@@ -2,17 +2,18 @@
 import Layout from "../layouts/Layout.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import { notFound } from "../i18n/translations";
 ---
 
-<Layout title="404 — Sahifa topilmadi | Getolog" description="Kechirasiz, siz qidirayotgan sahifa topilmadi.">
+<Layout title={notFound.title.uz} description={notFound.desc.uz}>
   <Navbar />
 
   <section class="error-page">
     <div class="container error-page__inner">
       <span class="error-page__code">404</span>
-      <h1 class="error-page__title">Sahifa topilmadi</h1>
-      <p class="error-page__desc">Kechirasiz, siz qidirayotgan sahifa mavjud emas yoki ko'chirilgan.</p>
-      <a href="/" class="btn btn--primary btn--lg">Bosh sahifaga qaytish</a>
+      <h1 class="error-page__title" data-uz={notFound.heading.uz} data-ru={notFound.heading.ru}>{notFound.heading.uz}</h1>
+      <p class="error-page__desc" data-uz={notFound.text.uz} data-ru={notFound.text.ru}>{notFound.text.uz}</p>
+      <a href="/" class="btn btn--primary btn--lg error-page__btn" data-uz={notFound.btn.uz} data-ru={notFound.btn.ru}>{notFound.btn.uz}</a>
     </div>
   </section>
 
@@ -58,3 +59,18 @@ import Footer from "../components/Footer.astro";
     margin-bottom: 16px;
   }
 </style>
+
+<script>
+  if (window.location.pathname.startsWith("/ru")) {
+    document.documentElement.lang = "ru";
+    document.querySelectorAll("[data-ru]").forEach((el) => {
+      const ru = el.getAttribute("data-ru")!;
+      if (el.tagName === "A") {
+        el.textContent = ru;
+        (el as HTMLAnchorElement).href = "/ru/";
+      } else {
+        el.textContent = ru;
+      }
+    });
+  }
+</script>

@@ -1,62 +1,36 @@
 ---
+import { type Lang, problems } from "../i18n/translations";
 
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+
+const icons = [
+  '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.5" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
+  '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+  '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.5" aria-hidden="true"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>',
+  '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.5" aria-hidden="true"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>',
+];
 ---
 
 <section class="section" id="features">
   <div class="container">
     <div class="section__header">
-      <h2 class="section__title">Getolog imkoniyatlari</h2>
-      <p class="section__subtitle">Qaysi muammolarni yechamiz?</p>
+      <h2 class="section__title">{problems.title[lang]}</h2>
+      <p class="section__subtitle">{problems.subtitle[lang]}</p>
     </div>
 
     <div class="problems-grid">
-      <div class="problem-card reveal">
-        <div class="problem-card__icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.5" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+      {problems.cards.map((card, i) => (
+        <div class="problem-card reveal">
+          <div class="problem-card__icon" set:html={icons[i]} />
+          <h3 class="problem-card__pain">{card.pain[lang]}</h3>
+          <p class="problem-card__desc">{card.desc[lang]}</p>
+          <div class="problem-card__solution">
+            <div class="solution-tag">{problems.solutionTag[lang]}</div>
+            <p set:html={card.solution[lang]} />
+          </div>
         </div>
-        <h3 class="problem-card__pain">Har bir obunachiga alohida link berish</h3>
-        <p class="problem-card__desc">To'lovni tekshirish, link yaratish, kanalga qo'shish - har safar takrorlanadi.</p>
-        <div class="problem-card__solution">
-          <div class="solution-tag">Yechim</div>
-          <p>To'lov tasdiqlangach bot <strong>avtomatik invite link</strong> beradi. Siz faqat tasdiqlaysiz.</p>
-        </div>
-      </div>
-
-      <div class="problem-card reveal">
-        <div class="problem-card__icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        </div>
-        <h3 class="problem-card__pain">Obuna muddatini kuzatib bo'lmaydi</h3>
-        <p class="problem-card__desc">Kim qachon kirgan, kimniki tugagan - qo'lda nazorat qilish deyarli imkonsiz.</p>
-        <div class="problem-card__solution">
-          <div class="solution-tag">Yechim</div>
-          <p>Muddat tugashiga <strong>3 va 1 kun</strong> qolganda bot ogohlantiradi. Tugagach - <strong>avtomatik chiqaradi</strong>.</p>
-        </div>
-      </div>
-
-      <div class="problem-card reveal">
-        <div class="problem-card__icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.5" aria-hidden="true"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-        </div>
-        <h3 class="problem-card__pain">Link boshqalarga tarqalib ketadi</h3>
-        <p class="problem-card__desc">Bitta linkni 10 kishi ishlatadi. To'lov qilmaganlar ham kanalingizda o'tiradi.</p>
-        <div class="problem-card__solution">
-          <div class="solution-tag">Yechim</div>
-          <p>Har bir link <strong>faqat 1 marta</strong> ishlaydi. Obuna bo'ladi, keyin link yaroqsiz holatga keladi.</p>
-        </div>
-      </div>
-
-      <div class="problem-card reveal">
-        <div class="problem-card__icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.5" aria-hidden="true"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        </div>
-        <h3 class="problem-card__pain">Bot tayyorlash qimmat va murakkab</h3>
-        <p class="problem-card__desc">Dasturchi yollash - o'rtacha 500$. O'zingiz yozish - oylab vaqt oladi.</p>
-        <div class="problem-card__solution">
-          <div class="solution-tag">Yechim</div>
-          <p>Kod yozish shart emas. <strong>Bot tokenini yuboring</strong> - 2 daqiqada tayyor bot olasiz.</p>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>

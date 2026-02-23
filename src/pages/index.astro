@@ -8,15 +8,16 @@ import Pricing from "../components/Pricing.astro";
 import FAQ from "../components/FAQ.astro";
 import CTA from "../components/CTA.astro";
 import Footer from "../components/Footer.astro";
+import { meta } from "../i18n/translations";
 ---
 
-<Layout title="Getolog - Telegram kanal/guruhni monetizatsiya qiling">
-  <Navbar />
-  <Hero />
-  <Problems />
-  <HowItWorks />
-  <Pricing />
-  <FAQ />
-  <CTA />
-  <Footer />
+<Layout title={meta.homeTitle.uz} lang="uz">
+  <Navbar lang="uz" />
+  <Hero lang="uz" />
+  <Problems lang="uz" />
+  <HowItWorks lang="uz" />
+  <Pricing lang="uz" />
+  <FAQ lang="uz" />
+  <CTA lang="uz" />
+  <Footer lang="uz" />
 </Layout>

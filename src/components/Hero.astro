@@ -1,5 +1,8 @@
 ---
+import { type Lang, hero } from "../i18n/translations";
 
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
 ---
 
 <section class="hero" id="main-content">
@@ -12,33 +15,29 @@
   </div>
   <div class="container hero__inner">
     <div class="hero__content">
-      <h1 class="hero__title fade-in-up delay-1">
-        Yopiq Telegram <span class="hero__br"></span>kanallaringizni <span class="hero__br"></span><span class="highlight">avtomatlashtiring</span>
-      </h1>
-      <p class="hero__subtitle fade-in-up delay-2">
-        To'lov qabul qilish, invite link berish, obuna nazorati - <span class="hero__br"></span>barchasini bot bajaradi. Siz faqat kontent joylang.
-      </p>
+      <h1 class="hero__title fade-in-up delay-1" set:html={hero.title[lang]} />
+      <p class="hero__subtitle fade-in-up delay-2" set:html={hero.subtitle[lang]} />
       <div class="hero__actions fade-in-up delay-3">
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--lg">
-          Boshlash
+          {hero.startBtn[lang]}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a href="#how-it-works" class="btn btn--ghost btn--lg">Qanday ishlaydi?</a>
+        <a href="#how-it-works" class="btn btn--ghost btn--lg">{hero.howBtn[lang]}</a>
       </div>
       <div class="hero__stats fade-in-up delay-4">
         <div class="stat">
-          <span class="stat__number">2 daqiqa</span>
-          <span class="stat__label">sozlash</span>
+          <span class="stat__number">{hero.stat1num[lang]}</span>
+          <span class="stat__label">{hero.stat1label[lang]}</span>
         </div>
         <div class="stat__divider" aria-hidden="true"></div>
         <div class="stat">
-          <span class="stat__number">0 so'm</span>
-          <span class="stat__label">boshlash uchun</span>
+          <span class="stat__number">{hero.stat2num[lang]}</span>
+          <span class="stat__label">{hero.stat2label[lang]}</span>
         </div>
         <div class="stat__divider" aria-hidden="true"></div>
         <div class="stat">
-          <span class="stat__number">24/7</span>
-          <span class="stat__label">bot ishlaydi</span>
+          <span class="stat__number">{hero.stat3num[lang]}</span>
+          <span class="stat__label">{hero.stat3label[lang]}</span>
         </div>
       </div>
     </div>
@@ -49,36 +48,29 @@
           <div class="chat-header">
             <div class="chat-header__avatar">P</div>
             <div>
-              <div class="chat-header__name">Premium Kanal Bot</div>
-              <div class="chat-header__status">online</div>
+              <div class="chat-header__name">{hero.phoneName[lang]}</div>
+              <div class="chat-header__status">{hero.phoneStatus[lang]}</div>
             </div>
           </div>
           <div class="chat-demo">
             <div class="chat-msg chat-msg--bot">
-              <div class="chat-msg__bubble">Assalomu alaykum! "IT Pro Academy" kanaliga kirish uchun to'lov usulini tanlang:</div>
+              <div class="chat-msg__bubble">{hero.phoneGreeting[lang]}</div>
             </div>
             <div class="chat-msg chat-msg--bot">
               <div class="chat-buttons">
-                <span class="chat-btn">1 oy - 50,000 so'm</span>
-                <span class="chat-btn">6 oy - 250,000 so'm</span>
-                <span class="chat-btn">Doimiy - 500,000 so'm</span>
+                <span class="chat-btn">{hero.phoneBtn1[lang]}</span>
+                <span class="chat-btn">{hero.phoneBtn2[lang]}</span>
+                <span class="chat-btn">{hero.phoneBtn3[lang]}</span>
               </div>
             </div>
             <div class="chat-msg chat-msg--user">
-              <div class="chat-msg__bubble">1 oy - 50,000 so'm</div>
+              <div class="chat-msg__bubble">{hero.phoneUserMsg[lang]}</div>
             </div>
             <div class="chat-msg chat-msg--bot">
-              <div class="chat-msg__bubble">
-                Karta: 8600 **** **** 1234<br/>
-                Summa: 50,000 so'm<br/><br/>
-                To'lovni amalga oshiring va chek rasmini yuboring.
-              </div>
+              <div class="chat-msg__bubble" set:html={hero.phoneCardInfo[lang]} />
             </div>
             <div class="chat-msg chat-msg--bot success-msg">
-              <div class="chat-msg__bubble">To'lov tasdiqlandi! Mana sizning linkingiz:<br/><br/>
-                <span class="invite-link">t.me/+aBcDeFgHiJk</span><br/><br/>
-                Bu link faqat 1 marta ishlaydi.
-              </div>
+              <div class="chat-msg__bubble" set:html={hero.phoneSuccess[lang]} />
             </div>
           </div>
         </div>

@@ -1,30 +1,43 @@
 ---
+import { type Lang, nav, langPrefix, alternateLang } from "../i18n/translations";
 
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+const alt = alternateLang(lang);
+const prefix = langPrefix(lang);
+
+// Current page path without lang prefix
+const pathname = Astro.url.pathname.replace(/^\/ru/, '') || '/';
+const altHref = alt === "uz" ? pathname : '/ru' + pathname;
 ---
 
-<nav class="navbar" id="navbar" role="navigation" aria-label="Asosiy navigatsiya">
+<nav class="navbar" id="navbar" role="navigation" aria-label={lang === "uz" ? "Asosiy navigatsiya" : "Основная навигация"}>
   <div class="container navbar__inner">
-    <a href="/" class="navbar__logo">
+    <a href={prefix + "/"} class="navbar__logo">
       <img src="/logo.png" alt="Getolog" class="logo-img" />
       <span>Getolog</span>
     </a>
     <ul class="navbar__links" id="navLinks" role="menubar">
-      <li role="none"><a href="#features" role="menuitem">Imkoniyatlar</a></li>
-      <li role="none"><a href="#how-it-works" role="menuitem">Qanday ishlaydi</a></li>
-      <li role="none"><a href="/#pricing" role="menuitem">Tariflar</a></li>
-      <li role="none"><a href="#faq" role="menuitem">FAQ</a></li>
+      <li role="none"><a href={prefix + "/#features"} role="menuitem">{nav.features[lang]}</a></li>
+      <li role="none"><a href={prefix + "/#how-it-works"} role="menuitem">{nav.howItWorks[lang]}</a></li>
+      <li role="none"><a href={prefix + "/#pricing"} role="menuitem">{nav.pricing[lang]}</a></li>
+      <li role="none"><a href={prefix + "/#faq"} role="menuitem">{nav.faq[lang]}</a></li>
+      <li role="none"><a href={altHref} class="navbar__lang" role="menuitem">{alt.toUpperCase()}</a></li>
       <li class="navbar__links-cta" role="none">
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full" role="menuitem">
-          Boshlash
+          {nav.start[lang]}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </li>
     </ul>
-    <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary navbar__cta">Boshlash</a>
+    <div class="navbar__right">
+      <a href={altHref} class="navbar__lang-desktop">{alt.toUpperCase()}</a>
+      <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary navbar__cta">{nav.start[lang]}</a>
+    </div>
     <button
       class="navbar__burger"
       id="burgerBtn"
-      aria-label="Menyu"
+      aria-label={lang === "uz" ? "Menyu" : "Меню"}
       aria-expanded="false"
       aria-controls="navLinks"
     >
@@ -96,8 +109,43 @@
     color: var(--light);
   }
 
+  .navbar__lang {
+    font-weight: 600 !important;
+    color: var(--accent) !important;
+    font-size: 0.85rem !important;
+    padding: 4px 10px;
+    border: 1px solid rgba(139, 142, 255, 0.3);
+    border-radius: 6px;
+    transition: all var(--transition);
+  }
+
+  .navbar__lang:hover {
+    background: rgba(139, 142, 255, 0.1);
+    color: var(--accent) !important;
+  }
+
   .navbar__links-cta {
     display: none;
+  }
+
+  .navbar__right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .navbar__lang-desktop {
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border: 1px solid rgba(139, 142, 255, 0.3);
+    border-radius: 6px;
+    transition: all var(--transition);
+  }
+
+  .navbar__lang-desktop:hover {
+    background: rgba(139, 142, 255, 0.1);
   }
 
   .navbar__cta {
@@ -198,6 +246,7 @@
     .navbar__links.open li:nth-child(3) { transition-delay: 0.2s; }
     .navbar__links.open li:nth-child(4) { transition-delay: 0.25s; }
     .navbar__links.open li:nth-child(5) { transition-delay: 0.3s; }
+    .navbar__links.open li:nth-child(6) { transition-delay: 0.35s; }
 
     .navbar__links a {
       padding: 16px 0;
@@ -214,6 +263,14 @@
       padding-left: 8px;
     }
 
+    .navbar__lang {
+      display: inline-block !important;
+      width: auto !important;
+      font-size: 1rem !important;
+      padding: 8px 16px;
+      text-align: center;
+    }
+
     .navbar__links-cta {
       display: block;
       margin-top: 24px;
@@ -227,7 +284,7 @@
       justify-content: center;
     }
 
-    .navbar__cta {
+    .navbar__right {
       display: none;
     }
 

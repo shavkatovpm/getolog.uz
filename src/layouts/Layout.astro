@@ -1,19 +1,29 @@
 ---
+import { type Lang, meta, langPrefix } from "../i18n/translations";
+
 interface Props {
   title: string;
   description?: string;
+  lang?: Lang;
 }
 
 const {
   title,
-  description = "Getolog - Telegram kanalingizni pullik qiling. Bot tokeningizni yuboring, biz avtomatlashtirilgan sotuvchi bot yaratamiz.",
+  lang = "uz" as Lang,
+  description = meta.defaultDesc[lang],
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://getolog.uz');
+const site = Astro.site || new URL('https://getolog.uz');
+const canonicalURL = new URL(Astro.url.pathname, site);
+
+// hreflang URLs
+const pathname = Astro.url.pathname.replace(/^\/ru/, '') || '/';
+const uzURL = new URL(pathname, site);
+const ruURL = new URL('/ru' + pathname, site);
 ---
 
 <!doctype html>
-<html lang="uz">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,13 +31,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://getolog.
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalURL.href} />
-    <link rel="alternate" hreflang="uz" href={canonicalURL.href} />
+    <link rel="alternate" hreflang="uz" href={uzURL.href} />
+    <link rel="alternate" hreflang="ru" href={ruURL.href} />
+    <link rel="alternate" hreflang="x-default" href={uzURL.href} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:locale" content={lang === "uz" ? "uz_UZ" : "ru_RU"} />
+    <meta property="og:locale:alternate" content={lang === "uz" ? "ru_RU" : "uz_UZ"} />
     <meta property="og:image" content="https://getolog.uz/logo.png" />
 
     <!-- Twitter Card -->
@@ -39,7 +53,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://getolog.
     <link rel="icon" id="favicon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
 
-    <!-- Fonts: faqat ishlatilgan Inter & Outfit -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -53,6 +67,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://getolog.
       "description": description,
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
+      "inLanguage": [lang === "uz" ? "uz" : "ru"],
       "offers": [
         {
           "@type": "Offer",
@@ -78,7 +93,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://getolog.
     })} />
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Asosiy kontentga o'tish</a>
+    <a href="#main-content" class="skip-link">{meta.skipLink[lang]}</a>
     <slot />
   </body>
 </html>
@@ -88,7 +103,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://getolog.
 </style>
 
 <script>
-  // Scroll reveal with IntersectionObserver (scroll listener o'rniga)
+  // Scroll reveal with IntersectionObserver
   const revealElements = document.querySelectorAll('.reveal');
 
   const revealObserver = new IntersectionObserver(

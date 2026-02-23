@@ -1,82 +1,86 @@
 ---
+import { type Lang, pricing, langPrefix } from "../i18n/translations";
 
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+const prefix = langPrefix(lang);
 ---
 
 <section class="section" id="pricing">
   <div class="container">
     <div class="section__header">
-      <h2 class="section__title">Tariflar</h2>
-      <p class="section__subtitle">Kanalingiz hajmiga mos tarifni tanlang</p>
+      <h2 class="section__title">{pricing.title[lang]}</h2>
+      <p class="section__subtitle">{pricing.subtitle[lang]}</p>
     </div>
 
     <div class="pricing-grid">
       <!-- Bepul -->
       <div class="pricing-card reveal">
         <div class="pricing-card__header">
-          <h3 class="pricing-card__name">Bepul</h3>
+          <h3 class="pricing-card__name">{pricing.free[lang]}</h3>
           <div class="pricing-card__price">
             <span class="price-amount">0</span>
-            <span class="price-currency">so'm</span>
+            <span class="price-currency">{pricing.currency[lang]}</span>
           </div>
         </div>
-        <ul class="pricing-card__features" aria-label="Bepul tarif xususiyatlari">
-          <li class="included">1 ta bot</li>
-          <li class="included">Karta orqali to'lov</li>
-          <li class="included">Statistika</li>
-          <li class="included">Avtomatik boshqaruvi</li>
-          <li class="excluded">Reklamani o'chirish</li>
-          <li class="excluded">Multi-admin</li>
-          <li class="excluded">Click / Payme</li>
+        <ul class="pricing-card__features" aria-label={pricing.free[lang]}>
+          <li class="included">{pricing.feat1bot[lang]}</li>
+          <li class="included">{pricing.featCard[lang]}</li>
+          <li class="included">{pricing.featStats[lang]}</li>
+          <li class="included">{pricing.featAuto[lang]}</li>
+          <li class="excluded">{pricing.featNoAd[lang]}</li>
+          <li class="excluded">{pricing.featMultiAdmin[lang]}</li>
+          <li class="excluded">{pricing.featPayme[lang]}</li>
         </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
       </div>
 
       <!-- Standard -->
       <div class="pricing-card pricing-card--popular reveal">
-        <span class="popular-badge">Tavsiya</span>
+        <span class="popular-badge">{pricing.badge[lang]}</span>
         <div class="pricing-card__header">
-          <h3 class="pricing-card__name">Standard</h3>
+          <h3 class="pricing-card__name">{pricing.standard[lang]}</h3>
           <div class="pricing-card__price">
             <span class="price-amount">97 000</span>
-            <span class="price-currency">so'm/oy</span>
+            <span class="price-currency">{pricing.currencyMonth[lang]}</span>
           </div>
         </div>
-        <ul class="pricing-card__features" aria-label="Standard tarif xususiyatlari">
-          <li class="included">2 ta bot</li>
-          <li class="included">Karta orqali to'lov</li>
-          <li class="included">Statistika</li>
-          <li class="included">Avtomatik boshqaruvi</li>
-          <li class="included">Reklamani o'chirish</li>
-          <li class="included">2 ta multi-admin</li>
-          <li class="excluded">Click / Payme</li>
+        <ul class="pricing-card__features" aria-label={pricing.standard[lang]}>
+          <li class="included">{pricing.feat2bot[lang]}</li>
+          <li class="included">{pricing.featCard[lang]}</li>
+          <li class="included">{pricing.featStats[lang]}</li>
+          <li class="included">{pricing.featAuto[lang]}</li>
+          <li class="included">{pricing.featNoAd[lang]}</li>
+          <li class="included">{pricing.feat2admin[lang]}</li>
+          <li class="excluded">{pricing.featPayme[lang]}</li>
         </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">Boshlash</a>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
       </div>
 
       <!-- Premium -->
       <div class="pricing-card reveal">
         <div class="pricing-card__header">
-          <h3 class="pricing-card__name">Premium</h3>
+          <h3 class="pricing-card__name">{pricing.premium[lang]}</h3>
           <div class="pricing-card__price">
             <span class="price-amount">197 000</span>
-            <span class="price-currency">so'm/oy</span>
+            <span class="price-currency">{pricing.currencyMonth[lang]}</span>
           </div>
         </div>
-        <ul class="pricing-card__features" aria-label="Premium tarif xususiyatlari">
-          <li class="included">5 ta bot</li>
-          <li class="included">Karta orqali to'lov</li>
-          <li class="included">Statistika</li>
-          <li class="included">Avtomatik boshqaruvi</li>
-          <li class="included">Reklamani o'chirish</li>
-          <li class="included">5 ta multi-admin</li>
-          <li class="included">Click / Payme</li>
+        <ul class="pricing-card__features" aria-label={pricing.premium[lang]}>
+          <li class="included">{pricing.feat5bot[lang]}</li>
+          <li class="included">{pricing.featCard[lang]}</li>
+          <li class="included">{pricing.featStats[lang]}</li>
+          <li class="included">{pricing.featAuto[lang]}</li>
+          <li class="included">{pricing.featNoAd[lang]}</li>
+          <li class="included">{pricing.feat5admin[lang]}</li>
+          <li class="included">{pricing.featPayme[lang]}</li>
         </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
       </div>
     </div>
 
     <p class="pricing-note">
-      <a href="/price" class="pricing-note__link">Batafsil taqqoslash &rarr;</a>
+      <a href={prefix + "/price"} class="pricing-note__link">{pricing.compareLink[lang]}</a>
     </p>
   </div>
 </section>
@@ -180,7 +184,7 @@
   }
 
   .pricing-card__features li.included::before {
-    content: '✓';
+    content: '\2713';
     color: #4ade80;
   }
 
@@ -189,14 +193,8 @@
   }
 
   .pricing-card__features li.excluded::before {
-    content: '×';
+    content: '\00d7';
     color: var(--light-400);
-  }
-
-  .feat-val {
-    font-weight: 700;
-    color: var(--accent);
-    min-width: 28px;
   }
 
   .pricing-note {

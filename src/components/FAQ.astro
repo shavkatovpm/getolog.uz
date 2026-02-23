@@ -1,30 +1,13 @@
 ---
-const faqs = [
-  {
-    q: "Getolog qanday ishlaydi?",
-    a: "Bot tokeningizni yuborasiz - Getolog undan sotuvchi bot yasaydi. Obunachilar shu bot orqali to'lov qiladi va bir martalik invite link oladi.",
-  },
-  {
-    q: "To'lov qayerga tushadi?",
-    a: "To'g'ridan-to'g'ri sizning kartangizga. Getolog to'lovga tegmaydi - faqat bot va obuna boshqaruvini ta'minlaydi.",
-  },
-  {
-    q: "Link ulashib yuborishsa nima bo'ladi?",
-    a: "Har bir link faqat 1 marta ishlaydi. Birinchi kirgan oladi - qolganlar uchun link yaroqsiz bo'ladi.",
-  },
-  {
-    q: "Obuna muddati tugasa?",
-    a: "3 kun va 1 kun qolganda ogohlantirish yuboriladi. Muddat tugagach - avtomatik kanaldan chiqariladi.",
-  },
-  {
-    q: "Bepul tarifda cheklovi bormi?",
-    a: "Funksionallik bir xil. Yagona farq - obunachilar botga kirganda Getolog reklamasi ko'rinadi. Pullik tarifda reklama yo'q.",
-  },
-  {
-    q: "Bot tokenimni berib xavfsizmi?",
-    a: "Ha. Token shifrlangan holda saqlanadi. Xohlagan vaqtda tokenni o'zgartirishingiz mumkin.",
-  },
-];
+import { type Lang, faq as faqData } from "../i18n/translations";
+
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+
+const faqs = faqData.items.map(item => ({
+  q: item.q[lang],
+  a: item.a[lang],
+}));
 ---
 
 <script type="application/ld+json" set:html={JSON.stringify({
@@ -43,7 +26,7 @@ const faqs = [
 <section class="section section--alt" id="faq">
   <div class="container">
     <div class="section__header">
-      <h2 class="section__title">Ko'p so'raladigan savollar</h2>
+      <h2 class="section__title">{faqData.title[lang]}</h2>
     </div>
 
     <div class="faq-list" role="list">
@@ -172,7 +155,6 @@ const faqs = [
 
 <script>
   const faqItems = document.querySelectorAll(".faq-item");
-
   const faqButtons = document.querySelectorAll(".faq-item__question");
 
   faqItems.forEach((item, index) => {
@@ -181,20 +163,17 @@ const faqs = [
     btn.addEventListener("click", () => {
       const isOpen = item.classList.contains("open");
 
-      // Close all
       faqItems.forEach((el) => {
         el.classList.remove("open");
         el.querySelector(".faq-item__question")?.setAttribute("aria-expanded", "false");
       });
 
-      // Toggle current
       if (!isOpen) {
         item.classList.add("open");
         btn.setAttribute("aria-expanded", "true");
       }
     });
 
-    // Arrow key navigation
     btn.addEventListener("keydown", (e: KeyboardEvent) => {
       let target: Element | null = null;
       if (e.key === "ArrowDown") {

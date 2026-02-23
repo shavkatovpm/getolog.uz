@@ -2,199 +2,206 @@
 import Layout from "../layouts/Layout.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import { type Lang, pricing, pricePage as pp, meta, langPrefix } from "../i18n/translations";
+
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+const prefix = langPrefix(lang);
+
+const f = pp.features;
 ---
 
-<Layout title="Tariflar — Getolog" description="Getolog tarif rejalari. Bepul, Standard va Premium tariflarni batafsil taqqoslang.">
-  <Navbar />
+<Layout title={meta.priceTitle[lang]} description={meta.priceDesc[lang]} lang={lang}>
+  <Navbar lang={lang} />
 
   <section class="price-hero">
     <div class="container">
-      <h1 class="price-hero__title">Tariflarni taqqoslang</h1>
-      <p class="price-hero__subtitle">Barcha imkoniyatlarni batafsil ko'ring va o'zingizga mos tarifni tanlang</p>
+      <h1 class="price-hero__title">{pp.heroTitle[lang]}</h1>
+      <p class="price-hero__subtitle">{pp.heroSubtitle[lang]}</p>
     </div>
   </section>
 
   <section class="price-table-section">
     <div class="container">
 
-      <!-- Mobile: kartalar ko'rinishi -->
+      <!-- Mobile -->
       <div class="price-cards-mobile">
         <!-- Bepul -->
         <div class="m-card">
           <div class="m-card__head">
-            <h3>Bepul</h3>
-            <div class="m-card__price">0 <span>so'm</span></div>
+            <h3>{pricing.free[lang]}</h3>
+            <div class="m-card__price">0 <span>{pricing.currency[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Bot limiti</span><span class="m-desc">Bitta akkauntdan nechta bot</span></div><span class="m-value">1 ta</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Karta orqali to'lov</span><span class="m-desc">Obunachilar karta orqali to'lov qiladi</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Statistika</span><span class="m-desc">Obunalar, daromad va foydalanuvchilar hisoboti</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Avtomatik obuna boshqaruvi</span><span class="m-desc">Eslatma va kanaldan chiqarish avtomatik</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Bir martalik invite link</span><span class="m-desc">Faqat 1 marta ishlaydigan havola</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Custom welcome xabar</span><span class="m-desc">Shaxsiy xush kelibsiz xabari</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Foydalanuvchilarni boshqarish</span><span class="m-desc">Ko'rish, boshqarish va blok qilish</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Chek tasdiqlash</span><span class="m-desc">To'lov chekini tasdiqlash usuli</span></div><span class="m-value">Qo'lda</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Multi-admin</span><span class="m-desc">Botni boshqalar bilan boshqarish</span></div><span class="m-value m-no">&times;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Click / Payme</span><span class="m-desc">Avtomatik to'lov qabul qilish</span></div><span class="m-value m-no">&times;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Reklama</span><span class="m-desc">Botga kirganda Getolog reklamasi</span></div><span class="m-value m-no">Bor</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Getolog brending</span><span class="m-desc">"Ushbu bot @getolog_bot tomonidan ishlab chiqildi" yozuvi</span></div><span class="m-value m-no">Bor</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Prioritet qo'llab-quvvatlash</span><span class="m-desc">Tezkor yordam va ustuvor xizmat</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBotLimit[lang]}</span><span class="m-desc">{pp.mBotLimitDesc[lang]}</span></div><span class="m-value">{pp.val1[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCard[lang]}</span><span class="m-desc">{pp.mCardDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mStats[lang]}</span><span class="m-desc">{pp.mStatsDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAuto[lang]}</span><span class="m-desc">{pp.mAutoDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mInvite[lang]}</span><span class="m-desc">{pp.mInviteDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mWelcome[lang]}</span><span class="m-desc">{pp.mWelcomeDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mUsers[lang]}</span><span class="m-desc">{pp.mUsersDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReceipt[lang]}</span><span class="m-desc">{pp.mReceiptDesc[lang]}</span></div><span class="m-value">{pp.valManual[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mMultiAdmin[lang]}</span><span class="m-desc">{pp.mMultiAdminDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span><span class="m-desc">{pp.mPaymeDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAds[lang]}</span><span class="m-desc">{pp.mAdsDesc[lang]}</span></div><span class="m-value m-no">{pp.valYes[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBranding[lang]}</span><span class="m-desc">{pp.mBrandingDesc[lang]}</span></div><span class="m-value m-no">{pp.valYes[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPriority[lang]}</span><span class="m-desc">{pp.mPriorityDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
           </ul>
-          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
         </div>
 
         <!-- Standard -->
         <div class="m-card m-card--popular">
-          <span class="m-badge">Tavsiya</span>
+          <span class="m-badge">{pricing.badge[lang]}</span>
           <div class="m-card__head">
-            <h3>Standard</h3>
-            <div class="m-card__price">97 000 <span>so'm/oy</span></div>
+            <h3>{pricing.standard[lang]}</h3>
+            <div class="m-card__price">97 000 <span>{pricing.currencyMonth[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Bot limiti</span><span class="m-desc">Bitta akkauntdan nechta bot</span></div><span class="m-value m-highlight">2 ta</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Multi-admin</span><span class="m-desc">Botni boshqalar bilan boshqarish</span></div><span class="m-value m-highlight">2 ta</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Reklama</span><span class="m-desc">Botga kirganda Getolog reklamasi</span></div><span class="m-value m-yes">Yo'q</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Karta orqali to'lov</span><span class="m-desc">Obunachilar karta orqali to'lov qiladi</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Statistika</span><span class="m-desc">Obunalar, daromad va foydalanuvchilar hisoboti</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Avtomatik obuna boshqaruvi</span><span class="m-desc">Eslatma va kanaldan chiqarish avtomatik</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Bir martalik invite link</span><span class="m-desc">Faqat 1 marta ishlaydigan havola</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Custom welcome xabar</span><span class="m-desc">Shaxsiy xush kelibsiz xabari</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Foydalanuvchilarni boshqarish</span><span class="m-desc">Ko'rish, boshqarish va blok qilish</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Chek tasdiqlash</span><span class="m-desc">To'lov chekini tasdiqlash usuli</span></div><span class="m-value">Qo'lda</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Click / Payme</span><span class="m-desc">Avtomatik to'lov qabul qilish</span></div><span class="m-value m-no">&times;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Getolog brending</span><span class="m-desc">"Ushbu bot @getolog_bot tomonidan ishlab chiqildi" yozuvi</span></div><span class="m-value m-no">Bor</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Prioritet qo'llab-quvvatlash</span><span class="m-desc">Tezkor yordam va ustuvor xizmat</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBotLimit[lang]}</span><span class="m-desc">{pp.mBotLimitDesc[lang]}</span></div><span class="m-value m-highlight">{pp.val2[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mMultiAdmin[lang]}</span><span class="m-desc">{pp.mMultiAdminDesc[lang]}</span></div><span class="m-value m-highlight">{pp.val2[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAds[lang]}</span><span class="m-desc">{pp.mAdsDesc[lang]}</span></div><span class="m-value m-yes">{pp.valNo[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCard[lang]}</span><span class="m-desc">{pp.mCardDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mStats[lang]}</span><span class="m-desc">{pp.mStatsDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAuto[lang]}</span><span class="m-desc">{pp.mAutoDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mInvite[lang]}</span><span class="m-desc">{pp.mInviteDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mWelcome[lang]}</span><span class="m-desc">{pp.mWelcomeDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mUsers[lang]}</span><span class="m-desc">{pp.mUsersDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReceipt[lang]}</span><span class="m-desc">{pp.mReceiptDesc[lang]}</span></div><span class="m-value">{pp.valManual[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span><span class="m-desc">{pp.mPaymeDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBranding[lang]}</span><span class="m-desc">{pp.mBrandingDesc[lang]}</span></div><span class="m-value m-no">{pp.valYes[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPriority[lang]}</span><span class="m-desc">{pp.mPriorityDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
           </ul>
-          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">Boshlash</a>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
         </div>
 
         <!-- Premium -->
         <div class="m-card">
           <div class="m-card__head">
-            <h3>Premium</h3>
-            <div class="m-card__price">197 000 <span>so'm/oy</span></div>
+            <h3>{pricing.premium[lang]}</h3>
+            <div class="m-card__price">197 000 <span>{pricing.currencyMonth[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Bot limiti</span><span class="m-desc">Bitta akkauntdan nechta bot</span></div><span class="m-value m-highlight">5 ta</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Multi-admin</span><span class="m-desc">Botni boshqalar bilan boshqarish</span></div><span class="m-value m-highlight">5 ta</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Reklama</span><span class="m-desc">Botga kirganda Getolog reklamasi</span></div><span class="m-value m-yes">Yo'q</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Getolog brending</span><span class="m-desc">"Ushbu bot @getolog_bot tomonidan ishlab chiqildi" yozuvi</span></div><span class="m-value m-yes">Yo'q</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Click / Payme</span><span class="m-desc">Avtomatik to'lov qabul qilish</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Karta orqali to'lov</span><span class="m-desc">Obunachilar karta orqali to'lov qiladi</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Statistika</span><span class="m-desc">Obunalar, daromad va foydalanuvchilar hisoboti</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Avtomatik obuna boshqaruvi</span><span class="m-desc">Eslatma va kanaldan chiqarish avtomatik</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Bir martalik invite link</span><span class="m-desc">Faqat 1 marta ishlaydigan havola</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Custom welcome xabar</span><span class="m-desc">Shaxsiy xush kelibsiz xabari</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Foydalanuvchilarni boshqarish</span><span class="m-desc">Ko'rish, boshqarish va blok qilish</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Chek tasdiqlash</span><span class="m-desc">To'lov chekini tasdiqlash usuli</span></div><span class="m-value m-highlight">Avtomatik</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">Prioritet qo'llab-quvvatlash</span><span class="m-desc">Tezkor yordam va ustuvor xizmat</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBotLimit[lang]}</span><span class="m-desc">{pp.mBotLimitDesc[lang]}</span></div><span class="m-value m-highlight">{pp.val5[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mMultiAdmin[lang]}</span><span class="m-desc">{pp.mMultiAdminDesc[lang]}</span></div><span class="m-value m-highlight">{pp.val5[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAds[lang]}</span><span class="m-desc">{pp.mAdsDesc[lang]}</span></div><span class="m-value m-yes">{pp.valNo[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBranding[lang]}</span><span class="m-desc">{pp.mBrandingDesc[lang]}</span></div><span class="m-value m-yes">{pp.valNo[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span><span class="m-desc">{pp.mPaymeDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCard[lang]}</span><span class="m-desc">{pp.mCardDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mStats[lang]}</span><span class="m-desc">{pp.mStatsDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAuto[lang]}</span><span class="m-desc">{pp.mAutoDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mInvite[lang]}</span><span class="m-desc">{pp.mInviteDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mWelcome[lang]}</span><span class="m-desc">{pp.mWelcomeDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mUsers[lang]}</span><span class="m-desc">{pp.mUsersDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReceipt[lang]}</span><span class="m-desc">{pp.mReceiptDesc[lang]}</span></div><span class="m-value m-highlight">{pp.valAuto[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPriority[lang]}</span><span class="m-desc">{pp.mPriorityDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
           </ul>
-          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
         </div>
       </div>
 
-      <!-- Desktop: jadval ko'rinishi -->
+      <!-- Desktop table -->
       <div class="price-table-wrap">
         <table class="price-table">
           <thead>
             <tr>
-              <th class="feat-col">Imkoniyat</th>
+              <th class="feat-col">{pp.featureCol[lang]}</th>
               <th>
                 <div class="plan-head">
-                  <span class="plan-name">Bepul</span>
-                  <span class="plan-price">0 so'm</span>
+                  <span class="plan-name">{pricing.free[lang]}</span>
+                  <span class="plan-price">0 {pricing.currency[lang]}</span>
                 </div>
               </th>
               <th class="plan-popular">
-                <span class="table-badge">Tavsiya</span>
+                <span class="table-badge">{pricing.badge[lang]}</span>
                 <div class="plan-head">
-                  <span class="plan-name">Standard</span>
-                  <span class="plan-price">97 000 so'm/oy</span>
+                  <span class="plan-name">{pricing.standard[lang]}</span>
+                  <span class="plan-price">97 000 {pricing.currencyMonth[lang]}</span>
                 </div>
               </th>
               <th>
                 <div class="plan-head">
-                  <span class="plan-name">Premium</span>
-                  <span class="plan-price">197 000 so'm/oy</span>
+                  <span class="plan-name">{pricing.premium[lang]}</span>
+                  <span class="plan-price">197 000 {pricing.currencyMonth[lang]}</span>
                 </div>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><div class="feat-name">Karta orqali to'lov</div><div class="feat-desc">Obunachilar to'g'ridan-to'g'ri karta orqali to'lov qiladi</div></td>
+              <td><div class="feat-name">{f.card.name[lang]}</div><div class="feat-desc">{f.card.desc[lang]}</div></td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Statistika</div><div class="feat-desc">Obunalar, daromad va foydalanuvchilar haqida hisobot</div></td>
+              <td><div class="feat-name">{f.stats.name[lang]}</div><div class="feat-desc">{f.stats.desc[lang]}</div></td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Avtomatik obuna boshqaruvi</div><div class="feat-desc">Muddat tugashi, eslatma va kanaldan chiqarish avtomatik</div></td>
+              <td><div class="feat-name">{f.auto.name[lang]}</div><div class="feat-desc">{f.auto.desc[lang]}</div></td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Bir martalik invite link</div><div class="feat-desc">Har bir to'lov uchun faqat 1 marta ishlaydigan havola</div></td>
+              <td><div class="feat-name">{f.invite.name[lang]}</div><div class="feat-desc">{f.invite.desc[lang]}</div></td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Custom welcome xabar</div><div class="feat-desc">Yangi obunachiga shaxsiy xush kelibsiz xabari</div></td>
+              <td><div class="feat-name">{f.welcome.name[lang]}</div><div class="feat-desc">{f.welcome.desc[lang]}</div></td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Foydalanuvchilarni boshqarish</div><div class="feat-desc">Obunachilarni ko'rish, boshqarish va blok qilish</div></td>
+              <td><div class="feat-name">{f.users.name[lang]}</div><div class="feat-desc">{f.users.desc[lang]}</div></td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Bot limiti</div><div class="feat-desc">Bitta akkauntdan nechta bot yaratish mumkinligi</div></td>
-              <td>1 ta</td>
-              <td class="plan-popular">2 ta</td>
-              <td>5 ta</td>
+              <td><div class="feat-name">{f.botLimit.name[lang]}</div><div class="feat-desc">{f.botLimit.desc[lang]}</div></td>
+              <td>{pp.val1[lang]}</td>
+              <td class="plan-popular">{pp.val2[lang]}</td>
+              <td>{pp.val5[lang]}</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Multi-admin</div><div class="feat-desc">Botni boshqa adminlar bilan birgalikda boshqarish</div></td>
+              <td><div class="feat-name">{f.multiAdmin.name[lang]}</div><div class="feat-desc">{f.multiAdmin.desc[lang]}</div></td>
               <td><span class="t-no">&times;</span></td>
-              <td class="plan-popular">2 ta</td>
-              <td>5 ta</td>
+              <td class="plan-popular">{pp.val2[lang]}</td>
+              <td>{pp.val5[lang]}</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Reklama</div><div class="feat-desc">Obunachilar botga kirganda Getolog reklamasi ko'rsatiladi</div></td>
-              <td><span class="t-no">Bor</span></td>
-              <td class="plan-popular"><span class="t-yes">Yo'q</span></td>
-              <td><span class="t-yes">Yo'q</span></td>
+              <td><div class="feat-name">{f.ads.name[lang]}</div><div class="feat-desc">{f.ads.desc[lang]}</div></td>
+              <td><span class="t-no">{pp.valYes[lang]}</span></td>
+              <td class="plan-popular"><span class="t-yes">{pp.valNo[lang]}</span></td>
+              <td><span class="t-yes">{pp.valNo[lang]}</span></td>
             </tr>
             <tr>
-              <td><div class="feat-name">Getolog brending</div><div class="feat-desc">Botda "Ushbu bot @getolog_bot tomonidan ishlab chiqildi" yozuvi ko'rinadi</div></td>
-              <td><span class="t-no">Bor</span></td>
-              <td class="plan-popular"><span class="t-no">Bor</span></td>
-              <td><span class="t-yes">Yo'q</span></td>
+              <td><div class="feat-name">{f.branding.name[lang]}</div><div class="feat-desc">{f.branding.desc[lang]}</div></td>
+              <td><span class="t-no">{pp.valYes[lang]}</span></td>
+              <td class="plan-popular"><span class="t-no">{pp.valYes[lang]}</span></td>
+              <td><span class="t-yes">{pp.valNo[lang]}</span></td>
             </tr>
             <tr>
-              <td><div class="feat-name">Chek tasdiqlash usuli</div><div class="feat-desc">To'lov chekini tasdiqlash — qo'lda yoki avtomatik</div></td>
-              <td>Qo'lda</td>
-              <td class="plan-popular">Qo'lda</td>
-              <td><span class="t-highlight">Avtomatik</span></td>
+              <td><div class="feat-name">{f.receipt.name[lang]}</div><div class="feat-desc">{f.receipt.desc[lang]}</div></td>
+              <td>{pp.valManual[lang]}</td>
+              <td class="plan-popular">{pp.valManual[lang]}</td>
+              <td><span class="t-highlight">{pp.valAuto[lang]}</span></td>
             </tr>
             <tr>
-              <td><div class="feat-name">Click / Payme integratsiya</div><div class="feat-desc">Click va Payme orqali avtomatik to'lov qabul qilish</div></td>
+              <td><div class="feat-name">{f.payme.name[lang]}</div><div class="feat-desc">{f.payme.desc[lang]}</div></td>
               <td><span class="t-no">&times;</span></td>
               <td class="plan-popular"><span class="t-no">&times;</span></td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">Prioritet qo'llab-quvvatlash</div><div class="feat-desc">Tezkor yordam va ustuvor xizmat ko'rsatish</div></td>
+              <td><div class="feat-name">{f.priority.name[lang]}</div><div class="feat-desc">{f.priority.desc[lang]}</div></td>
               <td><span class="t-no">&times;</span></td>
               <td class="plan-popular"><span class="t-no">&times;</span></td>
               <td>&check;</td>
@@ -204,13 +211,13 @@ import Footer from "../components/Footer.astro";
             <tr>
               <td></td>
               <td>
-                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
               </td>
               <td class="plan-popular">
-                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">Boshlash</a>
+                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
               </td>
               <td>
-                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
               </td>
             </tr>
           </tfoot>
@@ -222,16 +229,16 @@ import Footer from "../components/Footer.astro";
   <!-- CTA -->
   <section class="section" id="cta">
     <div class="container" style="text-align: center;">
-      <h2 class="section__title">Boshlashga tayyormisiz?</h2>
-      <p class="section__subtitle" style="margin-bottom: 32px;">2 daqiqada sozlang. Bepul boshlang.</p>
+      <h2 class="section__title">{pp.ctaTitle[lang]}</h2>
+      <p class="section__subtitle" style="margin-bottom: 32px;">{pp.ctaSubtitle[lang]}</p>
       <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--lg">
-        Boshlash
+        {pricing.startBtn[lang]}
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
   </section>
 
-  <Footer />
+  <Footer lang={lang} />
 </Layout>
 
 <style>

@@ -1,0 +1,23 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+import Hero from "../../components/Hero.astro";
+import Problems from "../../components/Problems.astro";
+import HowItWorks from "../../components/HowItWorks.astro";
+import Pricing from "../../components/Pricing.astro";
+import FAQ from "../../components/FAQ.astro";
+import CTA from "../../components/CTA.astro";
+import Footer from "../../components/Footer.astro";
+import { meta } from "../../i18n/translations";
+---
+
+<Layout title={meta.homeTitle.ru} lang="ru">
+  <Navbar lang="ru" />
+  <Hero lang="ru" />
+  <Problems lang="ru" />
+  <HowItWorks lang="ru" />
+  <Pricing lang="ru" />
+  <FAQ lang="ru" />
+  <CTA lang="ru" />
+  <Footer lang="ru" />
+</Layout>
