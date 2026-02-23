@@ -1,0 +1,492 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout title="Tariflar — Getolog" description="Getolog tarif rejalari. Bepul, Standard va Premium tariflarni batafsil taqqoslang.">
+  <Navbar />
+
+  <section class="price-hero">
+    <div class="container">
+      <h1 class="price-hero__title">Tariflarni taqqoslang</h1>
+      <p class="price-hero__subtitle">Barcha imkoniyatlarni batafsil ko'ring va o'zingizga mos tarifni tanlang</p>
+    </div>
+  </section>
+
+  <section class="price-table-section">
+    <div class="container">
+
+      <!-- Mobile: kartalar ko'rinishi -->
+      <div class="price-cards-mobile">
+        <!-- Bepul -->
+        <div class="m-card">
+          <div class="m-card__head">
+            <h3>Bepul</h3>
+            <div class="m-card__price">0 <span>so'm</span></div>
+          </div>
+          <ul class="m-card__list">
+            <li class="m-feat"><span class="m-label">Bot limiti</span><span class="m-value">1 ta</span></li>
+            <li class="m-feat"><span class="m-label">Karta orqali to'lov</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Statistika</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Avtomatik obuna boshqaruvi</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Bir martalik invite link</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Custom welcome xabar</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Foydalanuvchilarni boshqarish</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Chek tasdiqlash</span><span class="m-value">Qo'lda</span></li>
+            <li class="m-feat"><span class="m-label">Multi-admin</span><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><span class="m-label">Click / Payme</span><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><span class="m-label">Reklama</span><span class="m-value m-no">Bor</span></li>
+            <li class="m-feat"><span class="m-label">Getolog brending</span><span class="m-value m-no">Bor</span></li>
+            <li class="m-feat"><span class="m-label">Prioritet qo'llab-quvvatlash</span><span class="m-value m-no">&times;</span></li>
+          </ul>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+        </div>
+
+        <!-- Standard -->
+        <div class="m-card m-card--popular">
+          <span class="m-badge">Tavsiya</span>
+          <div class="m-card__head">
+            <h3>Standard</h3>
+            <div class="m-card__price">97 000 <span>so'm/oy</span></div>
+          </div>
+          <ul class="m-card__list">
+            <li class="m-feat"><span class="m-label">Bot limiti</span><span class="m-value m-highlight">2 ta</span></li>
+            <li class="m-feat"><span class="m-label">Multi-admin</span><span class="m-value m-highlight">2 ta</span></li>
+            <li class="m-feat"><span class="m-label">Reklama</span><span class="m-value m-yes">Yo'q</span></li>
+            <li class="m-feat"><span class="m-label">Karta orqali to'lov</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Statistika</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Avtomatik obuna boshqaruvi</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Bir martalik invite link</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Custom welcome xabar</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Foydalanuvchilarni boshqarish</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Chek tasdiqlash</span><span class="m-value">Qo'lda</span></li>
+            <li class="m-feat"><span class="m-label">Click / Payme</span><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><span class="m-label">Getolog brending</span><span class="m-value m-no">Bor</span></li>
+            <li class="m-feat"><span class="m-label">Prioritet qo'llab-quvvatlash</span><span class="m-value m-no">&times;</span></li>
+          </ul>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">Boshlash</a>
+        </div>
+
+        <!-- Premium -->
+        <div class="m-card">
+          <div class="m-card__head">
+            <h3>Premium</h3>
+            <div class="m-card__price">197 000 <span>so'm/oy</span></div>
+          </div>
+          <ul class="m-card__list">
+            <li class="m-feat"><span class="m-label">Bot limiti</span><span class="m-value m-highlight">5 ta</span></li>
+            <li class="m-feat"><span class="m-label">Multi-admin</span><span class="m-value m-highlight">5 ta</span></li>
+            <li class="m-feat"><span class="m-label">Reklama</span><span class="m-value m-yes">Yo'q</span></li>
+            <li class="m-feat"><span class="m-label">Getolog brending</span><span class="m-value m-yes">Yo'q</span></li>
+            <li class="m-feat"><span class="m-label">Click / Payme</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Karta orqali to'lov</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Statistika</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Avtomatik obuna boshqaruvi</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Bir martalik invite link</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Custom welcome xabar</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Foydalanuvchilarni boshqarish</span><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><span class="m-label">Chek tasdiqlash</span><span class="m-value m-highlight">Avtomatik</span></li>
+            <li class="m-feat"><span class="m-label">Prioritet qo'llab-quvvatlash</span><span class="m-value m-yes">&check;</span></li>
+          </ul>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+        </div>
+      </div>
+
+      <!-- Desktop: jadval ko'rinishi -->
+      <div class="price-table-wrap">
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th class="feat-col">Imkoniyat</th>
+              <th>
+                <div class="plan-head">
+                  <span class="plan-name">Bepul</span>
+                  <span class="plan-price">0 so'm</span>
+                </div>
+              </th>
+              <th class="plan-popular">
+                <span class="table-badge">Tavsiya</span>
+                <div class="plan-head">
+                  <span class="plan-name">Standard</span>
+                  <span class="plan-price">97 000 so'm/oy</span>
+                </div>
+              </th>
+              <th>
+                <div class="plan-head">
+                  <span class="plan-name">Premium</span>
+                  <span class="plan-price">197 000 so'm/oy</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Barchada mavjud -->
+            <tr>
+              <td>Karta orqali to'lov</td>
+              <td>&check;</td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td>Statistika</td>
+              <td>&check;</td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td>Avtomatik obuna boshqaruvi</td>
+              <td>&check;</td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td>Bir martalik invite link</td>
+              <td>&check;</td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td>Custom welcome xabar</td>
+              <td>&check;</td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td>Foydalanuvchilarni boshqarish</td>
+              <td>&check;</td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <!-- Farqli -->
+            <tr>
+              <td>Bot limiti</td>
+              <td>1 ta</td>
+              <td class="plan-popular">2 ta</td>
+              <td>5 ta</td>
+            </tr>
+            <tr>
+              <td>Multi-admin (har bir bot uchun)</td>
+              <td><span class="t-no">&times;</span></td>
+              <td class="plan-popular">2 ta</td>
+              <td>5 ta</td>
+            </tr>
+            <tr>
+              <td>Reklama</td>
+              <td><span class="t-no">Bor</span></td>
+              <td class="plan-popular"><span class="t-yes">Yo'q</span></td>
+              <td><span class="t-yes">Yo'q</span></td>
+            </tr>
+            <tr>
+              <td>Getolog brending</td>
+              <td><span class="t-no">Bor</span></td>
+              <td class="plan-popular"><span class="t-no">Bor</span></td>
+              <td><span class="t-yes">Yo'q</span></td>
+            </tr>
+            <tr>
+              <td>Chek tasdiqlash usuli</td>
+              <td>Qo'lda</td>
+              <td class="plan-popular">Qo'lda</td>
+              <td><span class="t-highlight">Avtomatik</span></td>
+            </tr>
+            <tr>
+              <td>Click / Payme integratsiya</td>
+              <td><span class="t-no">&times;</span></td>
+              <td class="plan-popular"><span class="t-no">&times;</span></td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td>Prioritet qo'llab-quvvatlash</td>
+              <td><span class="t-no">&times;</span></td>
+              <td class="plan-popular"><span class="t-no">&times;</span></td>
+              <td>&check;</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td>
+                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+              </td>
+              <td class="plan-popular">
+                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">Boshlash</a>
+              </td>
+              <td>
+                <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">Boshlash</a>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" id="cta">
+    <div class="container" style="text-align: center;">
+      <h2 class="section__title">Tayyor boshlashga?</h2>
+      <p class="section__subtitle" style="margin-bottom: 32px;">2 daqiqada sozlang. Bepul boshlang.</p>
+      <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--lg">
+        Boshlash
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Hero */
+  .price-hero {
+    padding: 140px 0 60px;
+    text-align: center;
+  }
+
+  .price-hero__title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .price-hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--light-400);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Mobile cards — hidden on desktop */
+  .price-cards-mobile {
+    display: none;
+  }
+
+  /* Desktop table */
+  .price-table-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .price-table-section {
+    padding-bottom: 80px;
+  }
+
+  .price-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .price-table thead th {
+    padding: 28px 16px 24px;
+    text-align: center;
+    vertical-align: bottom;
+    border-bottom: 1px solid rgba(230, 233, 255, 0.08);
+    position: relative;
+  }
+
+  .price-table thead th.feat-col {
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--light-400);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 280px;
+  }
+
+  .plan-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .plan-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .plan-price {
+    font-size: 0.85rem;
+    color: var(--light-400);
+    font-weight: 400;
+  }
+
+  .plan-popular {
+    background: rgba(139, 142, 255, 0.04);
+  }
+
+  .table-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--dark);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 100px;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .price-table tbody td {
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(230, 233, 255, 0.04);
+    color: var(--light);
+  }
+
+  .price-table tbody td:first-child {
+    text-align: left;
+    color: var(--light-200);
+    font-weight: 500;
+  }
+
+  .price-table tbody tr:hover td {
+    background: rgba(230, 233, 255, 0.02);
+  }
+
+  .price-table tfoot td {
+    padding: 24px 16px 0;
+  }
+
+  .t-no {
+    color: var(--light-400);
+    opacity: 0.5;
+  }
+
+  .t-yes {
+    color: var(--success);
+  }
+
+  .t-highlight {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Mobile card styles */
+  .m-card {
+    background: var(--dark-800);
+    border: 1px solid rgba(230, 233, 255, 0.06);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .m-card--popular {
+    border-color: var(--accent);
+    order: -1;
+  }
+
+  .m-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: var(--dark);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 14px;
+    border-radius: 100px;
+  }
+
+  .m-card__head {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(230, 233, 255, 0.06);
+  }
+
+  .m-card__head h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .m-card__price {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--white);
+  }
+
+  .m-card__price span {
+    font-size: 0.8rem;
+    color: var(--light-400);
+    font-weight: 400;
+  }
+
+  .m-card__list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 24px;
+  }
+
+  .m-feat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(230, 233, 255, 0.03);
+    font-size: 0.85rem;
+  }
+
+  .m-label {
+    color: var(--light-200);
+  }
+
+  .m-value {
+    font-weight: 600;
+    color: var(--light);
+  }
+
+  .m-value.m-yes {
+    color: var(--success);
+    font-weight: 700;
+  }
+
+  .m-value.m-no {
+    color: var(--light-400);
+    opacity: 0.5;
+    font-weight: 400;
+  }
+
+  .m-value.m-highlight {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .price-table-wrap {
+      display: none;
+    }
+
+    .price-cards-mobile {
+      display: flex;
+      flex-direction: column;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .price-hero {
+      padding: 110px 0 40px;
+    }
+
+    .price-hero__title {
+      font-size: 1.75rem;
+    }
+
+    .price-hero__subtitle {
+      font-size: 0.95rem;
+    }
+
+    .price-table-section {
+      padding-bottom: 40px;
+    }
+  }
+</style>
