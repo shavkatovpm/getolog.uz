@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
-from core.mod_auth import verify_password, change_password
+from core.mod_auth import verify_password, change_password, create_mod_session, delete_mod_session
 from db.engine import async_session
 from moderator.keyboards.inline import mod_menu_kb, mod_back_kb
 from services.stats_service import get_moderator_stats
@@ -24,6 +24,8 @@ async def is_mod_authenticated(state: FSMContext) -> bool:
 @router.message(Command("modlog"))
 async def modlog_start(message: Message, state: FSMContext):
     if await is_mod_authenticated(state):
+        # Refresh Redis session
+        await create_mod_session(message.from_user.id)
         await message.answer(
             "🛡 <b>Moderator Panel</b>\n\nQuyidagi menyudan tanlang:",
             reply_markup=mod_menu_kb(),
@@ -45,6 +47,7 @@ async def modlog_check_password(message: Message, state: FSMContext):
     if verify_password(message.text.strip()):
         await state.set_state(None)
         await state.update_data(mod_authenticated=True)
+        await create_mod_session(message.from_user.id)
         await message.answer(
             "✅ Muvaffaqiyatli!\n\n"
             "🛡 <b>Moderator Panel</b>\n\nQuyidagi menyudan tanlang:",
@@ -151,5 +154,6 @@ async def save_new_password(message: Message, state: FSMContext):
 @router.callback_query(F.data == "mod_logout")
 async def mod_logout(callback: CallbackQuery, state: FSMContext):
     await state.update_data(mod_authenticated=False)
+    await delete_mod_session(callback.from_user.id)
     await callback.message.edit_text("👋 Moderator paneldan chiqdingiz.")
     await callback.answer()

@@ -40,13 +40,16 @@ async def start_create_bot(callback: CallbackQuery, state: FSMContext):
         return
 
     await callback.message.edit_text(
+        'Ommaviy offerta bilan tanishing: <a href="https://getolog.uz/offerta">getolog.uz/offerta</a>\n\n'
         "🔑 <b>Bot tokenini yuboring</b>\n\n"
         "1. @BotFather ga o'ting\n"
         "2. /newbot buyrug'ini yuboring\n"
         "3. Bot nomini kiriting\n"
         "4. Olingan tokenni bu yerga yuboring\n\n"
-        "⚠️ Token formati: <code>123456:ABC-DEF...</code>",
+        "Token formati: <code>123456:ABC-DEF...</code>\n\n"
+        "⚠️ Token yuborish orqali ommaviy offertaga rozilik bildirgan bo'lasiz!",
         reply_markup=back_kb(),
+        disable_web_page_preview=True,
     )
     await state.set_state(RegisterStates.waiting_token)
     await callback.answer()

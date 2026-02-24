@@ -12,14 +12,39 @@ def main_menu_kb() -> InlineKeyboardMarkup:
             web_app=WebAppInfo(url=f"{config.server_url}/webapp"),
         )])
     buttons.extend([
-        [InlineKeyboardButton(text="🤖 Bot yaratish", callback_data="create_bot")],
-        [InlineKeyboardButton(text="⚙️ Sozlamalar", callback_data="settings")],
-        [InlineKeyboardButton(text="📊 Statistika", callback_data="stats")],
-        [InlineKeyboardButton(text="👥 Foydalanuvchilar", callback_data="manage_users")],
-        [InlineKeyboardButton(text="💳 To'lovlar", callback_data="payments")],
-        [InlineKeyboardButton(text="📦 Obuna", callback_data="my_subscription")],
+        [
+            InlineKeyboardButton(text="➕ Bot qo'shish", callback_data="create_bot"),
+            InlineKeyboardButton(text="🤖 Mening botlarim", callback_data="my_bots"),
+        ],
+        [
+            InlineKeyboardButton(text="📦 Obuna", callback_data="my_subscription"),
+            InlineKeyboardButton(text="❓ Yordam", callback_data="help"),
+        ],
     ])
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def bot_dashboard_kb(bot_id: int) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="📊 Statistika", callback_data=f"bot_stats_{bot_id}"),
+            InlineKeyboardButton(text="💳 To'lovlar", callback_data=f"bot_payments_{bot_id}"),
+        ],
+        [
+            InlineKeyboardButton(text="👥 Foydalanuvchilar", callback_data=f"bot_users_{bot_id}"),
+            InlineKeyboardButton(text="⚙️ Sozlamalar", callback_data=f"bot_settings_{bot_id}"),
+        ],
+        [
+            InlineKeyboardButton(text="🔄 Boshqa bot", callback_data="my_bots"),
+            InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_menu"),
+        ],
+    ])
+
+
+def back_bot_kb() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_bot_dashboard")],
+    ])
 
 
 def settings_kb() -> InlineKeyboardMarkup:
@@ -29,7 +54,7 @@ def settings_kb() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="💰 Narx o'zgartirish", callback_data="set_price")],
         [InlineKeyboardButton(text="👥 Hamkorlar", callback_data="manage_collabs")],
         [InlineKeyboardButton(text="🗑 Botni o'chirish", callback_data="deactivate_bot")],
-        [InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_menu")],
+        [InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_bot_dashboard")],
     ])
 
 

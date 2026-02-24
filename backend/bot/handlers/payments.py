@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.helpers import require_bot
-from bot.keyboards.inline import back_kb, main_menu_kb
+from bot.keyboards.inline import back_bot_kb, main_menu_kb
 from db.engine import async_session
 from services.payment_service import get_pending_payments, approve_payment, reject_payment, get_payment_by_id
 from services.subscription_service import create_subscription
@@ -30,7 +30,7 @@ async def show_payments(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text(
             f"💳 <b>To'lovlar</b> — @{user_bot.bot_username}\n\n"
             "Kutilayotgan to'lovlar yo'q.",
-            reply_markup=back_kb(),
+            reply_markup=back_bot_kb(),
         )
         await callback.answer()
         return
@@ -56,7 +56,7 @@ async def show_payments(callback: CallbackQuery, state: FSMContext):
             ),
         ])
 
-    buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_menu")])
+    buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_bot_dashboard")])
 
     await callback.message.edit_text(
         text,
@@ -98,7 +98,7 @@ async def handle_approve(callback: CallbackQuery):
                 f"⚠️ Invite link yaratishda xatolik! To'lov tasdiqlanmadi.\n"
                 f"Xatolik: {e}\n\n"
                 f"Bot kanalda admin ekanligini tekshiring.",
-                reply_markup=back_kb(),
+                reply_markup=back_bot_kb(),
             )
             await callback.answer("⚠️ Invite link xatolik!")
             return
@@ -151,7 +151,7 @@ async def handle_approve(callback: CallbackQuery):
             f"Invite link:\n{invite_link}"
         )
 
-    await callback.message.edit_text(result_text, reply_markup=back_kb())
+    await callback.message.edit_text(result_text, reply_markup=back_bot_kb())
     await callback.answer("✅ Tasdiqlandi!")
 
 
@@ -183,6 +183,6 @@ async def handle_reject(callback: CallbackQuery):
     await callback.message.edit_text(
         f"❌ To'lov #{payment_id} rad etildi.\n"
         f"👤 @{end_user.username or end_user.telegram_id} ga xabar yuborildi.",
-        reply_markup=back_kb(),
+        reply_markup=back_bot_kb(),
     )
     await callback.answer("❌ Rad etildi!")

@@ -5,6 +5,10 @@ from api.routes_payments import approve, get_screenshot, list_payments, reject
 from api.routes_settings import get_settings, update_settings
 from api.routes_stats import get_stats
 from api.routes_users import ban_user, list_users, unban_user
+from api.mod_routes import (
+    mod_get_stats, mod_list_admins, mod_ban_admin, mod_unban_admin,
+    mod_list_bots, mod_change_password,
+)
 
 
 def setup_api_routes(app: web.Application):
@@ -30,3 +34,11 @@ def setup_api_routes(app: web.Application):
     # Settings
     app.router.add_get("/api/settings", get_settings)
     app.router.add_put("/api/settings", update_settings)
+
+    # Moderator API
+    app.router.add_get("/api/mod/stats", mod_get_stats)
+    app.router.add_get("/api/mod/admins", mod_list_admins)
+    app.router.add_post("/api/mod/admins/{id}/ban", mod_ban_admin)
+    app.router.add_post("/api/mod/admins/{id}/unban", mod_unban_admin)
+    app.router.add_get("/api/mod/bots", mod_list_bots)
+    app.router.add_post("/api/mod/password", mod_change_password)

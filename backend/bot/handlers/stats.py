@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
 from bot.helpers import require_bot
-from bot.keyboards.inline import back_kb
+from bot.keyboards.inline import back_bot_kb
 from db.engine import async_session
 from services.stats_service import get_admin_stats
 
@@ -65,5 +65,5 @@ async def show_stats(callback: CallbackQuery, state: FSMContext):
             f"\n⏳ <b>{stats['pending_payments']}</b> ta to'lov tasdiqlash kutmoqda\n"
         )
 
-    await callback.message.edit_text(text, reply_markup=back_kb())
+    await callback.message.edit_text(text, reply_markup=back_bot_kb())
     await callback.answer()

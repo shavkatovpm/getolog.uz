@@ -64,4 +64,15 @@ def create_webhook_app(bot_manager, main_bot, main_dp) -> web.Application:
     app.router.add_get("/webapp/", webapp_index)
     app.router.add_static("/webapp/", webapp_dir)
 
+    # Serve Moderator Mini App static files
+    mod_webapp_dir = os.path.join(os.path.dirname(__file__), "..", "mod_webapp")
+    mod_webapp_dir = os.path.abspath(mod_webapp_dir)
+
+    async def mod_webapp_index(request: web.Request):
+        return web.FileResponse(os.path.join(mod_webapp_dir, "index.html"))
+
+    app.router.add_get("/mod_webapp", mod_webapp_index)
+    app.router.add_get("/mod_webapp/", mod_webapp_index)
+    app.router.add_static("/mod_webapp/", mod_webapp_dir)
+
     return app

@@ -10,7 +10,7 @@ from core.encryption import decrypt_token
 logger = logging.getLogger(__name__)
 
 from bot.helpers import require_bot
-from bot.keyboards.inline import back_kb
+from bot.keyboards.inline import back_bot_kb
 from db.engine import async_session
 from db.models import EndUser
 from sqlalchemy import select
@@ -47,7 +47,7 @@ async def show_users(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text(
             f"👥 <b>Foydalanuvchilar</b> — @{user_bot.bot_username}\n\n"
             "Hali foydalanuvchilar yo'q.",
-            reply_markup=back_kb(),
+            reply_markup=back_bot_kb(),
         )
         await callback.answer()
         return
@@ -68,7 +68,7 @@ async def show_users(callback: CallbackQuery, state: FSMContext):
             )
         ])
 
-    buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_menu")])
+    buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_bot_dashboard")])
     await callback.message.edit_text(
         text,
         reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons),

@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.helpers import require_bot, get_current_bot
-from bot.keyboards.inline import settings_kb, back_kb, main_menu_kb
+from bot.keyboards.inline import settings_kb, back_kb, back_bot_kb, main_menu_kb
 from bot.handlers.subscription import PLAN_FEATURES
 from core.bot_manager import BotManager
 from core.cache import cache_delete
@@ -41,7 +41,7 @@ async def ask_welcome(callback: CallbackQuery, state: FSMContext):
     await callback.message.edit_text(
         "✏️ Yangi <b>salomlash xabarini</b> yuboring.\n\n"
         "Bu xabar end user bot'ga /start bosganda ko'rinadi.",
-        reply_markup=back_kb(),
+        reply_markup=back_bot_kb(),
     )
     await state.set_state(SettingsStates.waiting_welcome)
     await callback.answer()
@@ -67,7 +67,7 @@ async def ask_card(callback: CallbackQuery, state: FSMContext):
     await callback.message.edit_text(
         "💳 Yangi <b>karta raqamini</b> yuboring:\n"
         "(Masalan: 8600 1234 5678 9012)",
-        reply_markup=back_kb(),
+        reply_markup=back_bot_kb(),
     )
     await state.set_state(SettingsStates.waiting_card)
     await callback.answer()
@@ -79,7 +79,7 @@ async def save_card(message: Message, state: FSMContext):
     if not formatted:
         await message.answer(
             "❌ Karta raqami noto'g'ri. 16 ta raqamdan iborat to'g'ri karta kiriting:",
-            reply_markup=back_kb(),
+            reply_markup=back_bot_kb(),
         )
         return
 
@@ -101,7 +101,7 @@ async def ask_price(callback: CallbackQuery, state: FSMContext):
     await callback.message.edit_text(
         "💰 Yangi <b>narxni</b> yuboring (UZS da):\n"
         "(Masalan: 50000)",
-        reply_markup=back_kb(),
+        reply_markup=back_bot_kb(),
     )
     await state.set_state(SettingsStates.waiting_price)
     await callback.answer()
@@ -116,7 +116,7 @@ async def save_price(message: Message, state: FSMContext):
     except ValueError:
         await message.answer(
             "❌ Narx kamida 1000 UZS bo'lishi kerak:",
-            reply_markup=back_kb(),
+            reply_markup=back_bot_kb(),
         )
         return
 
@@ -192,7 +192,7 @@ async def manage_collabs(callback: CallbackQuery, state: FSMContext):
         )])
     buttons.append([
         InlineKeyboardButton(text="◀️ Orqaga", callback_data="settings"),
-        InlineKeyboardButton(text="🏠 Asosiy bo'lim", callback_data="back_menu"),
+        InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_menu"),
     ])
 
     await callback.message.edit_text(
@@ -207,7 +207,7 @@ async def add_collab(callback: CallbackQuery, state: FSMContext):
     await callback.message.edit_text(
         "👤 Hamkorning <b>Telegram ID</b> sini yuboring.\n\n"
         "ID olish uchun hamkor @getmyid_bot ga /start bossin.",
-        reply_markup=back_kb(),
+        reply_markup=back_bot_kb(),
     )
     await state.set_state(SettingsStates.waiting_collab_id)
     await callback.answer()
@@ -220,7 +220,7 @@ async def save_collab(message: Message, state: FSMContext):
     except ValueError:
         await message.answer(
             "❌ Noto'g'ri ID. Raqam yuboring:",
-            reply_markup=back_kb(),
+            reply_markup=back_bot_kb(),
         )
         return
 
