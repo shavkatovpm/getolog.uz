@@ -8,159 +8,161 @@ interface Props { lang?: Lang }
 const lang = Astro.props.lang || "uz" as Lang;
 const prefix = langPrefix(lang);
 
-const pageTitle = { uz: "Ommaviy oferta", ru: "Публичная оферта" };
+const pageTitle = { uz: "Ommaviy offerta", ru: "Публичная оферта" };
 const pageDesc = {
-  uz: "Xizmat ko'rsatish shartnomasi",
-  ru: "Договор оказания услуг",
+  uz: "Getolog platformasidan foydalanish shartlari",
+  ru: "Условия использования платформы Getolog",
 };
-const lastUpdated = { uz: "Oxirgi yangilanish: 2026-yil 24-fevral", ru: "Последнее обновление: 24 февраля 2026 г." };
+const lastUpdated = {
+  uz: "Kuchga kirgan sana: 2026-yil 24-fevral",
+  ru: "Дата вступления в силу: 24 февраля 2026 г.",
+};
 
 const sections = [
   {
-    title: { uz: "1. Umumiy qoidalar", ru: "1. Общие положения" },
+    title: { uz: "1. Asosiy tushunchalar", ru: "1. Основные понятия" },
     html: {
-      uz: `<p>1.1. Ushbu hujjat «Getolog» xizmati (keyingi o'rinlarda — «Xizmat ko'rsatuvchi») tomonidan jismoniy va yuridik shaxslarga ko'rsatiladigan xizmatlar shartlarini belgilovchi ommaviy ofertadir.</p>
-<p>1.2. Xizmatdan foydalanishni boshlash (botga /start buyrug'ini yuborish) ushbu oferta shartlarini to'liq qabul qilish hisoblanadi.</p>
-<p>1.3. Xizmat O'zbekiston Respublikasi amaldagi qonunchiligiga muvofiq faoliyat yuritadi.</p>`,
-      ru: `<p>1.1. Настоящий документ является публичной офертой, определяющей условия оказания услуг сервисом «Getolog» (далее — «Исполнитель») физическим и юридическим лицам.</p>
-<p>1.2. Начало использования Сервиса (отправка команды /start боту) является полным принятием условий настоящей оферты.</p>
-<p>1.3. Сервис осуществляет деятельность в соответствии с действующим законодательством Республики Узбекистан.</p>`,
+      uz: `<p>1.1. <strong>Platforma</strong> — Getolog xizmati, ya'ni Telegram kanal va guruh egalari uchun obuna boshqaruvini avtomatlashtiradigan tizim.</p>
+<p>1.2. <strong>Xizmat ko'rsatuvchi</strong> — Getolog jamoasi, platformani ishlab chiquvchi va boshqaruvchi tomon.</p>
+<p>1.3. <strong>Admin</strong> — platformada ro'yxatdan o'tgan kanal yoki guruh egasi.</p>
+<p>1.4. <strong>Hamkor</strong> — admin tomonidan tayinlangan yordamchi shaxs. Hamkor to'lovlarni ko'rish va tasdiqlash huquqiga ega.</p>
+<p>1.5. <strong>Obunachi</strong> — admin ishlab chiqgan bot orqali pullik kanal yoki guruhga obuna bo'lgan shaxs.</p>
+<p>1.6. <strong>Bot</strong> — admin tomonidan ishlab chiqilgan va platformaga ulangan Telegram bot.</p>
+<p>1.7. Ushbu offerta platformadan foydalanishni boshlagan har bir shaxs uchun amal qiladi. Platformadan foydalanish — offertani qabul qilish hisoblanadi.</p>`,
+      ru: `<p>1.1. <strong>Платформа</strong> — сервис Getolog, система автоматизации управления подписками для владельцев Telegram-каналов и групп.</p>
+<p>1.2. <strong>Исполнитель</strong> — команда Getolog, сторона, разрабатывающая и управляющая платформой.</p>
+<p>1.3. <strong>Админ</strong> — владелец канала или группы, зарегистрированный на платформе.</p>
+<p>1.4. <strong>Помощник</strong> — лицо, назначенное админом. Помощник имеет право просматривать и подтверждать оплату.</p>
+<p>1.5. <strong>Подписчик</strong> — лицо, оформившее платную подписку на канал или группу через бот, созданный админом.</p>
+<p>1.6. <strong>Бот</strong> — Telegram-бот, созданный админом и подключённый к платформе.</p>
+<p>1.7. Настоящая оферта действует для каждого лица, начавшего использование платформы. Использование платформы является принятием оферты.</p>`,
     },
   },
   {
-    title: { uz: "2. Atamalar va ta'riflar", ru: "2. Термины и определения" },
+    title: { uz: "2. Xizmat ko'rsatish tartibi", ru: "2. Порядок оказания услуг" },
     html: {
-      uz: `<p>2.1. <strong>Xizmat ko'rsatuvchi</strong> — Getolog platformasi.</p>
-<p>2.2. <strong>Foydalanuvchi</strong> — Xizmatdan foydalanuvchi jismoniy yoki yuridik shaxs (kanal yoki guruh egasi).</p>
-<p>2.3. <strong>Obunachi</strong> — Foydalanuvchining pullik kanaliga kirish uchun to'lov qiluvchi shaxs.</p>
-<p>2.4. <strong>Bot</strong> — Foydalanuvchi tomonidan BotFather orqali yaratilgan va Getolog platformasiga ulangan Telegram bot.</p>
-<p>2.5. <strong>Token</strong> — Botni boshqarish uchun BotFather bergan maxfiy kalit.</p>`,
-      ru: `<p>2.1. <strong>Исполнитель</strong> — платформа Getolog.</p>
-<p>2.2. <strong>Пользователь</strong> — физическое или юридическое лицо, использующее Сервис (владелец канала или группы).</p>
-<p>2.3. <strong>Подписчик</strong> — лицо, оплачивающее доступ к платному каналу Пользователя.</p>
-<p>2.4. <strong>Бот</strong> — Telegram-бот, созданный Пользователем через BotFather и подключённый к платформе Getolog.</p>
-<p>2.5. <strong>Токен</strong> — секретный ключ, выданный BotFather для управления ботом.</p>`,
+      uz: `<p>2.1. Admin @getolog_bot orqali ro'yxatdan o'tadi, bot tokenini va karta raqamini kiritadi, kanalini ulaydi va obuna shartlarini belgilaydi.</p>
+<p>2.2. Platforma admin boti asosida avtomatlashtirilgan tizim ishlab chiqadi. Bu tizim obunachilarga to'lov qilish, kanalga kirish va obuna muddatini boshqarish imkonini beradi.</p>
+<p>2.3. Obunachi admin botiga murojaat qilib to'lovni amalga oshiradi va screenshot yuboradi. Admin yoki hamkor to'lovni tasdiqlaydi.</p>
+<p>2.4. Obuna muddati tugashi yaqinlashganda obunachiga ogohlantirish yuboriladi. Muddat tugaganda obunachi kanaldan avtomatik chiqariladi.</p>`,
+      ru: `<p>2.1. Админ регистрируется через @getolog_bot, вводит токен бота и номер карты, подключает канал и устанавливает условия подписки.</p>
+<p>2.2. Платформа создаёт автоматизированную систему на основе бота админа. Эта система позволяет подписчикам оплачивать, входить в канал и управлять сроком подписки.</p>
+<p>2.3. Подписчик обращается к боту админа, осуществляет оплату и отправляет скриншот. Админ или помощник подтверждает оплату.</p>
+<p>2.4. При приближении окончания срока подписки подписчику отправляется предупреждение. По истечении срока подписчик автоматически удаляется из канала.</p>`,
     },
   },
   {
-    title: { uz: "3. Xizmat predmeti", ru: "3. Предмет оферты" },
+    title: { uz: "3. Tarif rejalar va to'lov shartlari", ru: "3. Тарифные планы и условия оплаты" },
     html: {
-      uz: `<p>3.1. Xizmat ko'rsatuvchi Foydalanuvchiga quyidagi xizmatlarni taqdim etadi:</p>
-<ul>
-<li>Telegram bot orqali pullik kanalga obunani avtomatlashtirilgan boshqaruvi;</li>
-<li>To'lovlarni qabul qilish va tasdiqlash tizimi;</li>
-<li>Obuna muddatini nazorat qilish va avtomatik boshqarish;</li>
-<li>Bir martalik invite havolalar yaratish;</li>
-<li>Statistika va hisobotlar.</li>
-</ul>`,
-      ru: `<p>3.1. Исполнитель предоставляет Пользователю следующие услуги:</p>
-<ul>
-<li>автоматизированное управление платными подписками через Telegram-бот;</li>
-<li>система приёма и подтверждения оплаты;</li>
-<li>контроль сроков подписки и автоматическое управление;</li>
-<li>генерация одноразовых invite-ссылок;</li>
-<li>статистика и отчёты.</li>
-</ul>`,
+      uz: `<p>3.1. Platformada uchta tarif mavjud: Bepul, Standart (97 000 so'm/oy) va Premium (197 000 so'm/oy).</p>
+<p>3.2. Bepul tarifda 1 ta bot ishlab chiqish mumkin. Botda Getolog reklamasi va brendingi ko'rsatiladi.</p>
+<p>3.3. Pullik tariflarda qo'shimcha imkoniyatlar mavjud: ko'proq bot, hamkor qo'shish va reklamani olib tashlash.</p>
+<p>3.4. Tarif to'lovi har oy amalga oshiriladi. To'lov muddatida amalga oshirilmasa, tarif avtomatik ravishda Bepul rejaga tushiriladi. Adminning botlari va kanallari o'chirilmaydi, faqat Bepul tarif cheklovlari qo'llaniladi.</p>
+<p>3.5. Xizmat ko'rsatuvchi tarif narxlarini oldindan ogohlantirgan holda o'zgartirish huquqini o'zida saqlaydi.</p>
+<p>3.6. Getolog tarif rejasi uchun amalga oshirilgan to'lov qaytarilmaydi. Admin to'lovni amalga oshirgan paytdan boshlab xizmatdan foydalanish huquqiga ega bo'ladi va to'lov muddati tugagunga qadar xizmat ko'rsatiladi.</p>`,
+      ru: `<p>3.1. На платформе действуют три тарифа: Бесплатный, Стандарт (97 000 сум/мес) и Премиум (197 000 сум/мес).</p>
+<p>3.2. В бесплатном тарифе можно создать 1 бота. В боте отображается реклама и брендинг Getolog.</p>
+<p>3.3. В платных тарифах доступны дополнительные возможности: больше ботов, добавление помощников и отключение рекламы.</p>
+<p>3.4. Оплата тарифа производится ежемесячно. Если оплата не произведена в срок, тариф автоматически понижается до Бесплатного. Боты и каналы админа не удаляются, применяются только ограничения Бесплатного тарифа.</p>
+<p>3.5. Исполнитель оставляет за собой право изменять стоимость тарифов с предварительным уведомлением.</p>
+<p>3.6. Оплата тарифного плана Getolog не подлежит возврату. Админ получает право пользования сервисом с момента оплаты, и услуга оказывается до окончания оплаченного периода.</p>`,
     },
   },
   {
-    title: { uz: "4. Xizmatdan foydalanish tartibi", ru: "4. Порядок использования сервиса" },
+    title: { uz: "4. Admin huquq va majburiyatlari", ru: "4. Права и обязанности админа" },
     html: {
-      uz: `<p>4.1. Xizmatdan foydalanish uchun Foydalanuvchi @getolog_bot ga murojaat qilib, bot tokenini va kerakli ma'lumotlarni taqdim etishi lozim.</p>
-<p>4.2. Foydalanuvchi o'z botini yaratish, sozlash va kerakli kanallarga admin sifatida qo'shish uchun javobgardir.</p>
-<p>4.3. To'lovlar bevosita Foydalanuvchining karta raqamiga tushadi. Xizmat ko'rsatuvchi obunachi to'lovlariga tegmaydi.</p>`,
-      ru: `<p>4.1. Для использования Сервиса Пользователь обращается к @getolog_bot и предоставляет токен бота и необходимые данные.</p>
-<p>4.2. Пользователь несёт ответственность за создание, настройку бота и добавление его администратором в необходимые каналы.</p>
-<p>4.3. Оплата поступает напрямую на карту Пользователя. Исполнитель не участвует в обработке платежей подписчиков.</p>`,
+      uz: `<p>4.1. Admin faqat o'ziga tegishli yoki o'zi boshqaradigan kanal va guruhlarni platformaga ulashi mumkin.</p>
+<p>4.2. Admin kanalida qonunga zid yoki boshqa shaxslarning huquqlarini buzadigan kontent tarqatmasligi shart.</p>
+<p>4.3. Admin o'z obunachilari bilan to'lov va xizmat ko'rsatish masalalarida to'liq javobgar. Platforma admin va obunachi o'rtasidagi moliyaviy munosabatlarga aralashmaydi.</p>
+<p>4.4. Admin o'z bot tokenini va karta ma'lumotlarini xavfsiz saqlashi shart. Ruxsatsiz kirish yuz berganda admin Getolog ga zudlik bilan xabar berishi kerak.</p>
+<p>4.5. Admin istalgan vaqtda o'z botini platformadan o'chirishi va xizmatdan chiqishi mumkin.</p>`,
+      ru: `<p>4.1. Админ может подключать к платформе только каналы и группы, которые ему принадлежат или которыми он управляет.</p>
+<p>4.2. Админ обязан не распространять в канале контент, нарушающий закон или права третьих лиц.</p>
+<p>4.3. Админ несёт полную ответственность за вопросы оплаты и оказания услуг перед своими подписчиками. Платформа не вмешивается в финансовые отношения между админом и подписчиком.</p>
+<p>4.4. Админ обязан обеспечить безопасное хранение токена бота и данных карты. В случае несанкционированного доступа админ должен незамедлительно уведомить Getolog.</p>
+<p>4.5. Админ может в любое время удалить своего бота с платформы и прекратить использование сервиса.</p>`,
     },
   },
   {
-    title: { uz: "5. Tariflar va to'lov", ru: "5. Тарифы и оплата" },
+    title: { uz: "5. Obunachi huquq va majburiyatlari", ru: "5. Права и обязанности подписчика" },
     html: {
-      uz: `<p>5.1. Xizmat Bepul, Standart va Premium tarif rejalari bilan taqdim etiladi.</p>
-<p>5.2. Tarif narxlari va imkoniyatlari <a href="${prefix}/price">getolog.uz/price</a> sahifasida ko'rsatilgan.</p>
-<p>5.3. Pullik tarifga o'tish ixtiyoriy. Bepul tarifda reklama va brending mavjud.</p>
-<p>5.4. To'lov har oylik asosda amalga oshiriladi. To'lov qilinmasa, tarif bepulga qaytariladi.</p>`,
-      ru: `<p>5.1. Сервис предоставляется по тарифным планам: Бесплатный, Стандарт и Премиум.</p>
-<p>5.2. Стоимость и возможности тарифов указаны на странице <a href="${prefix}/price">getolog.uz/price</a>.</p>
-<p>5.3. Переход на платный тариф добровольный. В бесплатном тарифе присутствует реклама и брендинг.</p>
-<p>5.4. Оплата производится ежемесячно. При неоплате тариф возвращается к бесплатному.</p>`,
+      uz: `<p>5.1. Obunachi to'lovni amalga oshirgandan keyin kanalga kirish huquqiga ega bo'ladi. Kirish huquqi obuna muddati davomida amal qiladi.</p>
+<p>5.2. Obunachi boshqa shaxslarga kanalga kirish havolasini tarqatmasligi shart.</p>
+<p>5.3. Obunachi kanal ichidagi kontentni admin ruxsatisiz boshqa joylarga tarqatmasligi kerak.</p>
+<p>5.4. Obuna muddati tugagandan keyin obunachi kanaldan avtomatik chiqariladi. Davom ettirish uchun qaytadan to'lov qilish talab etiladi.</p>`,
+      ru: `<p>5.1. После осуществления оплаты подписчик получает право доступа к каналу. Право доступа действует в течение срока подписки.</p>
+<p>5.2. Подписчик обязан не распространять ссылку для входа в канал третьим лицам.</p>
+<p>5.3. Подписчик не должен распространять контент канала без разрешения админа.</p>
+<p>5.4. По истечении срока подписки подписчик автоматически удаляется из канала. Для продолжения доступа необходимо произвести повторную оплату.</p>`,
     },
   },
   {
-    title: { uz: "6. Tomonlarning huquq va majburiyatlari", ru: "6. Права и обязанности сторон" },
+    title: { uz: "6. Xizmat ko'rsatuvchining huquq va majburiyatlari", ru: "6. Права и обязанности исполнителя" },
     html: {
-      uz: `<h3>6.1. Xizmat ko'rsatuvchi:</h3>
-<ul>
-<li>Xizmatning uzluksiz ishlashini ta'minlashga harakat qiladi;</li>
-<li>Foydalanuvchi ma'lumotlarini himoya qiladi;</li>
-<li>Texnik muammolarni imkon qadar tezkor hal qiladi.</li>
-</ul>
-<h3>6.2. Foydalanuvchi:</h3>
-<ul>
-<li>Xizmatdan faqat qonuniy maqsadlarda foydalanadi;</li>
-<li>Bot tokenini uchinchi shaxslarga bermaydi;</li>
-<li>Noqonuniy kontent tarqatish uchun xizmatdan foydalanmaydi.</li>
-</ul>`,
-      ru: `<h3>6.1. Исполнитель:</h3>
-<ul>
-<li>прилагает усилия для обеспечения бесперебойной работы Сервиса;</li>
-<li>обеспечивает защиту данных Пользователя;</li>
-<li>устраняет технические неполадки в кратчайшие сроки.</li>
-</ul>
-<h3>6.2. Пользователь:</h3>
-<ul>
-<li>использует Сервис исключительно в законных целях;</li>
-<li>не передаёт токен бота третьим лицам;</li>
-<li>не использует Сервис для распространения незаконного контента.</li>
-</ul>`,
+      uz: `<p>6.1. Xizmat ko'rsatuvchi platformaning uzluksiz va barqaror ishlashini ta'minlashga harakat qiladi.</p>
+<p>6.2. Texnik nosozliklar yuzaga kelganda muammoni imkon qadar tezroq bartaraf etishga harakat qiladi.</p>
+<p>6.3. Admin va obunachi ma'lumotlarini uchinchi tomonlarga bermaydi. Bot tokenlari va karta raqamlari shifrlangan holda saqlanadi.</p>
+<p>6.4. Qonunga zid faoliyat yuritayotgan adminlarning hisobini ogohlantirishsiz to'xtatish huquqiga ega.</p>
+<p>6.5. Platformani texnik xizmat ko'rsatish yoki yangilash maqsadida vaqtincha to'xtatishi mumkin. Imkon qadar oldindan ogohlantirish beriladi.</p>`,
+      ru: `<p>6.1. Исполнитель прилагает усилия для обеспечения бесперебойной и стабильной работы платформы.</p>
+<p>6.2. При возникновении технических неполадок исполнитель стремится устранить проблему в кратчайшие сроки.</p>
+<p>6.3. Исполнитель не передаёт данные админов и подписчиков третьим лицам. Токены ботов и номера карт хранятся в зашифрованном виде.</p>
+<p>6.4. Исполнитель имеет право без предупреждения приостановить аккаунт админов, осуществляющих противоправную деятельность.</p>
+<p>6.5. Исполнитель может временно приостановить работу платформы для технического обслуживания или обновления. По возможности предварительное уведомление предоставляется заранее.</p>`,
     },
   },
   {
-    title: { uz: "7. Javobgarlik", ru: "7. Ответственность" },
+    title: { uz: "7. Xavfsizlik va ma'lumotlar himoyasi", ru: "7. Безопасность и защита данных" },
     html: {
-      uz: `<p>7.1. Xizmat ko'rsatuvchi Foydalanuvchi va Obunachi o'rtasidagi moliyaviy munosabatlar uchun javobgar emas.</p>
-<p>7.2. Xizmat ko'rsatuvchi Telegram platformasi tomonidan yuzaga keladigan uzilishlar uchun javobgar emas.</p>
-<p>7.3. Xizmat «bor holaticha» (as is) taqdim etiladi. Xizmat ko'rsatuvchi xizmatning to'xtovsiz yoki xatosiz ishlashiga kafolat bermaydi.</p>`,
-      ru: `<p>7.1. Исполнитель не несёт ответственности за финансовые отношения между Пользователем и Подписчиком.</p>
-<p>7.2. Исполнитель не несёт ответственности за перебои, вызванные платформой Telegram.</p>
-<p>7.3. Сервис предоставляется «как есть» (as is). Исполнитель не гарантирует бесперебойную или безошибочную работу Сервиса.</p>`,
+      uz: `<p>7.1. Admin tomonidan kiritilgan bot tokenlari va karta raqamlari shifrlangan holda saqlanadi.</p>
+<p>7.2. Obunachiga beriladigan kanalga kirish havolasi bir martalik bo'lib, faqat bitta shaxs tomonidan ishlatilishi mumkin.</p>
+<p>7.3. Platforma va botlar o'rtasidagi barcha aloqa himoyalangan texnologiyalar orqali amalga oshiriladi.</p>
+<p>7.4. Platforma foydalanuvchilarning shaxsiy ma'lumotlarini qonunchilik talablariga muvofiq himoya qiladi.</p>`,
+      ru: `<p>7.1. Токены ботов и номера карт, введённые админом, хранятся в зашифрованном виде.</p>
+<p>7.2. Ссылка для входа в канал, выдаваемая подписчику, является одноразовой и может быть использована только одним лицом.</p>
+<p>7.3. Все коммуникации между платформой и ботами осуществляются через защищённые технологии.</p>
+<p>7.4. Платформа защищает персональные данные пользователей в соответствии с требованиями законодательства.</p>`,
     },
   },
   {
-    title: { uz: "8. Shaxsiy ma'lumotlar", ru: "8. Персональные данные" },
+    title: { uz: "8. Javobgarlikni cheklash", ru: "8. Ограничение ответственности" },
     html: {
-      uz: `<p>8.1. Xizmat foydalanuvchining Telegram ID, bot tokeni va karta raqamini saqlaydi.</p>
-<p>8.2. Barcha maxfiy ma'lumotlar shifrlangan holda saqlanadi.</p>
-<p>8.3. Ma'lumotlar uchinchi shaxslarga berilmaydi, qonun tomonidan talab qilingan holatlar bundan mustasno.</p>`,
-      ru: `<p>8.1. Сервис хранит Telegram ID пользователя, токен бота и номер карты.</p>
-<p>8.2. Все конфиденциальные данные хранятся в зашифрованном виде.</p>
-<p>8.3. Данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством.</p>`,
+      uz: `<p>8.1. Platforma admin va obunachi o'rtasidagi moliyaviy munosabatlar uchun javobgar emas.</p>
+<p>8.2. Platforma admin kanalida e'lon qilingan kontent uchun javobgar emas. Kontent uchun to'liq javobgarlik admin zimmasida.</p>
+<p>8.3. Texnik nosozliklar, Telegram platformasi bilan bog'liq muammolar yoki uchinchi tomon xizmatlari sababli yuzaga kelgan uzilishlar uchun platforma javobgar emas.</p>
+<p>8.4. Admin o'z bot tokenini yoki karta ma'lumotlarini xavfsiz saqlamaganligi oqibatida yuzaga kelgan zarar uchun platforma javobgar emas.</p>`,
+      ru: `<p>8.1. Платформа не несёт ответственности за финансовые отношения между админом и подписчиком.</p>
+<p>8.2. Платформа не несёт ответственности за контент, публикуемый в канале админа. Полная ответственность за контент лежит на админе.</p>
+<p>8.3. Платформа не несёт ответственности за перебои, вызванные техническими неполадками, проблемами платформы Telegram или сторонних сервисов.</p>
+<p>8.4. Платформа не несёт ответственности за ущерб, возникший вследствие ненадлежащего хранения админом токена бота или данных карты.</p>`,
     },
   },
   {
-    title: { uz: "9. Shartnomani bekor qilish", ru: "9. Расторжение договора" },
+    title: { uz: "9. Offertaga o'zgartirish kiritish", ru: "9. Изменение оферты" },
     html: {
-      uz: `<p>9.1. Foydalanuvchi istalgan vaqtda xizmatdan foydalanishni to'xtatishi mumkin.</p>
-<p>9.2. Xizmat ko'rsatuvchi oferta shartlarini buzgan Foydalanuvchining hisobini to'xtatish huquqiga ega.</p>
-<p>9.3. Tarif muddati tugashidan oldin to'xtatilgan taqdirda, to'lov qaytarilmaydi.</p>`,
-      ru: `<p>9.1. Пользователь может прекратить использование Сервиса в любое время.</p>
-<p>9.2. Исполнитель вправе приостановить аккаунт Пользователя при нарушении условий оферты.</p>
-<p>9.3. При досрочном прекращении тарифа оплата не возвращается.</p>`,
+      uz: `<p>9.1. Xizmat ko'rsatuvchi ushbu offertaga istalgan vaqtda o'zgartirish kiritish huquqiga ega.</p>
+<p>9.2. O'zgartirishlar haqida foydalanuvchilarga platforma orqali oldindan xabar beriladi.</p>
+<p>9.3. O'zgartirishlar e'lon qilingandan keyin platformadan foydalanishni davom ettirish yangilangan shartlarga rozilik bildirish hisoblanadi.</p>`,
+      ru: `<p>9.1. Исполнитель имеет право в любое время вносить изменения в настоящую оферту.</p>
+<p>9.2. Об изменениях пользователи уведомляются заранее через платформу.</p>
+<p>9.3. Продолжение использования платформы после публикации изменений означает согласие с обновлёнными условиями.</p>`,
     },
   },
   {
-    title: { uz: "10. Yakuniy qoidalar", ru: "10. Заключительные положения" },
+    title: { uz: "10. Nizolarni hal qilish", ru: "10. Разрешение споров" },
     html: {
-      uz: `<p>10.1. Xizmat ko'rsatuvchi ushbu ofertaga o'zgartirish kiritish huquqini o'zida saqlaydi. O'zgarishlar getolog.uz saytida e'lon qilinadi.</p>
-<p>10.2. Xizmatdan foydalanishni davom ettirish yangilangan shartlarni qabul qilish hisoblanadi.</p>
-<p>10.3. Ushbu oferta bo'yicha yuzaga keladigan nizolar muzokaralar yo'li bilan hal qilinadi.</p>`,
-      ru: `<p>10.1. Исполнитель оставляет за собой право вносить изменения в настоящую оферту. Изменения публикуются на сайте getolog.uz.</p>
-<p>10.2. Продолжение использования Сервиса означает принятие обновлённых условий.</p>
-<p>10.3. Споры, возникающие по настоящей оферте, разрешаются путём переговоров.</p>`,
+      uz: `<p>10.1. Platformadan foydalanish bilan bog'liq har qanday nizo avval muzokaralar yo'li bilan hal qilinadi.</p>
+<p>10.2. Muzokaralar natija bermagan taqdirda, nizo O'zbekiston Respublikasi qonunchiligiga muvofiq hal qilinadi.</p>`,
+      ru: `<p>10.1. Любой спор, связанный с использованием платформы, разрешается прежде всего путём переговоров.</p>
+<p>10.2. Если переговоры не привели к результату, спор разрешается в соответствии с законодательством Республики Узбекистан.</p>`,
     },
   },
 ];
+
+const footerNote = {
+  uz: "Ushbu offerta platformadan foydalanishni boshlagan paytdan e'tiboran kuchga kiradi va foydalanuvchi platformadan chiqqanga qadar amal qiladi.",
+  ru: "Настоящая оферта вступает в силу с момента начала использования платформы и действует до момента прекращения использования.",
+};
 ---
 
 <Layout title={meta.offertaTitle[lang]} description={meta.offertaDesc[lang]} lang={lang}>
@@ -181,6 +183,14 @@ const sections = [
             <div set:html={s.html[lang]} />
           </section>
         ))}
+
+        <div class="doc-footer-note">
+          <p>{footerNote[lang]}</p>
+          <div class="doc-signature">
+            <p><strong>Getolog</strong></p>
+            <p><a href="https://getolog.uz">getolog.uz</a> · <a href="https://t.me/getologbot" target="_blank" rel="noopener noreferrer">@getologbot</a></p>
+          </div>
+        </div>
       </div>
     </div>
   </article>
@@ -277,6 +287,44 @@ const sections = [
     margin-bottom: 6px;
   }
 
+  .doc-footer-note {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(230, 233, 255, 0.06);
+  }
+
+  .doc-footer-note > p {
+    font-size: 0.9rem;
+    color: var(--light-400);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .doc-signature {
+    margin-top: 28px;
+  }
+
+  .doc-signature p {
+    font-size: 0.9rem;
+    color: var(--light-400);
+    margin-bottom: 4px;
+  }
+
+  .doc-signature strong {
+    color: var(--light);
+    font-size: 1rem;
+  }
+
+  .doc-signature a {
+    color: var(--accent);
+    transition: all var(--transition);
+  }
+
+  .doc-signature a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
   @media (max-width: 768px) {
     .doc-page {
       padding-top: 100px;
@@ -294,6 +342,11 @@ const sections = [
 
     .doc-section h2 {
       font-size: 1.15rem;
+    }
+
+    .doc-footer-note {
+      margin-top: 40px;
+      padding-top: 24px;
     }
   }
 </style>
