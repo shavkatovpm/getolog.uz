@@ -2,6 +2,7 @@ from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
+from bot.middlewares.i18n import get_text
 from db.engine import async_session
 from moderator.handlers.dashboard import is_mod_authenticated
 from moderator.keyboards.inline import mod_back_kb
@@ -12,9 +13,10 @@ router = Router()
 
 
 @router.callback_query(F.data == "mod_admins")
-async def show_admins(callback: CallbackQuery, state: FSMContext):
+async def show_admins(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     if not await is_mod_authenticated(state):
-        await callback.answer("⛔ Avval /modlog orqali kiring.", show_alert=True)
+        await callback.answer(_("mod_auth_required"), show_alert=True)
         return
 
     async with async_session() as session:
@@ -22,13 +24,13 @@ async def show_admins(callback: CallbackQuery, state: FSMContext):
 
     if not admins:
         await callback.message.edit_text(
-            "👥 Hali adminlar yo'q.",
-            reply_markup=mod_back_kb(),
+            _("mod_no_admins"),
+            reply_markup=mod_back_kb(lang=i18n_lang),
         )
         await callback.answer()
         return
 
-    text = f"👥 <b>Adminlar</b> ({len(admins)} ta):\n\n"
+    text = _("mod_admins_header").format(count=len(admins))
     buttons = []
     for a in admins[:20]:
         status = "🚫" if a.banned else "✅"
@@ -41,7 +43,9 @@ async def show_admins(callback: CallbackQuery, state: FSMContext):
             )
         ])
 
-    buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="mod_menu")])
+    buttons.append([InlineKeyboardButton(
+        text=_('btn_back'), callback_data="mod_menu"
+    )])
     await callback.message.edit_text(
         text,
         reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons),
@@ -50,9 +54,10 @@ async def show_admins(callback: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data.startswith("mod_toggle_"))
-async def toggle_admin_ban(callback: CallbackQuery, state: FSMContext):
+async def toggle_admin_ban(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     if not await is_mod_authenticated(state):
-        await callback.answer("⛔ Avval /modlog orqali kiring.", show_alert=True)
+        await callback.answer(_("mod_auth_required"), show_alert=True)
         return
 
     admin_id = int(callback.data.split("_")[2])
@@ -65,9 +70,9 @@ async def toggle_admin_ban(callback: CallbackQuery, state: FSMContext):
         if admin:
             if admin.banned:
                 await unban_admin(session, admin_id)
-                await callback.answer("✅ Blokdan chiqarildi!")
+                await callback.answer(_("mod_admin_unbanned"))
             else:
                 await ban_admin(session, admin_id)
-                await callback.answer("🚫 Bloklandi!")
+                await callback.answer(_("mod_admin_banned"))
 
-    await show_admins(callback, state)
+    await show_admins(callback, state, i18n_lang=i18n_lang)

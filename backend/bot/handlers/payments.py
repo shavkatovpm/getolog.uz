@@ -6,6 +6,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMar
 
 from bot.helpers import require_bot
 from bot.keyboards.inline import back_bot_kb, main_menu_kb
+from bot.middlewares.i18n import get_text
 from db.engine import async_session
 from services.payment_service import get_pending_payments, approve_payment, reject_payment, get_payment_by_id
 from services.subscription_service import create_subscription
@@ -18,8 +19,10 @@ router = Router()
 
 
 @router.callback_query(F.data == "payments")
-async def show_payments(callback: CallbackQuery, state: FSMContext):
-    user_bot, admin = await require_bot(callback, state, "payments")
+async def show_payments(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
+    user_bot, admin = await require_bot(callback, state, "payments", i18n_lang=i18n_lang)
     if not user_bot:
         return
 
@@ -28,16 +31,14 @@ async def show_payments(callback: CallbackQuery, state: FSMContext):
 
     if not pending:
         await callback.message.edit_text(
-            f"💳 <b>To'lovlar</b> — @{user_bot.bot_username}\n\n"
-            "Kutilayotgan to'lovlar yo'q.",
-            reply_markup=back_bot_kb(),
+            _("no_pending_payments").format(username=user_bot.bot_username),
+            reply_markup=back_bot_kb(lang=i18n_lang),
         )
         await callback.answer()
         return
 
-    text = (
-        f"💳 <b>Kutilayotgan to'lovlar</b> — @{user_bot.bot_username}"
-        f" ({len(pending)} ta)\n\n"
+    text = _("pending_payments_header").format(
+        username=user_bot.bot_username, count=len(pending)
     )
 
     buttons = []
@@ -47,16 +48,18 @@ async def show_payments(callback: CallbackQuery, state: FSMContext):
         text += f"#{p.id} — {amount_fmt} UZS — @{username}\n"
         buttons.append([
             InlineKeyboardButton(
-                text=f"✅ #{p.id} tasdiqlash",
+                text=f"#{p.id} {_('btn_approve')}",
                 callback_data=f"pay_approve_{p.id}",
             ),
             InlineKeyboardButton(
-                text=f"❌ #{p.id} rad etish",
+                text=f"#{p.id} {_('btn_reject')}",
                 callback_data=f"pay_reject_{p.id}",
             ),
         ])
 
-    buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_bot_dashboard")])
+    buttons.append([InlineKeyboardButton(
+        text=_('btn_back'), callback_data="back_bot_dashboard"
+    )])
 
     await callback.message.edit_text(
         text,
@@ -66,14 +69,14 @@ async def show_payments(callback: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data.startswith("pay_approve_"))
-async def handle_approve(callback: CallbackQuery):
+async def handle_approve(callback: CallbackQuery, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     payment_id = int(callback.data.split("_")[2])
 
     async with async_session() as session:
-        # Get payment details FIRST (without approving)
         payment = await get_payment_by_id(session, payment_id)
         if not payment or payment.status != PaymentStatus.PENDING:
-            await callback.answer("❌ To'lov topilmadi yoki allaqachon ko'rib chiqilgan.")
+            await callback.answer(_("payment_not_found_or_processed"))
             return
 
         channel = payment.channel
@@ -83,10 +86,9 @@ async def handle_approve(callback: CallbackQuery):
         from core.encryption import decrypt_token
         user_bot = await get_bot_by_id(session, payment.user_bot_id)
         if not user_bot:
-            await callback.answer("❌ Bot topilmadi.")
+            await callback.answer(_("bot_not_found"))
             return
 
-        # Create invite link BEFORE approving payment
         try:
             token = decrypt_token(user_bot.bot_token)
             temp_bot = Bot(token=token)
@@ -95,21 +97,17 @@ async def handle_approve(callback: CallbackQuery):
         except Exception as e:
             logger.error(f"Failed to create invite link: {e}")
             await callback.message.edit_text(
-                f"⚠️ Invite link yaratishda xatolik! To'lov tasdiqlanmadi.\n"
-                f"Xatolik: {e}\n\n"
-                f"Bot kanalda admin ekanligini tekshiring.",
-                reply_markup=back_bot_kb(),
+                _("invite_link_error").format(error=e),
+                reply_markup=back_bot_kb(lang=i18n_lang),
             )
-            await callback.answer("⚠️ Invite link xatolik!")
+            await callback.answer("⚠️")
             return
 
-        # Invite link ready — now approve payment
         payment = await approve_payment(session, payment_id)
         if not payment:
-            await callback.answer("❌ To'lov allaqachon ko'rib chiqilgan.")
+            await callback.answer(_("payment_not_found_or_processed"))
             return
 
-        # Create subscription
         sub = await create_subscription(
             session,
             end_user_id=end_user.id,
@@ -119,70 +117,67 @@ async def handle_approve(callback: CallbackQuery):
             duration_months=channel.duration_months,
         )
 
-    # Notify end user with invite link
+    # Notify end user — use end_user's language
+    eu_lang = end_user.language or "uz"
+    _eu = lambda key: get_text(key, eu_lang)
     notify_failed = False
     try:
-        duration_text = {0: "umrbod", 1: "1 oy", 6: "6 oy", 12: "12 oy"}.get(
-            channel.duration_months, f"{channel.duration_months} oy"
-        )
+        duration_text = {
+            0: _eu("duration_lifetime"), 1: _eu("duration_1m"),
+            6: _eu("duration_6m"), 12: _eu("duration_12m"),
+        }.get(channel.duration_months, f"{channel.duration_months}")
         await callback.bot.send_message(
             end_user.telegram_id,
-            f"✅ <b>To'lov tasdiqlandi!</b>\n\n"
-            f"📢 {channel.title}\n"
-            f"📅 Muddat: {duration_text}\n\n"
-            f"🔗 Kanalga kirish uchun quyidagi linkni bosing:\n"
-            f"{invite_link}\n\n"
-            f"⚠️ Bu link faqat 1 marta ishlaydi!",
+            _eu("payment_approved_user").format(
+                channel=channel.title, duration=duration_text, link=invite_link
+            ),
         )
     except Exception as e:
         logger.error(f"Failed to notify end user: {e}")
         notify_failed = True
 
-    # Invalidate stats cache
     await cache_delete(f"stats:{payment.user_bot_id}")
 
-    result_text = (
-        f"✅ To'lov #{payment_id} tasdiqlandi!\n"
-        f"👤 @{end_user.username or end_user.telegram_id} ga invite link yuborildi."
+    result_text = _("payment_approved_admin").format(
+        id=payment_id, username=end_user.username or end_user.telegram_id
     )
     if notify_failed:
-        result_text += (
-            f"\n\n⚠️ Foydalanuvchiga xabar yuborib bo'lmadi. "
-            f"Invite link:\n{invite_link}"
-        )
+        result_text += _("payment_notify_failed").format(link=invite_link)
 
-    await callback.message.edit_text(result_text, reply_markup=back_bot_kb())
-    await callback.answer("✅ Tasdiqlandi!")
+    await callback.message.edit_text(result_text, reply_markup=back_bot_kb(lang=i18n_lang))
+    await callback.answer(f"✅")
 
 
 @router.callback_query(F.data.startswith("pay_reject_"))
-async def handle_reject(callback: CallbackQuery):
+async def handle_reject(callback: CallbackQuery, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     payment_id = int(callback.data.split("_")[2])
 
     async with async_session() as session:
         payment = await reject_payment(session, payment_id)
         if not payment:
-            await callback.answer("❌ To'lov topilmadi yoki allaqachon ko'rib chiqilgan.")
+            await callback.answer(_("payment_not_found_or_processed"))
             return
 
         payment = await get_payment_by_id(session, payment_id)
         end_user = payment.end_user
         channel = payment.channel
 
-    # Notify end user
+    # Notify end user in their language
+    eu_lang = end_user.language or "uz"
+    _eu = lambda key: get_text(key, eu_lang)
     try:
         await callback.bot.send_message(
             end_user.telegram_id,
-            f"❌ <b>To'lov rad etildi</b>\n\n"
-            f"📢 {channel.title}\n\n"
-            f"To'lov tasdiqlana olmadi. Iltimos, to'g'ri summani o'tkazing va qayta urinib ko'ring.",
+            _eu("payment_rejected_user").format(channel=channel.title),
         )
     except Exception as e:
         logger.error(f"Failed to notify end user about rejection: {e}")
 
     await callback.message.edit_text(
-        f"❌ To'lov #{payment_id} rad etildi.\n"
-        f"👤 @{end_user.username or end_user.telegram_id} ga xabar yuborildi.",
-        reply_markup=back_bot_kb(),
+        _("payment_rejected_admin").format(
+            id=payment_id, username=end_user.username or end_user.telegram_id
+        ),
+        reply_markup=back_bot_kb(lang=i18n_lang),
     )
-    await callback.answer("❌ Rad etildi!")
+    await callback.answer("❌")

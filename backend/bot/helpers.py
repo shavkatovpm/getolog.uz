@@ -3,6 +3,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMar
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.keyboards.inline import main_menu_kb
+from bot.middlewares.i18n import get_text
 from db.engine import async_session
 from services.admin_service import get_admin_by_telegram_id
 from services.bot_service import get_bots_by_admin, get_bot_by_id, get_bot_by_admin, get_collab_bots
@@ -12,12 +13,15 @@ async def require_bot(
     callback: CallbackQuery,
     state: FSMContext,
     action: str,
+    i18n_lang: str = "uz",
 ):
     """Ensure admin has a bot selected.
 
     Returns (user_bot, admin) or (None, None) if a selection screen was shown.
     Includes bots the user collaborates on.
     """
+    _ = lambda key: get_text(key, i18n_lang)
+
     async with async_session() as session:
         admin = await get_admin_by_telegram_id(session, callback.from_user.id)
         owned = await get_bots_by_admin(session, admin.id)
@@ -29,8 +33,8 @@ async def require_bot(
 
     if not bots:
         await callback.message.edit_text(
-            "⚠️ Sizda hali bot yo'q. Avval bot yarating.",
-            reply_markup=main_menu_kb(),
+            _("no_bot_yet"),
+            reply_markup=main_menu_kb(lang=i18n_lang),
         )
         await callback.answer()
         return None, None
@@ -50,15 +54,17 @@ async def require_bot(
     # Show bot selection
     buttons = [
         [InlineKeyboardButton(
-            text=f"🤖 @{b.bot_username}",
+            text=f"@{b.bot_username}",
             callback_data=f"pick_{action}_{b.id}",
         )]
         for b in bots
     ]
-    buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_menu")])
+    buttons.append([InlineKeyboardButton(
+        text=_('btn_back'), callback_data="back_menu"
+    )])
 
     await callback.message.edit_text(
-        "🤖 <b>Qaysi botni boshqarmoqchisiz?</b>",
+        _("which_bot"),
         reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons),
     )
     await callback.answer()

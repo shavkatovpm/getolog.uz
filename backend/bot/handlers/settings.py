@@ -5,6 +5,7 @@ from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKe
 from bot.helpers import require_bot, get_current_bot
 from bot.keyboards.inline import settings_kb, back_kb, back_bot_kb, main_menu_kb
 from bot.handlers.subscription import PLAN_FEATURES
+from bot.middlewares.i18n import get_text
 from core.bot_manager import BotManager
 from core.cache import cache_delete
 from core.encryption import decrypt_card
@@ -20,35 +21,36 @@ router = Router()
 
 
 @router.callback_query(F.data == "settings")
-async def show_settings(callback: CallbackQuery, state: FSMContext):
-    user_bot, admin = await require_bot(callback, state, "settings")
+async def show_settings(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
+    user_bot, admin = await require_bot(callback, state, "settings", i18n_lang=i18n_lang)
     if not user_bot:
         return
 
-    text = (
-        "⚙️ <b>Bot sozlamalari</b>\n\n"
-        f"🤖 Bot: @{user_bot.bot_username}\n"
-        f"💳 Karta: {decrypt_card(user_bot.card_number) if user_bot.card_number else '—'}\n"
-        f"💬 Salomlash: {(user_bot.welcome_message or '—')[:50]}...\n\n"
-        "Nimani o'zgartirmoqchisiz?"
+    text = _("settings_header").format(
+        username=user_bot.bot_username,
+        card=decrypt_card(user_bot.card_number) if user_bot.card_number else '—',
+        welcome=(user_bot.welcome_message or '—')[:50],
     )
-    await callback.message.edit_text(text, reply_markup=settings_kb())
+    await callback.message.edit_text(text, reply_markup=settings_kb(lang=i18n_lang))
     await callback.answer()
 
 
 @router.callback_query(F.data == "set_welcome")
-async def ask_welcome(callback: CallbackQuery, state: FSMContext):
+async def ask_welcome(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     await callback.message.edit_text(
-        "✏️ Yangi <b>salomlash xabarini</b> yuboring.\n\n"
-        "Bu xabar end user bot'ga /start bosganda ko'rinadi.",
-        reply_markup=back_bot_kb(),
+        _("ask_welcome_message"),
+        reply_markup=back_bot_kb(lang=i18n_lang),
     )
     await state.set_state(SettingsStates.waiting_welcome)
     await callback.answer()
 
 
 @router.message(SettingsStates.waiting_welcome)
-async def save_welcome(message: Message, state: FSMContext):
+async def save_welcome(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     async with async_session() as session:
         admin = await get_admin_by_telegram_id(session, message.from_user.id)
         user_bot = await get_current_bot(session, admin.id, state)
@@ -56,30 +58,31 @@ async def save_welcome(message: Message, state: FSMContext):
         await cache_delete(f"settings:{user_bot.id}")
 
     await message.answer(
-        "✅ Salomlash xabari yangilandi!",
-        reply_markup=settings_kb(),
+        _("welcome_saved"),
+        reply_markup=settings_kb(lang=i18n_lang),
     )
     await state.set_state(None)
 
 
 @router.callback_query(F.data == "set_card")
-async def ask_card(callback: CallbackQuery, state: FSMContext):
+async def ask_card(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     await callback.message.edit_text(
-        "💳 Yangi <b>karta raqamini</b> yuboring:\n"
-        "(Masalan: 8600 1234 5678 9012)",
-        reply_markup=back_bot_kb(),
+        _("ask_card_number"),
+        reply_markup=back_bot_kb(lang=i18n_lang),
     )
     await state.set_state(SettingsStates.waiting_card)
     await callback.answer()
 
 
 @router.message(SettingsStates.waiting_card)
-async def save_card(message: Message, state: FSMContext):
+async def save_card(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     formatted = validate_card(message.text)
     if not formatted:
         await message.answer(
-            "❌ Karta raqami noto'g'ri. 16 ta raqamdan iborat to'g'ri karta kiriting:",
-            reply_markup=back_bot_kb(),
+            _("card_invalid_16"),
+            reply_markup=back_bot_kb(lang=i18n_lang),
         )
         return
 
@@ -90,33 +93,34 @@ async def save_card(message: Message, state: FSMContext):
         await cache_delete(f"settings:{user_bot.id}")
 
     await message.answer(
-        f"✅ Karta yangilandi: {formatted}",
-        reply_markup=settings_kb(),
+        _("card_saved").format(card=formatted),
+        reply_markup=settings_kb(lang=i18n_lang),
     )
     await state.set_state(None)
 
 
 @router.callback_query(F.data == "set_price")
-async def ask_price(callback: CallbackQuery, state: FSMContext):
+async def ask_price(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     await callback.message.edit_text(
-        "💰 Yangi <b>narxni</b> yuboring (UZS da):\n"
-        "(Masalan: 50000)",
-        reply_markup=back_bot_kb(),
+        _("ask_new_price"),
+        reply_markup=back_bot_kb(lang=i18n_lang),
     )
     await state.set_state(SettingsStates.waiting_price)
     await callback.answer()
 
 
 @router.message(SettingsStates.waiting_price)
-async def save_price(message: Message, state: FSMContext):
+async def save_price(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     try:
         price = int(message.text.strip().replace(" ", ""))
         if price < 1000:
             raise ValueError
     except ValueError:
         await message.answer(
-            "❌ Narx kamida 1000 UZS bo'lishi kerak:",
-            reply_markup=back_bot_kb(),
+            _("price_min_error"),
+            reply_markup=back_bot_kb(lang=i18n_lang),
         )
         return
 
@@ -132,8 +136,8 @@ async def save_price(message: Message, state: FSMContext):
 
     price_formatted = f"{price:,}".replace(",", " ")
     await message.answer(
-        f"✅ Narx yangilandi: {price_formatted} UZS",
-        reply_markup=settings_kb(),
+        _("price_saved").format(price=price_formatted),
+        reply_markup=settings_kb(lang=i18n_lang),
     )
     await state.set_state(None)
 
@@ -142,7 +146,9 @@ async def save_price(message: Message, state: FSMContext):
 
 
 @router.callback_query(F.data == "manage_collabs")
-async def manage_collabs(callback: CallbackQuery, state: FSMContext):
+async def manage_collabs(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     async with async_session() as session:
         admin = await get_admin_by_telegram_id(session, callback.from_user.id)
         sub = await get_active_subscription(session, admin.id)
@@ -153,18 +159,16 @@ async def manage_collabs(callback: CallbackQuery, state: FSMContext):
 
     if features["multi_admin_limit"] == 0:
         await callback.message.edit_text(
-            "👥 <b>Hamkorlar</b>\n\n"
-            "❌ Bepul tarifda hamkor qo'shish imkoni yo'q.\n"
-            "Standard yoki Premium tarifga o'ting.",
-            reply_markup=settings_kb(),
+            _("collabs_no_access"),
+            reply_markup=settings_kb(lang=i18n_lang),
         )
         await callback.answer()
         return
 
     if not user_bot:
         await callback.message.edit_text(
-            "⚠️ Avval bot yarating.",
-            reply_markup=main_menu_kb(),
+            _("create_bot_first"),
+            reply_markup=main_menu_kb(lang=i18n_lang),
         )
         await callback.answer()
         return
@@ -172,27 +176,27 @@ async def manage_collabs(callback: CallbackQuery, state: FSMContext):
     collabs = user_bot.collaborators
     limit = features["multi_admin_limit"]
 
-    text = f"👥 <b>Hamkorlar</b> ({len(collabs)}/{limit})\n\n"
+    text = _("collabs_header").format(count=len(collabs), limit=limit)
     if collabs:
         for c in collabs:
             text += f"• @{c.username or c.telegram_id}\n"
     else:
-        text += "Hozircha hamkor yo'q.\n"
+        text += _("no_collabs_yet")
 
     buttons = []
     if len(collabs) < limit:
         buttons.append([InlineKeyboardButton(
-            text="➕ Hamkor qo'shish",
+            text=_('btn_add_collab'),
             callback_data="add_collab",
         )])
     for c in collabs:
         buttons.append([InlineKeyboardButton(
-            text=f"❌ @{c.username or c.telegram_id} ni o'chirish",
+            text=f"@{c.username or c.telegram_id}",
             callback_data=f"remove_collab_{c.id}",
         )])
     buttons.append([
-        InlineKeyboardButton(text="◀️ Orqaga", callback_data="settings"),
-        InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_menu"),
+        InlineKeyboardButton(text=_('btn_back'), callback_data="settings"),
+        InlineKeyboardButton(text=_('btn_main_menu'), callback_data="back_menu"),
     ])
 
     await callback.message.edit_text(
@@ -203,24 +207,25 @@ async def manage_collabs(callback: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data == "add_collab")
-async def add_collab(callback: CallbackQuery, state: FSMContext):
+async def add_collab(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     await callback.message.edit_text(
-        "👤 Hamkorning <b>Telegram ID</b> sini yuboring.\n\n"
-        "ID olish uchun hamkor @getmyid_bot ga /start bossin.",
-        reply_markup=back_bot_kb(),
+        _("add_collab_prompt"),
+        reply_markup=back_bot_kb(lang=i18n_lang),
     )
     await state.set_state(SettingsStates.waiting_collab_id)
     await callback.answer()
 
 
 @router.message(SettingsStates.waiting_collab_id)
-async def save_collab(message: Message, state: FSMContext):
+async def save_collab(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     try:
         collab_tg_id = int(message.text.strip())
     except ValueError:
         await message.answer(
-            "❌ Noto'g'ri ID. Raqam yuboring:",
-            reply_markup=back_bot_kb(),
+            _("collab_id_invalid"),
+            reply_markup=back_bot_kb(lang=i18n_lang),
         )
         return
 
@@ -230,7 +235,7 @@ async def save_collab(message: Message, state: FSMContext):
         user_bot = await get_current_bot(session, admin.id, state)
 
         if not user_bot:
-            await message.answer("⚠️ Bot topilmadi.", reply_markup=settings_kb())
+            await message.answer(_("bot_not_found"), reply_markup=settings_kb(lang=i18n_lang))
             await state.set_state(None)
             return
 
@@ -238,16 +243,14 @@ async def save_collab(message: Message, state: FSMContext):
         features = PLAN_FEATURES.get(plan, PLAN_FEATURES["free"])
         limit = features["multi_admin_limit"]
 
-        # Check limit
         if len(user_bot.collaborators) >= limit:
             await message.answer(
-                f"❌ Hamkor limiti ({limit}) ga yetdingiz.",
-                reply_markup=settings_kb(),
+                _("collab_limit_reached").format(limit=limit),
+                reply_markup=settings_kb(lang=i18n_lang),
             )
             await state.set_state(None)
             return
 
-        # Check if already exists
         existing = await session.execute(
             select(BotCollaborator).where(
                 and_(
@@ -258,22 +261,20 @@ async def save_collab(message: Message, state: FSMContext):
         )
         if existing.scalar_one_or_none():
             await message.answer(
-                "❌ Bu foydalanuvchi allaqachon hamkor sifatida qo'shilgan.",
-                reply_markup=settings_kb(),
+                _("collab_already_exists"),
+                reply_markup=settings_kb(lang=i18n_lang),
             )
             await state.set_state(None)
             return
 
-        # Check not adding self
         if collab_tg_id == message.from_user.id:
             await message.answer(
-                "❌ O'zingizni hamkor qilib qo'sha olmaysiz.",
-                reply_markup=settings_kb(),
+                _("collab_self_error"),
+                reply_markup=settings_kb(lang=i18n_lang),
             )
             await state.set_state(None)
             return
 
-        # Try to get username
         username = None
         try:
             chat = await message.bot.get_chat(collab_tg_id)
@@ -290,14 +291,15 @@ async def save_collab(message: Message, state: FSMContext):
         await session.commit()
 
     await message.answer(
-        f"✅ Hamkor qo'shildi: @{username or collab_tg_id}",
-        reply_markup=settings_kb(),
+        _("collab_added").format(username=username or collab_tg_id),
+        reply_markup=settings_kb(lang=i18n_lang),
     )
     await state.set_state(None)
 
 
 @router.callback_query(F.data.startswith("remove_collab_"))
-async def remove_collab(callback: CallbackQuery, state: FSMContext):
+async def remove_collab(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
     collab_id = int(callback.data.replace("remove_collab_", ""))
 
     async with async_session() as session:
@@ -309,45 +311,42 @@ async def remove_collab(callback: CallbackQuery, state: FSMContext):
             username = collab.username or collab.telegram_id
             await session.delete(collab)
             await session.commit()
-            await callback.answer(f"✅ @{username} o'chirildi!")
+            await callback.answer(_("collab_removed").format(username=username))
         else:
-            await callback.answer("❌ Hamkor topilmadi.")
+            await callback.answer(_("collab_not_found"))
 
-    # Refresh the list
-    await manage_collabs(callback, state)
+    await manage_collabs(callback, state, i18n_lang=i18n_lang)
 
 
 # --- Bot Deactivation ---
 
 
 @router.callback_query(F.data == "deactivate_bot")
-async def ask_deactivate_bot(callback: CallbackQuery, state: FSMContext):
+async def ask_deactivate_bot(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     async with async_session() as session:
         admin = await get_admin_by_telegram_id(session, callback.from_user.id)
         user_bot = await get_current_bot(session, admin.id, state)
 
     if not user_bot:
         await callback.message.edit_text(
-            "⚠️ Bot topilmadi.",
-            reply_markup=main_menu_kb(),
+            _("bot_not_found"),
+            reply_markup=main_menu_kb(lang=i18n_lang),
         )
         await callback.answer()
         return
 
     await callback.message.edit_text(
-        f"⚠️ <b>@{user_bot.bot_username} ni o'chirishni tasdiqlang.</b>\n\n"
-        "Bu botni o'chirsangiz:\n"
-        "• Bot foydalanuvchilarga javob bermaydi\n"
-        "• Barcha sozlamalar saqlanib qoladi\n\n"
-        "Davom etasizmi?",
+        _("deactivate_confirm").format(username=user_bot.bot_username),
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [
                 InlineKeyboardButton(
-                    text="🗑 O'chirish",
+                    text=_('btn_delete'),
                     callback_data=f"do_deactivate_{user_bot.id}",
                 ),
                 InlineKeyboardButton(
-                    text="❌ Bekor qilish",
+                    text=_('btn_cancel'),
                     callback_data="settings",
                 ),
             ],
@@ -358,8 +357,9 @@ async def ask_deactivate_bot(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("do_deactivate_"))
 async def confirm_deactivate_bot(
-    callback: CallbackQuery, state: FSMContext, bot_manager: BotManager
+    callback: CallbackQuery, state: FSMContext, bot_manager: BotManager, i18n_lang: str = "uz"
 ):
+    _ = lambda key: get_text(key, i18n_lang)
     bot_id = int(callback.data.split("_")[2])
 
     async with async_session() as session:
@@ -369,12 +369,12 @@ async def confirm_deactivate_bot(
         await bot_manager.stop_bot(bot_id)
         await state.update_data(selected_bot_id=None)
         await callback.message.edit_text(
-            "✅ Bot muvaffaqiyatli o'chirildi.",
-            reply_markup=main_menu_kb(),
+            _("deactivate_success"),
+            reply_markup=main_menu_kb(lang=i18n_lang),
         )
     else:
         await callback.message.edit_text(
-            "❌ Bot topilmadi.",
-            reply_markup=main_menu_kb(),
+            _("bot_not_found"),
+            reply_markup=main_menu_kb(lang=i18n_lang),
         )
     await callback.answer()

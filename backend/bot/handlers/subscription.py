@@ -6,6 +6,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.keyboards.inline import back_kb, main_menu_kb
+from bot.middlewares.i18n import get_text
 from config import config
 from core.cache import cache_delete
 from db.engine import async_session
@@ -56,7 +57,9 @@ class SubPayStates(StatesGroup):
 
 
 @router.callback_query(F.data == "my_subscription")
-async def show_subscription(callback: CallbackQuery):
+async def show_subscription(callback: CallbackQuery, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     async with async_session() as session:
         admin = await get_admin_by_telegram_id(session, callback.from_user.id)
         sub = await get_active_subscription(session, admin.id)
@@ -67,95 +70,72 @@ async def show_subscription(callback: CallbackQuery):
     features = PLAN_FEATURES.get(plan, PLAN_FEATURES[PlanName.FREE])
 
     if plan == PlanName.FREE:
-        text = (
-            "📦 <b>Joriy tarif: Bepul</b>\n\n"
-            f"🤖 Botlar: {bot_count}/{features['bot_limit']}\n"
-            f"👥 Multi-admin: ❌\n"
-            "🔹 Getolog reklama yuborishi mumkin\n"
-            "🔹 Getolog brending ko'rsatiladi\n"
-            "🔹 To'lov: faqat karta + screenshot\n\n"
-            "Tarifni oshirish uchun tanlang:"
-        )
+        text = _("plan_free").format(bots=bot_count, limit=features['bot_limit'])
         buttons = []
         for plan_id, plan_info in PLANS.items():
             price_fmt = f"{plan_info['price']:,}".replace(",", " ")
-            feat = PLAN_FEATURES[plan_id]
-            desc = []
-            if not feat["ads"]:
-                desc.append("reklama yo'q")
-            if not feat["branding"]:
-                desc.append("brending yo'q")
-            if feat["payment_integration"]:
-                desc.append("Click/Payme")
-            feat_text = " · ".join(desc)
             buttons.append([
                 InlineKeyboardButton(
                     text=f"{plan_info['name']} — {price_fmt} UZS/oy",
                     callback_data=f"buy_plan_{plan_id}",
                 )
             ])
-        buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_menu")])
+        buttons.append([InlineKeyboardButton(
+            text=_('btn_back'),
+            callback_data="back_menu",
+        )])
         kb = InlineKeyboardMarkup(inline_keyboard=buttons)
 
     elif plan == PlanName.STANDARD:
-        expires = sub.expires_at.strftime("%d.%m.%Y") if sub.expires_at else "—"
-        text = (
-            "📦 <b>Joriy tarif: Standard</b>\n\n"
-            f"📅 Tugash sanasi: {expires}\n"
-            "✅ Holati: Aktiv\n\n"
-            f"🤖 Botlar: {bot_count}/{features['bot_limit']}\n"
-            f"👥 Multi-admin: ✅ ({features['multi_admin_limit']} tagacha)\n"
-            "🔹 Reklama yuborilmaydi\n"
-            "🔹 Brending ko'rsatiladi\n"
-            "🔹 To'lov: faqat karta + screenshot\n\n"
-            "Premium ga o'tish uchun:"
+        expires = sub.expires_at.strftime("%d.%m.%Y") if sub.expires_at else "\u2014"
+        text = _("plan_standard").format(
+            expires=expires,
+            bots=bot_count,
+            limit=features['bot_limit'],
+            collab_limit=features['multi_admin_limit'],
         )
         premium = PLANS[PlanName.PREMIUM]
         price_fmt = f"{premium['price']:,}".replace(",", " ")
         buttons = [
             [InlineKeyboardButton(
-                text=f"⬆️ Premium — {price_fmt} UZS/oy",
+                text=f"Premium — {price_fmt} UZS/oy",
                 callback_data="buy_plan_premium",
             )],
-            [InlineKeyboardButton(text="◀️ Orqaga", callback_data="back_menu")],
+            [InlineKeyboardButton(
+                text=_('btn_back'),
+                callback_data="back_menu",
+            )],
         ]
         kb = InlineKeyboardMarkup(inline_keyboard=buttons)
 
     elif plan == PlanName.PREMIUM:
-        expires = sub.expires_at.strftime("%d.%m.%Y") if sub.expires_at else "—"
-        text = (
-            "📦 <b>Joriy tarif: Premium</b>\n\n"
-            f"📅 Tugash sanasi: {expires}\n"
-            "✅ Holati: Aktiv\n\n"
-            f"🤖 Botlar: {bot_count}/{features['bot_limit']}\n"
-            f"👥 Multi-admin: ✅ ({features['multi_admin_limit']} tagacha)\n"
-            "🔹 Reklama yuborilmaydi\n"
-            "🔹 Brending ko'rsatilmaydi\n"
-            "🔹 Click / Payme to'lov integratsiyasi faol\n"
+        expires = sub.expires_at.strftime("%d.%m.%Y") if sub.expires_at else "\u2014"
+        text = _("plan_premium").format(
+            expires=expires,
+            bots=bot_count,
+            limit=features['bot_limit'],
+            collab_limit=features['multi_admin_limit'],
         )
-        kb = back_kb()
+        kb = back_kb(lang=i18n_lang)
 
     else:
         # Backward compat: old plans (1month, 6month, 12month)
-        expires = sub.expires_at.strftime("%d.%m.%Y") if sub.expires_at else "—"
-        text = (
-            f"📦 <b>Joriy tarif: {sub.plan} (eski)</b>\n\n"
-            f"📅 Tugash sanasi: {expires}\n"
-            "✅ Holati: Aktiv\n\n"
-            "Muddati tugagandan keyin yangi tariflardan birini tanlashingiz mumkin."
-        )
-        kb = back_kb()
+        expires = sub.expires_at.strftime("%d.%m.%Y") if sub.expires_at else "\u2014"
+        text = _("plan_old").format(plan=sub.plan, expires=expires)
+        kb = back_kb(lang=i18n_lang)
 
     await callback.message.edit_text(text, reply_markup=kb)
     await callback.answer()
 
 
 @router.callback_query(F.data.startswith("buy_plan_"))
-async def buy_plan(callback: CallbackQuery, state: FSMContext):
+async def buy_plan(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     plan_id = callback.data.replace("buy_plan_", "")
     plan = PLANS.get(plan_id)
     if not plan:
-        await callback.answer("❌ Tarif topilmadi.")
+        await callback.answer(_("plan_not_found"))
         return
 
     price_fmt = f"{plan['price']:,}".replace(",", " ")
@@ -165,27 +145,30 @@ async def buy_plan(callback: CallbackQuery, state: FSMContext):
     features = PLAN_FEATURES[plan_id]
     feat_lines = []
     if not features["ads"]:
-        feat_lines.append("✅ Reklama yuborilmaydi")
+        feat_lines.append(_("feat_no_ads"))
     if not features["branding"]:
-        feat_lines.append("✅ Brending ko'rsatilmaydi")
+        feat_lines.append(_("feat_no_branding"))
     if features["payment_integration"]:
-        feat_lines.append("✅ Click / Payme integratsiyasi")
+        feat_lines.append(_("feat_click_payme"))
     feat_text = "\n".join(feat_lines)
 
     await callback.message.edit_text(
-        f"💳 <b>{plan['name']} obuna — {price_fmt} UZS/oy</b>\n\n"
-        f"{feat_text}\n\n"
-        f"Quyidagi karta raqamiga to'lov qiling:\n\n"
-        f"<code>{GETOLOG_CARD}</code>\n\n"
-        f"✅ To'lov qilgandan keyin <b>chek rasmini</b> (screenshot) yuboring.",
-        reply_markup=back_kb(),
+        _("buy_plan").format(
+            name=plan['name'],
+            price=price_fmt,
+            features=feat_text,
+            card=GETOLOG_CARD,
+        ),
+        reply_markup=back_kb(lang=i18n_lang),
     )
     await state.set_state(SubPayStates.waiting_screenshot)
     await callback.answer()
 
 
 @router.message(SubPayStates.waiting_screenshot, F.photo)
-async def process_sub_screenshot(message: Message, state: FSMContext):
+async def process_sub_screenshot(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     data = await state.get_data()
     plan_id = data["plan_id"]
     plan = PLANS[plan_id]
@@ -194,9 +177,8 @@ async def process_sub_screenshot(message: Message, state: FSMContext):
     price_fmt = f"{plan['price']:,}".replace(",", " ")
 
     await message.answer(
-        "✅ To'lov ma'lumotlari qabul qilindi!\n\n"
-        "⏳ Moderator tasdiqlashini kuting. Tasdiqlanganidan keyin obuna faollashadi.",
-        reply_markup=main_menu_kb(),
+        _("sub_payment_received"),
+        reply_markup=main_menu_kb(lang=i18n_lang),
     )
 
     # Notify all moderators
@@ -205,21 +187,21 @@ async def process_sub_screenshot(message: Message, state: FSMContext):
             await message.bot.send_photo(
                 mod_id,
                 photo=photo.file_id,
-                caption=(
-                    f"💎 <b>Getolog obuna to'lovi!</b>\n\n"
-                    f"👤 @{message.from_user.username or '—'} ({message.from_user.full_name})\n"
-                    f"📦 Tarif: {plan['name']}\n"
-                    f"💰 {price_fmt} UZS/oy\n"
-                    f"🆔 Admin ID: {message.from_user.id}"
+                caption=get_text("sub_mod_notification", "uz").format(
+                    username=message.from_user.username or "\u2014",
+                    name=message.from_user.full_name,
+                    plan=plan['name'],
+                    price=price_fmt,
+                    admin_id=message.from_user.id,
                 ),
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                     [
                         InlineKeyboardButton(
-                            text="✅ Tasdiqlash",
+                            text=get_text('btn_approve', 'uz'),
                             callback_data=f"mod_sub_approve_{message.from_user.id}_{plan_id}",
                         ),
                         InlineKeyboardButton(
-                            text="❌ Rad etish",
+                            text=get_text('btn_reject', 'uz'),
                             callback_data=f"mod_sub_reject_{message.from_user.id}",
                         ),
                     ]
@@ -232,17 +214,21 @@ async def process_sub_screenshot(message: Message, state: FSMContext):
 
 
 @router.message(SubPayStates.waiting_screenshot)
-async def wrong_sub_screenshot(message: Message):
+async def wrong_sub_screenshot(message: Message, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     await message.answer(
-        "❌ Iltimos, <b>rasm</b> (screenshot) yuboring.",
-        reply_markup=back_kb(),
+        _("sub_wrong_screenshot"),
+        reply_markup=back_kb(lang=i18n_lang),
     )
 
 
 @router.callback_query(F.data.startswith("mod_sub_approve_"))
-async def mod_approve_subscription(callback: CallbackQuery):
+async def mod_approve_subscription(callback: CallbackQuery, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     if callback.from_user.id not in config.moderator_ids:
-        await callback.answer("⛔ Ruxsat yo'q.")
+        await callback.answer(_("no_permission"))
         return
 
     parts = callback.data.split("_")
@@ -252,7 +238,7 @@ async def mod_approve_subscription(callback: CallbackQuery):
     plan = PLANS.get(plan_id)
 
     if not plan:
-        await callback.answer("❌ Tarif topilmadi.")
+        await callback.answer(_("plan_not_found"))
         return
 
     from datetime import datetime, timedelta, timezone
@@ -260,7 +246,7 @@ async def mod_approve_subscription(callback: CallbackQuery):
     async with async_session() as session:
         admin = await get_admin_by_telegram_id(session, admin_tg_id)
         if not admin:
-            await callback.answer("❌ Admin topilmadi.")
+            await callback.answer(_("admin_not_found"))
             return
 
         # Expire old active subscription
@@ -286,56 +272,66 @@ async def mod_approve_subscription(callback: CallbackQuery):
         for b in bots:
             await cache_delete(f"premium:{b.bot_username}")
 
-    # Build notification based on plan
+        # Get admin's language for the notification sent to them
+        admin_lang = admin.language or "uz"
+
+    # Build notification using admin's language
+    _admin = lambda key: get_text(key, admin_lang)
+
     features = PLAN_FEATURES[plan_id]
     feat_lines = []
     if not features["ads"]:
-        feat_lines.append("✅ Reklama yuborilmaydi")
+        feat_lines.append(_admin("feat_no_ads"))
     if features["branding"]:
-        feat_lines.append("ℹ️ Getolog brending saqlanadi")
+        feat_lines.append(_admin("feat_branding_kept"))
     else:
-        feat_lines.append("✅ Brending ko'rsatilmaydi")
+        feat_lines.append(_admin("feat_no_branding"))
     if features["payment_integration"]:
-        feat_lines.append("✅ Click / Payme integratsiyasi faol")
+        feat_lines.append(_admin("feat_click_payme"))
     feat_text = "\n".join(feat_lines)
 
     try:
         await callback.bot.send_message(
             admin_tg_id,
-            f"✅ <b>Obuna faollashtirildi!</b>\n\n"
-            f"📦 Tarif: {plan['name']}\n"
-            f"📅 Muddat: 1 oy\n\n"
-            f"{feat_text}",
-            reply_markup=main_menu_kb(),
+            _admin("sub_activated").format(plan=plan['name'], features=feat_text),
+            reply_markup=main_menu_kb(lang=admin_lang),
         )
     except Exception:
         pass
 
     await callback.message.edit_caption(
-        caption=callback.message.caption + "\n\n✅ <b>TASDIQLANDI</b>",
+        caption=callback.message.caption + "\n\n" + _("confirmed"),
     )
-    await callback.answer("✅ Obuna faollashtirildi!")
+    await callback.answer(_("sub_activated_cb"))
 
 
 @router.callback_query(F.data.startswith("mod_sub_reject_"))
-async def mod_reject_subscription(callback: CallbackQuery):
+async def mod_reject_subscription(callback: CallbackQuery, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     if callback.from_user.id not in config.moderator_ids:
-        await callback.answer("⛔ Ruxsat yo'q.")
+        await callback.answer(_("no_permission"))
         return
 
     admin_tg_id = int(callback.data.split("_")[3])
 
+    # Look up admin's language for the rejection message sent to them
+    async with async_session() as session:
+        admin = await get_admin_by_telegram_id(session, admin_tg_id)
+        admin_lang = (admin.language if admin else None) or "uz"
+
+    _admin = lambda key: get_text(key, admin_lang)
+
     try:
         await callback.bot.send_message(
             admin_tg_id,
-            "❌ <b>To'lov rad etildi.</b>\n\n"
-            "To'lov tasdiqlana olmadi. Iltimos, to'g'ri summani o'tkazing va qayta urinib ko'ring.",
-            reply_markup=main_menu_kb(),
+            _admin("sub_rejected"),
+            reply_markup=main_menu_kb(lang=admin_lang),
         )
     except Exception:
         pass
 
     await callback.message.edit_caption(
-        caption=callback.message.caption + "\n\n❌ <b>RAD ETILDI</b>",
+        caption=callback.message.caption + "\n\n" + _("rejected_label"),
     )
-    await callback.answer("❌ Rad etildi.")
+    await callback.answer(_("sub_rejected_cb"))
