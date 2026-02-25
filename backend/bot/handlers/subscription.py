@@ -21,7 +21,7 @@ router = Router()
 # Getolog admin subscription plans (UZS / month)
 PLANS = {
     PlanName.STANDARD: {"name": "Standard", "price": 97_000, "months": 1},
-    PlanName.PREMIUM:  {"name": "Premium",  "price": 197_000, "months": 1},
+    PlanName.PREMIUM:  {"name": "Biznes",  "price": 497_000, "months": 1},
 }
 
 # Features per plan

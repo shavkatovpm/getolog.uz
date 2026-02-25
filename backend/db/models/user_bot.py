@@ -25,7 +25,7 @@ class UserBot(Base):
     )
 
     # Relationships
-    admin: Mapped["UserAdmin"] = relationship(back_populates="bots")
+    admin: Mapped["UserAdmin"] = relationship(back_populates="bots", lazy="selectin")
     channels: Mapped[list["Channel"]] = relationship(
         back_populates="bot", lazy="selectin"
     )

@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select, and_
 
+from bot.middlewares.i18n import get_text
 from db.engine import async_session
 from db.models import Subscription, AdminSubscription, UserBot
 from core.encryption import decrypt_token
@@ -58,7 +59,6 @@ class SchedulerService:
         now = datetime.now(timezone.utc)
 
         async with async_session() as session:
-            # Find ACTIVE expired + EXPIRED not-yet-kicked (retry)
             result = await session.execute(
                 select(Subscription).where(
                     and_(
@@ -71,12 +71,10 @@ class SchedulerService:
             expired_subs = result.scalars().all()
 
             for sub in expired_subs:
-                # Always mark as EXPIRED first (business state)
                 if sub.status == SubStatus.ACTIVE:
                     sub.status = SubStatus.EXPIRED
                     logger.info(f"Subscription {sub.id} expired")
 
-                # Attempt to kick from channel (best effort with retry)
                 try:
                     from core.invite_link import kick_member
 
@@ -100,25 +98,27 @@ class SchedulerService:
                     else:
                         logger.warning(f"Kick failed for sub={sub.id}, will retry next run")
 
-                    # Notify end user
+                    # Notify end user in their language
+                    eu_lang = sub.end_user.language or "uz"
                     try:
                         await bot.send_message(
                             sub.end_user.telegram_id,
-                            "⏰ Obuna muddatingiz tugadi. Qayta obuna bo'lish uchun /start bosing.",
+                            get_text("subscription_expired", eu_lang),
                         )
                     except Exception:
                         pass
 
-                    # Notify admin
+                    # Notify admin in their language
                     try:
                         admin_tg_id = channel.bot.admin.telegram_id
+                        admin_lang = channel.bot.admin.language or "uz"
                         username = sub.end_user.username or sub.end_user.telegram_id
                         await bot.send_message(
                             admin_tg_id,
-                            f"🚪 <b>Foydalanuvchi chiqarildi</b>\n\n"
-                            f"👤 @{username}\n"
-                            f"📢 {channel.title}\n"
-                            f"📅 Obuna muddati tugagan",
+                            get_text("user_kicked_notification", admin_lang).format(
+                                username=username,
+                                channel=channel.title,
+                            ),
                         )
                     except Exception:
                         pass
@@ -146,7 +146,6 @@ class SchedulerService:
 
             for admin_sub in expired:
                 admin_sub.status = SubStatus.EXPIRED
-                # Create new free subscription
                 free_sub = AdminSubscription(
                     user_admin_id=admin_sub.user_admin_id,
                     plan=PlanName.FREE,
@@ -181,21 +180,24 @@ class SchedulerService:
                     channel = sub.channel
                     bot = self.bot_manager.bots.get(channel.user_bot_id)
                     if bot:
+                        eu_lang = sub.end_user.language or "uz"
                         await bot.send_message(
                             sub.end_user.telegram_id,
-                            "⚠️ Obuna muddatingiz 3 kundan keyin tugaydi. Qayta obuna bo'ling!",
+                            get_text("subscription_expires_3day", eu_lang),
                         )
                         sub.notified_3day = True
 
                         # Notify admin
                         try:
                             admin_tg_id = channel.bot.admin.telegram_id
+                            admin_lang = channel.bot.admin.language or "uz"
                             username = sub.end_user.username or sub.end_user.telegram_id
                             await bot.send_message(
                                 admin_tg_id,
-                                f"⚠️ <b>Obuna 3 kundan tugaydi</b>\n\n"
-                                f"👤 @{username}\n"
-                                f"📢 {channel.title}",
+                                get_text("admin_3day_warning", admin_lang).format(
+                                    username=username,
+                                    channel=channel.title,
+                                ),
                             )
                         except Exception:
                             pass
@@ -219,21 +221,24 @@ class SchedulerService:
                     channel = sub.channel
                     bot = self.bot_manager.bots.get(channel.user_bot_id)
                     if bot:
+                        eu_lang = sub.end_user.language or "uz"
                         await bot.send_message(
                             sub.end_user.telegram_id,
-                            "🔴 Obuna muddatingiz ertaga tugaydi! Hoziroq uzaytiring.",
+                            get_text("subscription_expires_1day", eu_lang),
                         )
                         sub.notified_1day = True
 
                         # Notify admin
                         try:
                             admin_tg_id = channel.bot.admin.telegram_id
+                            admin_lang = channel.bot.admin.language or "uz"
                             username = sub.end_user.username or sub.end_user.telegram_id
                             await bot.send_message(
                                 admin_tg_id,
-                                f"🔴 <b>Obuna ertaga tugaydi</b>\n\n"
-                                f"👤 @{username}\n"
-                                f"📢 {channel.title}",
+                                get_text("admin_1day_warning", admin_lang).format(
+                                    username=username,
+                                    channel=channel.title,
+                                ),
                             )
                         except Exception:
                             pass
@@ -248,7 +253,6 @@ class SchedulerService:
         dead_bots = [bid for bid, status in results.items() if status == "dead"]
         if dead_bots:
             logger.warning(f"Dead bots detected: {dead_bots}")
-            # Try to restart dead bots
             async with async_session() as session:
                 for bot_id in dead_bots:
                     result = await session.execute(

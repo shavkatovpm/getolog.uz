@@ -6,6 +6,7 @@ from aiogram.types import Message, CallbackQuery
 
 from bot.keyboards.inline import main_menu_kb, confirm_kb, duration_kb, back_kb, check_channel_kb, card_or_free_kb
 from bot.handlers.subscription import PLAN_FEATURES
+from bot.middlewares.i18n import get_text
 from core.bot_manager import BotManager
 from db.engine import async_session
 from services.admin_service import get_admin_by_telegram_id, get_active_subscription
@@ -18,7 +19,9 @@ router = Router()
 
 
 @router.callback_query(F.data == "create_bot")
-async def start_create_bot(callback: CallbackQuery, state: FSMContext):
+async def start_create_bot(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     async with async_session() as session:
         admin = await get_admin_by_telegram_id(session, callback.from_user.id)
         sub = await get_active_subscription(session, admin.id)
@@ -31,24 +34,20 @@ async def start_create_bot(callback: CallbackQuery, state: FSMContext):
     if len(existing_bots) >= bot_limit:
         bot_names = ", ".join(f"@{b.bot_username}" for b in existing_bots)
         await callback.message.edit_text(
-            f"🤖 Sizda {len(existing_bots)}/{bot_limit} ta bot mavjud: {bot_names}\n\n"
-            f"📦 Joriy tarif: <b>{plan.capitalize()}</b>\n"
-            "Ko'proq bot yaratish uchun tarifni oshiring.",
-            reply_markup=back_kb(),
+            _("bot_limit_reached").format(
+                count=len(existing_bots),
+                limit=bot_limit,
+                names=bot_names,
+                plan=plan.capitalize(),
+            ),
+            reply_markup=back_kb(lang=i18n_lang),
         )
         await callback.answer()
         return
 
     await callback.message.edit_text(
-        'Ommaviy offerta bilan tanishing: <a href="https://getolog.uz/offerta">getolog.uz/offerta</a>\n\n'
-        "🔑 <b>Bot tokenini yuboring</b>\n\n"
-        "1. @BotFather ga o'ting\n"
-        "2. /newbot buyrug'ini yuboring\n"
-        "3. Bot nomini kiriting\n"
-        "4. Olingan tokenni bu yerga yuboring\n\n"
-        "Token formati: <code>123456:ABC-DEF...</code>\n\n"
-        "⚠️ Token yuborish orqali ommaviy offertaga rozilik bildirgan bo'lasiz!",
-        reply_markup=back_kb(),
+        _("send_token_prompt"),
+        reply_markup=back_kb(lang=i18n_lang),
         disable_web_page_preview=True,
     )
     await state.set_state(RegisterStates.waiting_token)
@@ -56,121 +55,111 @@ async def start_create_bot(callback: CallbackQuery, state: FSMContext):
 
 
 @router.message(RegisterStates.waiting_token)
-async def process_token(message: Message, state: FSMContext):
+async def process_token(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     token = message.text.strip()
 
     # Basic validation
     if ":" not in token or len(token) < 30:
         await message.answer(
-            "❌ Noto'g'ri format. Token quyidagicha bo'lishi kerak:\n"
-            "<code>123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11</code>\n\n"
-            "Qayta urinib ko'ring:",
-            reply_markup=back_kb(),
+            _("token_format_error"),
+            reply_markup=back_kb(lang=i18n_lang),
         )
         return
 
-    await message.answer("🔄 Token tekshirilmoqda...")
+    await message.answer(_("token_checking"))
 
     # Validate with Telegram API
     bot_info = await validate_token(token)
     if not bot_info:
         await message.answer(
-            "❌ Token noto'g'ri yoki bot o'chirilgan.\n"
-            "Iltimos, @BotFather dan yangi token oling va qayta yuboring.",
-            reply_markup=back_kb(),
+            _("token_invalid"),
+            reply_markup=back_kb(lang=i18n_lang),
         )
         return
+
+    # Remove webhook if set (needed for get_updates to work), but keep pending updates
+    try:
+        temp_bot = Bot(token=token)
+        await temp_bot.delete_webhook()
+        await temp_bot.session.close()
+    except Exception:
+        pass
 
     await state.update_data(token=token, bot_info=bot_info)
 
     await message.answer(
-        f"✅ Bot topildi: @{bot_info['username']}\n\n"
-        "💳 To'lov qabul qiladigan <b>karta raqamingizni</b> yuboring:\n"
-        "(Masalan: 8600 1234 5678 9012)\n\n"
-        "Yoki kanal/guruhga kirish bepul bo'lsa, quyidagi tugmani bosing:",
-        reply_markup=card_or_free_kb(),
+        _("bot_found_ask_card").format(username=bot_info["username"]),
+        reply_markup=card_or_free_kb(lang=i18n_lang),
     )
     await state.set_state(RegisterStates.waiting_card)
 
 
 @router.message(RegisterStates.waiting_card)
-async def process_card(message: Message, state: FSMContext):
+async def process_card(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     formatted = validate_card(message.text)
     if not formatted:
         await message.answer(
-            "❌ Karta raqami noto'g'ri. 16 ta raqamdan iborat to'g'ri karta kiriting.\n"
-            "Qayta kiriting:",
-            reply_markup=back_kb(),
+            _("card_invalid"),
+            reply_markup=back_kb(lang=i18n_lang),
         )
         return
 
     await state.update_data(card_number=formatted)
-
-    # Clear old updates on the user bot so we only detect new channel additions
     data = await state.get_data()
-    token = data["token"]
-    try:
-        temp_bot = Bot(token=token)
-        await temp_bot.delete_webhook(drop_pending_updates=True)
-        await temp_bot.session.close()
-    except Exception:
-        pass
 
     await message.answer(
-        f"📢 <b>Endi @{data['bot_info']['username']} ni kanalga admin qilib qo'shing.</b>\n\n"
-        "1. Kanal sozlamalariga o'ting\n"
-        "2. Administratorlar bo'limiga kiring\n"
-        f"3. @{data['bot_info']['username']} ni admin qilib qo'shing\n\n"
-        "Qo'shgandan keyin quyidagi tugmani bosing:",
-        reply_markup=check_channel_kb(),
+        _("add_bot_to_channel").format(username=data["bot_info"]["username"]),
+        reply_markup=check_channel_kb(lang=i18n_lang),
     )
     await state.set_state(RegisterStates.waiting_channel)
 
 
 @router.callback_query(RegisterStates.waiting_card, F.data == "reg_free_mode")
-async def choose_free_mode(callback: CallbackQuery, state: FSMContext):
+async def choose_free_mode(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     data = await state.get_data()
-    token = data["token"]
 
     await state.update_data(is_free=True, card_number=None, price=0, duration=0)
 
-    # Clear old updates on the user bot
-    try:
-        temp_bot = Bot(token=token)
-        await temp_bot.delete_webhook(drop_pending_updates=True)
-        await temp_bot.session.close()
-    except Exception:
-        pass
-
     await callback.message.edit_text(
-        f"🆓 <b>Bepul rejim tanlandi!</b>\n\n"
-        f"📢 Endi @{data['bot_info']['username']} ni kanalga admin qilib qo'shing.\n\n"
-        "1. Kanal sozlamalariga o'ting\n"
-        "2. Administratorlar bo'limiga kiring\n"
-        f"3. @{data['bot_info']['username']} ni admin qilib qo'shing\n\n"
-        "Qo'shgandan keyin quyidagi tugmani bosing:",
-        reply_markup=check_channel_kb(),
+        _("free_mode_selected").format(username=data["bot_info"]["username"]),
+        reply_markup=check_channel_kb(lang=i18n_lang),
     )
     await state.set_state(RegisterStates.waiting_channel)
     await callback.answer()
 
 
 @router.callback_query(RegisterStates.waiting_channel, F.data == "check_channel")
-async def check_channel_auto(callback: CallbackQuery, state: FSMContext):
+async def check_channel_auto(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     data = await state.get_data()
     token = data["token"]
 
-    await callback.answer("🔍 Tekshirilmoqda...")
+    await callback.answer(_("checking"))
 
     try:
         temp_bot = Bot(token=token)
-        updates = await temp_bot.get_updates(allowed_updates=["my_chat_member"])
+        # Get ALL update types — no filter
+        updates = await temp_bot.get_updates()
 
+        logger.info(f"Channel auto-detect: got {len(updates)} updates")
+
+        # Find the LAST my_chat_member event where bot became admin
         found_chat = None
-        for update in updates:
+        for update in reversed(updates):
             if update.my_chat_member:
                 member = update.my_chat_member
-                if member.new_chat_member.status in ("administrator", "member"):
+                logger.info(
+                    f"  my_chat_member: chat={member.chat.title} ({member.chat.id}), "
+                    f"status={member.new_chat_member.status}"
+                )
+                if member.new_chat_member.status in ("administrator", "creator"):
                     found_chat = member.chat
                     break
 
@@ -178,17 +167,15 @@ async def check_channel_auto(callback: CallbackQuery, state: FSMContext):
     except Exception as e:
         logger.error(f"Channel auto-detect error: {e}")
         await callback.message.edit_text(
-            "❌ Xatolik yuz berdi. Qayta urinib ko'ring.",
-            reply_markup=check_channel_kb(),
+            _("channel_error"),
+            reply_markup=check_channel_kb(lang=i18n_lang),
         )
         return
 
     if not found_chat:
         await callback.message.edit_text(
-            "❌ Bot hali kanalga qo'shilmagan.\n\n"
-            f"@{data['bot_info']['username']} ni kanalga <b>admin</b> qilib qo'shing, "
-            "keyin qayta tekshiring.",
-            reply_markup=check_channel_kb(),
+            _("channel_not_added").format(username=data["bot_info"]["username"]),
+            reply_markup=check_channel_kb(lang=i18n_lang),
         )
         return
 
@@ -201,139 +188,218 @@ async def check_channel_auto(callback: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
     if data.get("is_free"):
-        # Free mode — skip price/duration, go to confirm
-        summary = (
-            "📋 <b>Bot sozlamalari:</b>\n\n"
-            f"🤖 Bot: @{data['bot_info']['username']}\n"
-            f"📢 Kanal: {found_chat.title}\n"
-            "💰 Narx: Bepul\n"
-            "📅 Muddat: Umrbod\n\n"
-            "Tasdiqlaysizmi?"
+        summary = _("bot_summary_free").format(
+            username=data["bot_info"]["username"],
+            channel=found_chat.title,
         )
-        await callback.message.edit_text(summary, reply_markup=confirm_kb("reg"))
+        await callback.message.edit_text(summary, reply_markup=confirm_kb("reg", lang=i18n_lang))
     else:
         await callback.message.edit_text(
-            f"✅ {chat_type.capitalize()} topildi: <b>{found_chat.title}</b>\n\n"
-            "💰 Kirish narxini yuboring (UZS da):\n"
-            "(Masalan: 50000)",
-            reply_markup=back_kb(),
+            _("channel_found_ask_price").format(
+                type=chat_type.capitalize(),
+                title=found_chat.title,
+            ),
+            reply_markup=back_kb(lang=i18n_lang),
         )
         await state.set_state(RegisterStates.waiting_price)
 
 
-@router.callback_query(RegisterStates.waiting_channel, F.data == "manual_channel_id")
-async def switch_to_manual(callback: CallbackQuery, state: FSMContext):
-    await callback.message.edit_text(
-        "📢 Kanal yoki guruhingizning <b>ID sini</b> yuboring.\n\n"
-        "ID olish: kanalga @getmyid_bot qo'shing.\n"
-        "(Masalan: -1001234567890)",
-        reply_markup=back_kb(),
-    )
-    await state.set_state(RegisterStates.waiting_channel_manual)
-    await callback.answer()
-
-
-@router.message(RegisterStates.waiting_channel_manual)
-async def process_channel_manual(message: Message, state: FSMContext):
-    try:
-        chat_id = int(message.text.strip())
-    except ValueError:
-        await message.answer(
-            "❌ Noto'g'ri ID. Raqam yuboring (masalan: -1001234567890):",
-            reply_markup=back_kb(),
-        )
-        return
+@router.message(RegisterStates.waiting_channel, F.forward_from_chat)
+async def check_channel_forward(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    """Detect channel from a forwarded message — most reliable method."""
+    _ = lambda key: get_text(key, i18n_lang)
 
     data = await state.get_data()
     token = data["token"]
+    bot_user_id = data["bot_info"]["id"]
+    chat = message.forward_from_chat
+
+    # Only accept channels and supergroups
+    if chat.type not in ("channel", "supergroup", "group"):
+        await message.answer(
+            _("forward_not_channel"),
+            reply_markup=check_channel_kb(lang=i18n_lang),
+        )
+        return
+
     try:
         temp_bot = Bot(token=token)
-        chat = await temp_bot.get_chat(chat_id)
+        member = await temp_bot.get_chat_member(chat.id, bot_user_id)
         await temp_bot.session.close()
-    except Exception:
+
+        if member.status not in ("administrator", "creator"):
+            await message.answer(
+                _("channel_not_added").format(username=data["bot_info"]["username"]),
+                reply_markup=check_channel_kb(lang=i18n_lang),
+            )
+            return
+    except Exception as e:
+        logger.error(f"Channel forward check error: {e}")
         await message.answer(
-            "❌ Kanal/guruh topilmadi. Botni admin qilib qo'shganingizga ishonch hosil qiling.\n"
-            "Qayta urinib ko'ring:",
-            reply_markup=back_kb(),
+            _("channel_error"),
+            reply_markup=check_channel_kb(lang=i18n_lang),
         )
         return
 
     chat_type = "channel" if chat.type == "channel" else "group"
     await state.update_data(
-        channel_id=chat_id,
+        channel_id=chat.id,
         channel_title=chat.title,
         channel_type=chat_type,
     )
 
     data = await state.get_data()
     if data.get("is_free"):
-        # Free mode — skip price/duration, go to confirm
-        summary = (
-            "📋 <b>Bot sozlamalari:</b>\n\n"
-            f"🤖 Bot: @{data['bot_info']['username']}\n"
-            f"📢 Kanal: {chat.title}\n"
-            "💰 Narx: Bepul\n"
-            "📅 Muddat: Umrbod\n\n"
-            "Tasdiqlaysizmi?"
+        summary = _("bot_summary_free").format(
+            username=data["bot_info"]["username"],
+            channel=chat.title,
         )
-        await message.answer(summary, reply_markup=confirm_kb("reg"))
+        await message.answer(summary, reply_markup=confirm_kb("reg", lang=i18n_lang))
     else:
         await message.answer(
-            f"✅ {chat_type.capitalize()} topildi: <b>{chat.title}</b>\n\n"
-            "💰 Kirish narxini yuboring (UZS da):\n"
-            "(Masalan: 50000)",
-            reply_markup=back_kb(),
+            _("channel_found_ask_price").format(
+                type=chat_type.capitalize(),
+                title=chat.title,
+            ),
+            reply_markup=back_kb(lang=i18n_lang),
+        )
+        await state.set_state(RegisterStates.waiting_price)
+
+
+@router.callback_query(RegisterStates.waiting_channel, F.data == "manual_channel_id")
+async def switch_to_manual(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
+    await callback.message.edit_text(
+        _("manual_channel_prompt"),
+        reply_markup=back_kb(lang=i18n_lang),
+    )
+    await state.set_state(RegisterStates.waiting_channel_manual)
+    await callback.answer()
+
+
+@router.message(RegisterStates.waiting_channel_manual)
+async def process_channel_manual(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
+    data = await state.get_data()
+    token = data["token"]
+    bot_user_id = data["bot_info"]["id"]
+    raw = message.text.strip()
+
+    # Parse: @username or numeric ID
+    if raw.startswith("@"):
+        chat_id = raw
+    else:
+        try:
+            chat_id = int(raw)
+        except ValueError:
+            await message.answer(
+                _("channel_id_invalid"),
+                reply_markup=back_kb(lang=i18n_lang),
+            )
+            return
+
+    try:
+        temp_bot = Bot(token=token)
+        chat = await temp_bot.get_chat(chat_id)
+        member = await temp_bot.get_chat_member(chat.id, bot_user_id)
+        await temp_bot.session.close()
+
+        if member.status not in ("administrator", "creator"):
+            await message.answer(
+                _("channel_not_added").format(username=data["bot_info"]["username"]),
+                reply_markup=back_kb(lang=i18n_lang),
+            )
+            return
+    except Exception:
+        await message.answer(
+            _("channel_not_found"),
+            reply_markup=back_kb(lang=i18n_lang),
+        )
+        return
+
+    chat_type = "channel" if chat.type == "channel" else "group"
+    await state.update_data(
+        channel_id=chat.id,
+        channel_title=chat.title,
+        channel_type=chat_type,
+    )
+
+    data = await state.get_data()
+    if data.get("is_free"):
+        summary = _("bot_summary_free").format(
+            username=data["bot_info"]["username"],
+            channel=chat.title,
+        )
+        await message.answer(summary, reply_markup=confirm_kb("reg", lang=i18n_lang))
+    else:
+        await message.answer(
+            _("channel_found_ask_price").format(
+                type=chat_type.capitalize(),
+                title=chat.title,
+            ),
+            reply_markup=back_kb(lang=i18n_lang),
         )
         await state.set_state(RegisterStates.waiting_price)
 
 
 @router.message(RegisterStates.waiting_price)
-async def process_price(message: Message, state: FSMContext):
+async def process_price(message: Message, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     try:
         price = int(message.text.strip().replace(" ", ""))
         if price < 1000:
             raise ValueError
     except ValueError:
         await message.answer(
-            "❌ Narx kamida 1000 UZS bo'lishi kerak. Qayta kiriting:",
-            reply_markup=back_kb(),
+            _("price_invalid"),
+            reply_markup=back_kb(lang=i18n_lang),
         )
         return
 
     await state.update_data(price=price)
 
     await message.answer(
-        "📅 Obuna muddatini tanlang:",
-        reply_markup=duration_kb(),
+        _("select_duration"),
+        reply_markup=duration_kb(lang=i18n_lang),
     )
     await state.set_state(RegisterStates.waiting_duration)
 
 
 @router.callback_query(RegisterStates.waiting_duration, F.data.startswith("dur_"))
-async def process_duration(callback: CallbackQuery, state: FSMContext):
+async def process_duration(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     duration = int(callback.data.split("_")[1])
     data = await state.get_data()
 
-    duration_text = {0: "Umrbod", 1: "1 oy", 6: "6 oy", 12: "12 oy"}[duration]
+    duration_text = {
+        0: _("duration_lifetime"),
+        1: _("duration_1m"),
+        6: _("duration_6m"),
+        12: _("duration_12m"),
+    }[duration]
     price_formatted = f"{data['price']:,}".replace(",", " ")
 
-    summary = (
-        "📋 <b>Bot sozlamalari:</b>\n\n"
-        f"🤖 Bot: @{data['bot_info']['username']}\n"
-        f"📢 Kanal: {data['channel_title']}\n"
-        f"💰 Narx: {price_formatted} UZS\n"
-        f"📅 Muddat: {duration_text}\n"
-        f"💳 Karta: {data['card_number']}\n\n"
-        "Tasdiqlaysizmi?"
+    summary = _("bot_summary").format(
+        username=data["bot_info"]["username"],
+        channel=data["channel_title"],
+        price=price_formatted,
+        duration=duration_text,
+        card=data["card_number"],
     )
 
     await state.update_data(duration=duration)
-    await callback.message.edit_text(summary, reply_markup=confirm_kb("reg"))
+    await callback.message.edit_text(summary, reply_markup=confirm_kb("reg", lang=i18n_lang))
     await callback.answer()
 
 
 @router.callback_query(F.data == "reg_confirm")
-async def confirm_registration(callback: CallbackQuery, state: FSMContext, bot_manager: BotManager):
+async def confirm_registration(callback: CallbackQuery, state: FSMContext, bot_manager: BotManager, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     data = await state.get_data()
 
     async with async_session() as session:
@@ -370,39 +436,30 @@ async def confirm_registration(callback: CallbackQuery, state: FSMContext, bot_m
     else:
         logger.error(f"Failed to register @{data['bot_info']['username']} with BotManager")
         await callback.message.edit_text(
-            f"⚠️ Bot bazaga saqlandi, lekin ishga tushirishda xatolik yuz berdi.\n\n"
-            f"🤖 @{data['bot_info']['username']}\n\n"
-            "Server qayta ishga tushganda bot avtomatik faollashadi.",
-            reply_markup=main_menu_kb(),
+            _("bot_register_failed").format(username=data["bot_info"]["username"]),
+            reply_markup=main_menu_kb(lang=i18n_lang),
         )
         await state.clear()
         await callback.answer()
         return
 
     if data.get("is_free"):
-        success_text = (
-            "✅ <b>Bot muvaffaqiyatli yaratildi!</b>\n\n"
-            f"🤖 @{data['bot_info']['username']} endi ishlayapti.\n"
-            "🆓 Kirish bepul — end userlar botga /start bosib kanalga kirishlari mumkin.\n\n"
-            "Sozlamalarni o'zgartirish uchun menyudan foydalaning."
-        )
+        success_text = _("bot_created_free").format(username=data["bot_info"]["username"])
     else:
-        success_text = (
-            "✅ <b>Bot muvaffaqiyatli yaratildi!</b>\n\n"
-            f"🤖 @{data['bot_info']['username']} endi ishlayapti.\n"
-            "End userlar botga /start bosib, to'lov qilishlari mumkin.\n\n"
-            "Sozlamalarni o'zgartirish uchun menyudan foydalaning."
-        )
-    await callback.message.edit_text(success_text, reply_markup=main_menu_kb())
+        success_text = _("bot_created_paid").format(username=data["bot_info"]["username"])
+
+    await callback.message.edit_text(success_text, reply_markup=main_menu_kb(lang=i18n_lang))
     await state.clear()
     await callback.answer()
 
 
 @router.callback_query(F.data == "reg_cancel")
-async def cancel_registration(callback: CallbackQuery, state: FSMContext):
+async def cancel_registration(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
     await state.clear()
     await callback.message.edit_text(
-        "❌ Bot yaratish bekor qilindi.",
-        reply_markup=main_menu_kb(),
+        _("registration_cancelled"),
+        reply_markup=main_menu_kb(lang=i18n_lang),
     )
     await callback.answer()

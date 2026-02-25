@@ -6,6 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from bot.keyboards.inline import payment_action_kb
+from bot.middlewares.i18n import get_text
 from db.engine import async_session
 from db.models import EndUser, UserBot, Channel
 from services.payment_service import create_payment, approve_payment, get_payment_by_id
@@ -18,6 +19,19 @@ from sqlalchemy import select
 
 logger = logging.getLogger(__name__)
 router = Router()
+
+
+async def _get_end_user_lang(bot_username: str, telegram_id: int) -> str:
+    """Get end user language from DB."""
+    async with async_session() as session:
+        result = await session.execute(
+            select(EndUser).join(UserBot).where(
+                EndUser.telegram_id == telegram_id,
+                UserBot.bot_username == bot_username,
+            )
+        )
+        eu = result.scalar_one_or_none()
+        return (eu.language if eu else "uz") or "uz"
 
 
 @router.callback_query(F.data.startswith("buy_ch_"))
@@ -45,22 +59,24 @@ async def buy_channel(callback: CallbackQuery, state: FSMContext):
         channel = result.scalar_one_or_none()
 
         if not channel or not end_user:
-            await callback.answer("❌ Xatolik yuz berdi.")
+            await callback.answer(get_text("error", "uz"))
             return
+
+        lang = end_user.language or "uz"
+        _ = lambda key: get_text(key, lang)
 
         # Check if already has active subscription
         existing = await get_active_subscription(session, end_user.id, channel.id)
         if existing:
-            await callback.message.edit_text(
-                "✅ Sizda allaqachon aktiv obuna mavjud!"
-            )
+            await callback.message.edit_text(_("subscription_active"))
             await callback.answer()
             return
 
     price_fmt = f"{float(channel.price):,.0f}".replace(",", " ")
-    duration_text = {0: "umrbod", 1: "1 oy", 6: "6 oy", 12: "12 oy"}.get(
-        channel.duration_months, f"{channel.duration_months} oy"
-    )
+    duration_text = {
+        0: _("duration_lifetime"), 1: _("duration_1m"),
+        6: _("duration_6m"), 12: _("duration_12m"),
+    }.get(channel.duration_months, f"{channel.duration_months}")
 
     await state.update_data(
         channel_id=channel_id,
@@ -68,19 +84,19 @@ async def buy_channel(callback: CallbackQuery, state: FSMContext):
         user_bot_id=user_bot.id,
     )
 
-    text = (
-        f"📢 <b>{channel.title}</b>\n\n"
-        f"💰 Narx: {price_fmt} UZS\n"
-        f"📅 Muddat: {duration_text}\n\n"
-        "To'lov usulini tanlang:"
-    )
-    await callback.message.edit_text(text, reply_markup=payment_method_kb())
+    text = _("channel_info").format(
+        title=channel.title, price=price_fmt, duration=duration_text
+    ) + _("payment_select_method")
+    await callback.message.edit_text(text, reply_markup=payment_method_kb(lang=lang))
     await callback.answer()
 
 
 @router.callback_query(F.data == "pay_card")
 async def pay_card(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
+    bot_info = await callback.bot.get_me()
+    lang = await _get_end_user_lang(bot_info.username, callback.from_user.id)
+    _ = lambda key: get_text(key, lang)
 
     async with async_session() as session:
         result = await session.execute(
@@ -89,21 +105,14 @@ async def pay_card(callback: CallbackQuery, state: FSMContext):
         user_bot = result.scalar_one_or_none()
 
     if not user_bot or not user_bot.card_number:
-        await callback.message.edit_text(
-            "❌ Bot egasi hali to'lov sozlamalarini o'rnatmagan.\n"
-            "Iltimos, keyinroq qayta urinib ko'ring."
-        )
+        await callback.message.edit_text(_("payment_settings_missing"))
         await state.clear()
         await callback.answer()
         return
 
     card = decrypt_card(user_bot.card_number)
     await callback.message.edit_text(
-        f"💳 <b>Karta orqali to'lov</b>\n\n"
-        f"Quyidagi karta raqamiga pul o'tkazing:\n\n"
-        f"<code>{card}</code>\n\n"
-        "✅ O'tkazgandan keyin <b>chek rasmini</b> yuboring (screenshot).\n\n"
-        "Bekor qilish uchun /cancel bosing."
+        _("payment_card_info").format(card=card),
     )
     await state.set_state(PaymentStates.waiting_screenshot)
     await callback.answer()
@@ -111,15 +120,20 @@ async def pay_card(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "cancel_payment")
 async def cancel_payment(callback: CallbackQuery, state: FSMContext):
+    bot_info = await callback.bot.get_me()
+    lang = await _get_end_user_lang(bot_info.username, callback.from_user.id)
     await state.clear()
-    await callback.message.edit_text("❌ To'lov bekor qilindi.")
+    await callback.message.edit_text(get_text("payment_cancelled", lang))
     await callback.answer()
 
 
 @router.message(PaymentStates.waiting_screenshot, F.photo)
 async def process_screenshot(message: Message, state: FSMContext):
     data = await state.get_data()
-    photo = message.photo[-1]  # Highest resolution
+    photo = message.photo[-1]
+    bot_info = await message.bot.get_me()
+    lang = await _get_end_user_lang(bot_info.username, message.from_user.id)
+    _ = lambda key: get_text(key, lang)
 
     async with async_session() as session:
         result = await session.execute(
@@ -127,7 +141,6 @@ async def process_screenshot(message: Message, state: FSMContext):
         )
         channel = result.scalar_one_or_none()
 
-        # Create payment
         payment = await create_payment(
             session,
             end_user_id=data["end_user_id"],
@@ -138,25 +151,21 @@ async def process_screenshot(message: Message, state: FSMContext):
             screenshot_file_id=photo.file_id,
         )
 
-        # Get user_bot for admin notification
         result = await session.execute(
             select(UserBot).where(UserBot.id == data["user_bot_id"])
         )
         user_bot = result.scalar_one_or_none()
 
-    await message.answer(
-        "✅ To'lov ma'lumotlari qabul qilindi!\n\n"
-        "⏳ Admin tasdiqlashini kuting. Tasdiqlanganidan keyin invite link yuboriladi."
-    )
+    await message.answer(_("payment_received"))
 
-    # Notify admin + collaborators
+    # Notify admin + collaborators — use admin's language
+    admin_lang = user_bot.admin.language or "uz"
     amount_fmt = f"{float(channel.price):,.0f}".replace(",", " ")
-    caption = (
-        f"💳 <b>Yangi to'lov!</b>\n\n"
-        f"👤 @{message.from_user.username or '—'}\n"
-        f"💰 {amount_fmt} UZS\n"
-        f"📢 {channel.title}\n"
-        f"#{payment.id}"
+    caption = get_text("new_payment_notification", admin_lang).format(
+        username=message.from_user.username or '—',
+        amount=amount_fmt,
+        channel=channel.title,
+        id=payment.id,
     )
     notify_ids = [user_bot.admin.telegram_id]
     for collab in user_bot.collaborators:
@@ -168,7 +177,7 @@ async def process_screenshot(message: Message, state: FSMContext):
                 notify_id,
                 photo=photo.file_id,
                 caption=caption,
-                reply_markup=payment_action_kb(payment.id),
+                reply_markup=payment_action_kb(payment.id, lang=admin_lang),
             )
         except Exception as e:
             logger.error(f"Failed to notify {notify_id}: {e}")
@@ -178,14 +187,14 @@ async def process_screenshot(message: Message, state: FSMContext):
 
 @router.message(PaymentStates.waiting_screenshot, Command("cancel"))
 async def cancel_screenshot(message: Message, state: FSMContext):
+    bot_info = await message.bot.get_me()
+    lang = await _get_end_user_lang(bot_info.username, message.from_user.id)
     await state.clear()
-    await message.answer("❌ To'lov bekor qilindi.")
+    await message.answer(get_text("payment_cancelled", lang))
 
 
 @router.message(PaymentStates.waiting_screenshot)
 async def wrong_screenshot(message: Message):
-    await message.answer(
-        "❌ Iltimos, <b>rasm</b> (screenshot) yuboring.\n"
-        "Matnli xabar qabul qilinmaydi.\n\n"
-        "Bekor qilish uchun /cancel bosing."
-    )
+    bot_info = await message.bot.get_me()
+    lang = await _get_end_user_lang(bot_info.username, message.from_user.id)
+    await message.answer(get_text("send_photo_only", lang))

@@ -4,6 +4,7 @@ from aiogram.types import CallbackQuery
 
 from bot.helpers import require_bot
 from bot.keyboards.inline import back_bot_kb
+from bot.middlewares.i18n import get_text
 from db.engine import async_session
 from services.stats_service import get_admin_stats
 
@@ -11,8 +12,10 @@ router = Router()
 
 
 @router.callback_query(F.data == "stats")
-async def show_stats(callback: CallbackQuery, state: FSMContext):
-    user_bot, admin = await require_bot(callback, state, "stats")
+async def show_stats(callback: CallbackQuery, state: FSMContext, i18n_lang: str = "uz"):
+    _ = lambda key: get_text(key, i18n_lang)
+
+    user_bot, admin = await require_bot(callback, state, "stats", i18n_lang=i18n_lang)
     if not user_bot:
         return
 
@@ -27,43 +30,29 @@ async def show_stats(callback: CallbackQuery, state: FSMContext):
     conversion = round(total_payments / total_users * 100) if total_users > 0 else 0
     avg_check = stats["total_revenue"] / total_payments if total_payments > 0 else 0
 
-    text = f"📊 <b>Statistika</b> — @{user_bot.bot_username}\n"
+    text = _("stats_header").format(username=user_bot.bot_username)
 
-    # Daromad bloki
-    text += (
-        f"\n💰 <b>Daromad</b>\n"
-        f"├ Bugun: {fmt(stats['today_revenue'])} UZS\n"
-        f"├ Bu oy: {fmt(stats['month_revenue'])} UZS\n"
-        f"└ Jami: {fmt(stats['total_revenue'])} UZS\n"
-    )
+    text += _("revenue_header")
+    text += _("revenue_today").format(amount=fmt(stats['today_revenue']))
+    text += _("revenue_month").format(amount=fmt(stats['month_revenue']))
+    text += _("revenue_total").format(amount=fmt(stats['total_revenue']))
 
-    # Foydalanuvchilar bloki
-    text += (
-        f"\n👥 <b>Foydalanuvchilar</b>\n"
-        f"├ Jami: {total_users}\n"
-        f"├ Aktiv obunalar: {stats['active_subs']}\n"
-        f"└ Konversiya: {conversion}%\n"
-    )
+    text += _("users_stats_header")
+    text += _("users_total").format(count=total_users)
+    text += _("users_active_subs").format(count=stats['active_subs'])
+    text += _("users_conversion").format(percent=conversion)
 
-    # To'lovlar bloki
-    text += (
-        f"\n💳 <b>To'lovlar</b>\n"
-        f"├ Tasdiqlangan: {total_payments}\n"
-        f"├ Kutilayotgan: {stats['pending_payments']}\n"
-        f"├ Rad etilgan: {stats['rejected_payments']}\n"
-        f"└ O'rtacha chek: {fmt(avg_check)} UZS\n"
-    )
+    text += _("payments_stats_header")
+    text += _("payments_approved").format(count=total_payments)
+    text += _("payments_pending").format(count=stats['pending_payments'])
+    text += _("payments_rejected").format(count=stats['rejected_payments'])
+    text += _("payments_avg_check").format(amount=fmt(avg_check))
 
-    # Ogohlantirishlar
     if stats["expiring_soon"] > 0:
-        text += (
-            f"\n⚠️ <b>{stats['expiring_soon']}</b> ta obuna 3 kun ichida tugaydi\n"
-        )
+        text += _("warning_expiring").format(count=stats['expiring_soon'])
 
     if stats["pending_payments"] > 0:
-        text += (
-            f"\n⏳ <b>{stats['pending_payments']}</b> ta to'lov tasdiqlash kutmoqda\n"
-        )
+        text += _("warning_pending_payments").format(count=stats['pending_payments'])
 
-    await callback.message.edit_text(text, reply_markup=back_bot_kb())
+    await callback.message.edit_text(text, reply_markup=back_bot_kb(lang=i18n_lang))
     await callback.answer()

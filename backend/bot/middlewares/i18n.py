@@ -5,6 +5,9 @@ from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Message, CallbackQuery
 
+from db.engine import async_session
+from services.admin_service import get_admin_by_telegram_id
+
 # Load translations
 _translations: dict[str, dict] = {}
 _i18n_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "i18n")
@@ -22,7 +25,7 @@ def get_text(key: str, lang: str = "uz") -> str:
 
 
 class I18nMiddleware(BaseMiddleware):
-    """Inject i18n helper into handler data."""
+    """Inject i18n helper into handler data, detecting language from DB."""
 
     async def __call__(
         self,
@@ -30,11 +33,23 @@ class I18nMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: Dict[str, Any],
     ) -> Any:
-        # Default language
         lang = "uz"
 
-        # Try to get from FSM data or user record
-        # For now, just pass the helper function
+        user_id = None
+        if isinstance(event, Message) and event.from_user:
+            user_id = event.from_user.id
+        elif isinstance(event, CallbackQuery) and event.from_user:
+            user_id = event.from_user.id
+
+        if user_id:
+            try:
+                async with async_session() as session:
+                    admin = await get_admin_by_telegram_id(session, user_id)
+                    if admin and admin.language:
+                        lang = admin.language
+            except Exception:
+                pass
+
         data["_"] = lambda key: get_text(key, lang)
         data["i18n_lang"] = lang
 

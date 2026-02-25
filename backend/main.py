@@ -18,6 +18,7 @@ from core.scheduler import SchedulerService
 from core.webhook_server import create_webhook_app
 from bot.handlers import get_main_bot_router
 from bot.middlewares.ban_check import BanCheckMiddleware
+from bot.middlewares.i18n import I18nMiddleware
 from bot.middlewares.rate_limit import RateLimitMiddleware
 from moderator.handlers import get_moderator_router
 from user_bot.handlers import get_user_bot_router
@@ -30,6 +31,12 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     stream=sys.stdout,
 )
+# Silence noisy loggers
+logging.getLogger("sqlalchemy").setLevel(logging.WARNING)
+logging.getLogger("aiohttp").setLevel(logging.WARNING)
+logging.getLogger("apscheduler").setLevel(logging.WARNING)
+logging.getLogger("aiosqlite").setLevel(logging.WARNING)
+logging.getLogger("aiogram.event").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
@@ -81,12 +88,14 @@ async def main():
     # Add middlewares to main bot
     main_dp.message.middleware(RateLimitMiddleware(redis))
     main_dp.message.middleware(BanCheckMiddleware())
+    main_dp.message.middleware(I18nMiddleware())
+    main_dp.callback_query.middleware(I18nMiddleware())
 
     # User bot router (shared by all user bots)
     user_bot_router = get_user_bot_router()
 
     # Bot Manager
-    bot_manager = BotManager(user_bot_router, storage)
+    bot_manager = BotManager(user_bot_router, storage, is_production=config.is_production)
 
     # Make bot_manager accessible in handlers via dispatcher data
     main_dp["bot_manager"] = bot_manager

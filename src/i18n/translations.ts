@@ -153,7 +153,7 @@ export const pricing = {
   compareLink: { uz: "Batafsil taqqoslash →", ru: "Подробное сравнение →" } as T,
   free: { uz: "Bepul", ru: "Бесплатный" } as T,
   standard: { uz: "Standard", ru: "Стандарт" } as T,
-  premium: { uz: "Premium", ru: "Премиум" } as T,
+  premium: { uz: "Biznes", ru: "Бизнес" } as T,
   currency: { uz: "so'm", ru: "сум" } as T,
   currencyMonth: { uz: "so'm/oy", ru: "сум/мес" } as T,
   // Features
@@ -260,8 +260,8 @@ export const meta = {
   } as T,
   priceTitle: { uz: "Tariflar — Getolog", ru: "Тарифы — Getolog" } as T,
   priceDesc: {
-    uz: "Getolog tarif rejalari. Bepul, Standard va Premium tariflarni batafsil taqqoslang.",
-    ru: "Тарифные планы Getolog. Подробное сравнение тарифов: Бесплатный, Стандарт и Премиум.",
+    uz: "Getolog tarif rejalari. Bepul, Standart va Biznes tariflarni batafsil taqqoslang.",
+    ru: "Тарифные планы Getolog. Подробное сравнение тарифов: Бесплатный, Стандарт и Бизнес.",
   } as T,
   skipLink: { uz: "Asosiy kontentga o'tish", ru: "Перейти к основному контенту" } as T,
   infoTitle: { uz: "Getolog haqida — Ma'lumot", ru: "О сервисе Getolog — Информация" } as T,

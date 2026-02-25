@@ -3,6 +3,7 @@ from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Message, CallbackQuery
 
+from bot.middlewares.i18n import get_text
 from db.engine import async_session
 from services.admin_service import get_admin_by_telegram_id
 
@@ -26,10 +27,11 @@ class BanCheckMiddleware(BaseMiddleware):
             async with async_session() as session:
                 admin = await get_admin_by_telegram_id(session, user_id)
                 if admin and admin.banned:
+                    lang = admin.language or "uz"
                     if isinstance(event, Message):
-                        await event.answer("⛔ Sizning akkauntingiz bloklangan.")
+                        await event.answer(get_text("ban_message", lang))
                     elif isinstance(event, CallbackQuery):
-                        await event.answer("⛔ Bloklangan.", show_alert=True)
+                        await event.answer(get_text("ban_short", lang), show_alert=True)
                     return
 
         return await handler(event, data)

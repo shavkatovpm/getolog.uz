@@ -3,6 +3,7 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
+from bot.middlewares.i18n import get_text
 from db.engine import async_session
 from db.models import EndUser, UserBot
 from user_bot.keyboards.inline import language_kb, channel_select_kb
@@ -25,7 +26,7 @@ async def cmd_start(message: Message, state: FSMContext):
         )
         user_bot = result.scalar_one_or_none()
         if not user_bot:
-            await message.answer("❌ Bot sozlanmagan.")
+            await message.answer(get_text("bot_not_configured", "uz"))
             return
 
         # Get or create end user
@@ -48,9 +49,9 @@ async def cmd_start(message: Message, state: FSMContext):
             await session.commit()
 
             # Notify admin + collaborators about new user
-            notify_text = (
-                f"🆕 Yangi foydalanuvchi: @{message.from_user.username or '—'}\n"
-                f"Bot: @{user_bot.bot_username}"
+            notify_text = get_text("new_user_notification", user_bot.admin.language or "uz").format(
+                username=message.from_user.username or '—',
+                bot=user_bot.bot_username,
             )
             notify_ids = [user_bot.admin.telegram_id]
             for collab in user_bot.collaborators:
@@ -68,18 +69,20 @@ async def cmd_start(message: Message, state: FSMContext):
             return
 
         if end_user.banned:
-            await message.answer("⛔ Siz bloklangansiz.")
+            lang = end_user.language or "uz"
+            await message.answer(get_text("banned", lang))
             return
 
         # Existing user — show welcome + channels
-        welcome = user_bot.welcome_message or "Assalomu alaykum! Pullik kanalga kirish uchun quyidagi tugmani bosing."
+        lang = end_user.language or "uz"
+        welcome = user_bot.welcome_message or get_text("welcome", lang)
         channels = await get_channels_by_bot(session, user_bot.id)
 
     await message.answer(welcome)
     if channels:
         await message.answer(
-            "📢 Mavjud kanallar:",
-            reply_markup=channel_select_kb(channels),
+            get_text("channels_title", lang),
+            reply_markup=channel_select_kb(channels, lang=lang),
         )
 
 
@@ -105,14 +108,15 @@ async def set_language(callback: CallbackQuery):
             end_user.language = lang
             await session.commit()
 
-        welcome = user_bot.welcome_message or "Assalomu alaykum! Pullik kanalga kirish uchun quyidagi tugmani bosing."
+        welcome = user_bot.welcome_message or get_text("welcome", lang)
         channels = await get_channels_by_bot(session, user_bot.id)
 
-    await callback.message.edit_text(f"✅ Til tanlandi!")
+    _ = lambda key: get_text(key, lang)
+    await callback.message.edit_text(_("language_selected"))
     await callback.message.answer(welcome)
     if channels:
         await callback.message.answer(
-            "📢 Mavjud kanallar:",
-            reply_markup=channel_select_kb(channels),
+            _("channels_title"),
+            reply_markup=channel_select_kb(channels, lang=lang),
         )
     await callback.answer()

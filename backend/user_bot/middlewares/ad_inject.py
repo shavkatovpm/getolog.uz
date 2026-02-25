@@ -3,6 +3,7 @@ from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Message
 
+from bot.middlewares.i18n import get_text
 from core.cache import cache_get, cache_set
 from db.engine import async_session
 from db.models import UserBot, AdminSubscription
@@ -36,9 +37,7 @@ class BrandingMiddleware(BaseMiddleware):
                 cached = await cache_get(cache_key)
                 if cached is not None:
                     if not cached.get("is_premium"):
-                        await event.answer(
-                            "🤖 <i>Ushbu bot @getolog_bot tomonidan tayyorlandi</i>",
-                        )
+                        await event.answer(get_text("branding_text", "uz"))
                     return result
 
                 async with async_session() as session:
@@ -63,9 +62,7 @@ class BrandingMiddleware(BaseMiddleware):
                     await cache_set(cache_key, {"is_premium": is_premium}, ttl=120)
 
                     if not is_premium:
-                        await event.answer(
-                            "🤖 <i>Ushbu bot @getolog_bot tomonidan tayyorlandi</i>",
-                        )
+                        await event.answer(get_text("branding_text", "uz"))
             except Exception:
                 pass
 

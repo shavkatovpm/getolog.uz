@@ -60,7 +60,7 @@ getolog.uz/
 │   │   ├── handlers/
 │   │   │   ├── start.py          # /start, bot tanlash
 │   │   │   ├── register.py       # Bot yaratish (token → karta → kanal → narx)
-│   │   │   ├── subscription.py   # Tarif rejalar (Free/Standard/Premium)
+│   │   │   ├── subscription.py   # Tarif rejalar (Free/Standard/Biznes)
 │   │   │   ├── payments.py       # To'lovlarni tasdiqlash/rad etish
 │   │   │   ├── stats.py          # Statistika
 │   │   │   ├── settings.py       # Sozlamalar + hamkorlar
@@ -137,14 +137,14 @@ getolog.uz/
 
 ## Tarif rejalar
 
-| Xususiyat | Free | Standard | Premium |
-|-----------|------|----------|---------|
+| Xususiyat | Free | Standard | Biznes |
+|-----------|------|----------|--------|
 | Bot limiti | 1 | 2 | 5 |
 | Ko'p admin (hamkor) | — | 2 ta | 5 ta |
 | Reklama (brending) | Bor | Yo'q | Yo'q |
 | Getolog brending | Bor | Bor | Yo'q |
 | Click/Payme | — | — | Bor |
-| **Narx** | **Bepul** | **97,000 UZS/oy** | **197,000 UZS/oy** |
+| **Narx** | **Bepul** | **97,000 UZS/oy** | **497,000 UZS/oy** |
 
 ---
 

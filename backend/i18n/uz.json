@@ -20,8 +20,8 @@
   "token_invalid": "❌ Token noto'g'ri yoki bot o'chirilgan.\nIltimos, @BotFather dan yangi token oling va qayta yuboring.",
   "bot_found_ask_card": "✅ Bot topildi: @{username}\n\n💳 To'lov qabul qiladigan <b>karta raqamingizni</b> yuboring:\n(Masalan: 8600 1234 5678 9012)\n\nYoki kanal/guruhga kirish bepul bo'lsa, quyidagi tugmani bosing:",
   "card_invalid": "❌ Karta raqami noto'g'ri. 16 ta raqamdan iborat to'g'ri karta kiriting.\nQayta kiriting:",
-  "add_bot_to_channel": "📢 <b>Endi @{username} ni kanalga admin qilib qo'shing.</b>\n\n1. Kanal sozlamalariga o'ting\n2. Administratorlar bo'limiga kiring\n3. @{username} ni admin qilib qo'shing\n\nQo'shgandan keyin quyidagi tugmani bosing:",
-  "free_mode_selected": "🆓 <b>Bepul rejim tanlandi!</b>\n\n📢 Endi @{username} ni kanalga admin qilib qo'shing.\n\n1. Kanal sozlamalariga o'ting\n2. Administratorlar bo'limiga kiring\n3. @{username} ni admin qilib qo'shing\n\nQo'shgandan keyin quyidagi tugmani bosing:",
+  "add_bot_to_channel": "📢 <b>Endi @{username} ni kanalga admin qilib qo'shing.</b>\n\n1. Kanal sozlamalariga o'ting\n2. Administratorlar bo'limiga kiring\n3. @{username} ni admin qilib qo'shing\n\n✅ Qo'shgandan keyin <b>kanaldan istalgan xabarni shu yerga forward qiling</b>.\n\nYoki quyidagi tugmalardan foydalaning:",
+  "free_mode_selected": "🆓 <b>Bepul rejim tanlandi!</b>\n\n📢 Endi @{username} ni kanalga admin qilib qo'shing.\n\n1. Kanal sozlamalariga o'ting\n2. Administratorlar bo'limiga kiring\n3. @{username} ni admin qilib qo'shing\n\n✅ Qo'shgandan keyin <b>kanaldan istalgan xabarni shu yerga forward qiling</b>.\n\nYoki quyidagi tugmalardan foydalaning:",
   "checking": "🔍 Tekshirilmoqda...",
   "channel_error": "❌ Xatolik yuz berdi. Qayta urinib ko'ring.",
   "channel_not_added": "❌ Bot hali kanalga qo'shilmagan.\n\n@{username} ni kanalga <b>admin</b> qilib qo'shing, keyin qayta tekshiring.",
@@ -216,5 +216,6 @@
   "confirmed": "✅ <b>TASDIQLANDI</b>",
   "rejected_label": "❌ <b>RAD ETILDI</b>",
   "sub_activated_cb": "✅ Obuna faollashtirildi!",
-  "sub_rejected_cb": "❌ Rad etildi."
+  "sub_rejected_cb": "❌ Rad etildi.",
+  "forward_not_channel": "❌ Bu xabar kanal yoki guruhdan emas.\nIltimos, <b>kanaldan</b> istalgan xabarni forward qiling."
 }
