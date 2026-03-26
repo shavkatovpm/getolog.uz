@@ -25,6 +25,45 @@ const dateStr = dateObj.toLocaleDateString(lang === "uz" ? "uz-UZ" : "ru-RU", {
 
 const backText = { uz: "Barcha maqolalar", ru: "Все статьи" };
 const readTimeLabel = { uz: "O'qish vaqti", ru: "Время чтения" };
+const faqTitle = { uz: "Ko'p so'raladigan savollar", ru: "Часто задаваемые вопросы" };
+
+const articleUrl = `https://getolog.uz${prefix}/blog/${slug}`;
+const blogUrl = `https://getolog.uz${prefix}/blog`;
+const homeUrl = lang === "uz" ? "https://getolog.uz" : "https://getolog.uz/ru";
+const blogLabel = { uz: "Maqolalar", ru: "Статьи" };
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": article.title[lang],
+      "description": article.description[lang],
+      "datePublished": article.date,
+      "dateModified": article.date,
+      "author": { "@type": "Organization", "name": "Getolog", "url": "https://getolog.uz" },
+      "publisher": { "@type": "Organization", "name": "Getolog", "url": "https://getolog.uz", "logo": { "@type": "ImageObject", "url": "https://getolog.uz/logo.png" } },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
+      "inLanguage": lang,
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Getolog", "item": homeUrl },
+        { "@type": "ListItem", "position": 2, "name": blogLabel[lang], "item": blogUrl },
+        { "@type": "ListItem", "position": 3, "name": article.title[lang], "item": articleUrl },
+      ],
+    },
+    ...(article.faq.length > 0 ? [{
+      "@type": "FAQPage",
+      "mainEntity": article.faq.map((f) => ({
+        "@type": "Question",
+        "name": f.q[lang],
+        "acceptedAnswer": { "@type": "Answer", "text": f.a[lang] },
+      })),
+    }] : []),
+  ],
+};
 
 export function getStaticPaths() {
   return articles.map((a) => ({ params: { slug: a.slug } }));
@@ -34,11 +73,17 @@ export function getStaticPaths() {
 <Layout title={`${article.title[lang]} — Getolog`} description={article.description[lang]} lang={lang}>
   <Navbar lang={lang} />
 
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+
   <article class="article-page">
     <div class="container">
-      <div class="article-back">
-        <a href={`${prefix}/blog`}>&larr; {backText[lang]}</a>
-      </div>
+      <nav class="article-breadcrumb" aria-label="Breadcrumb">
+        <a href={homeUrl}>Getolog</a>
+        <span>/</span>
+        <a href={`${prefix}/blog`}>{blogLabel[lang]}</a>
+        <span>/</span>
+        <span class="current">{article.title[lang]}</span>
+      </nav>
 
       <header class="article-header">
         <div class="article-meta">
@@ -51,6 +96,20 @@ export function getStaticPaths() {
       </header>
 
       <div class="article-body" set:html={article.html[lang]} />
+
+      {article.faq.length > 0 && (
+        <section class="article-faq">
+          <h2>{faqTitle[lang]}</h2>
+          <div class="faq-list">
+            {article.faq.map((f) => (
+              <details class="faq-item">
+                <summary class="faq-question">{f.q[lang]}</summary>
+                <p class="faq-answer">{f.a[lang]}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div class="article-cta">
         <p class="article-cta__text">
@@ -75,20 +134,38 @@ export function getStaticPaths() {
     padding-bottom: 80px;
   }
 
-  .article-back {
+  .article-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin-bottom: 32px;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
   }
 
-  .article-back a {
-    font-size: 0.9rem;
+  .article-breadcrumb a {
     color: var(--accent);
-    font-weight: 600;
+    font-weight: 500;
     transition: all var(--transition);
   }
 
-  .article-back a:hover {
+  .article-breadcrumb a:hover {
     text-decoration: underline;
-    text-underline-offset: 4px;
+    text-underline-offset: 3px;
+  }
+
+  .article-breadcrumb span {
+    color: var(--light-400);
+    opacity: 0.5;
+  }
+
+  .article-breadcrumb .current {
+    color: var(--light-400);
+    opacity: 0.7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
   }
 
   .article-header {
@@ -237,5 +314,80 @@ export function getStaticPaths() {
     .article-cta__text {
       font-size: 1.05rem;
     }
+
+    .article-faq h2 {
+      font-size: 1.25rem;
+    }
+  }
+
+  /* FAQ */
+  .article-faq {
+    max-width: 720px;
+    margin: 48px auto 0;
+    padding-top: 40px;
+    border-top: 1px solid rgba(230, 233, 255, 0.06);
+  }
+
+  .article-faq h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .faq-item {
+    background: var(--dark-800);
+    border: 1px solid rgba(230, 233, 255, 0.06);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color var(--transition);
+  }
+
+  .faq-item[open] {
+    border-color: rgba(139, 142, 255, 0.2);
+  }
+
+  .faq-question {
+    padding: 18px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--light);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question::after {
+    content: '+';
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform var(--transition);
+  }
+
+  .faq-item[open] .faq-question::after {
+    content: '\2212';
+  }
+
+  .faq-answer {
+    padding: 0 24px 18px;
+    font-size: 0.9rem;
+    color: var(--light-400);
+    line-height: 1.7;
+    margin: 0;
   }
 </style>

@@ -2,6 +2,11 @@ import type { Lang } from "../i18n/translations";
 
 type T = Record<Lang, string>;
 
+export interface FAQ {
+  q: T;
+  a: T;
+}
+
 export interface Article {
   slug: string;
   title: T;
@@ -10,6 +15,7 @@ export interface Article {
   readTime: T;
   category: T;
   html: T;
+  faq: FAQ[];
 }
 
 export const articles: Article[] = [
@@ -75,6 +81,20 @@ export const articles: Article[] = [
 <h2>Какой способ лучше?</h2>
 <p>По стабильности лидирует платная подписка — доход прогнозируется ежемесячно. Остальные способы работают как дополнительные. Также будут полезны <a href="/ru/blog/pullik-kanal-uchun-maslahatlar">советы по ведению платного канала</a>.</p>`,
     },
+    faq: [
+      {
+        q: { uz: "Telegram kanalni pullik qilish qancha turadi?", ru: "Сколько стоит сделать Telegram-канал платным?" },
+        a: { uz: "Getolog orqali bepul boshlash mumkin. Pullik tariflar 97,000 so'mdan boshlanadi. To'lov to'g'ridan-to'g'ri sizning kartangizga tushadi — Getolog komissiya olmaydi.", ru: "Через Getolog можно начать бесплатно. Платные тарифы от 97 000 сум. Оплата поступает напрямую на вашу карту — Getolog не берёт комиссию." },
+      },
+      {
+        q: { uz: "Pullik kanal uchun nechta obunachi kerak?", ru: "Сколько подписчиков нужно для платного канала?" },
+        a: { uz: "Minimal chegara yo'q. Hatto 10-20 ta obunachi bilan ham boshlash mumkin. Muhimi — kontent sifati va auditoriyaning qiziqishi.", ru: "Минимального порога нет. Можно начать даже с 10–20 подписчиков. Главное — качество контента и заинтересованность аудитории." },
+      },
+      {
+        q: { uz: "Qaysi turdagi kanallar eng ko'p daromad oladi?", ru: "Какие типы каналов зарабатывают больше всего?" },
+        a: { uz: "Signal kanallar (kripto, forex), ta'lim kanallari va VIP guruhlar eng ko'p daromad oladi. O'zbekistonda bu kanallar oyiga 1-10 mln so'm ishlamoqda.", ru: "Сигнальные каналы (крипто, форекс), образовательные каналы и VIP-группы зарабатывают больше всего. В Узбекистане такие каналы получают от 1 до 10 млн сум в месяц." },
+      },
+    ],
   },
   {
     slug: "obuna-bot-sozlash",
@@ -140,6 +160,20 @@ export const articles: Article[] = [
 
 <p>Следующий шаг: прочитайте о <a href="/ru/blog/invite-link-xavfsizligi">безопасности invite-ссылок</a> — как защитить канал от несанкционированного доступа.</p>`,
     },
+    faq: [
+      {
+        q: { uz: "Telegram obuna bot bepulmi?", ru: "Бот подписок Telegram бесплатный?" },
+        a: { uz: "Ha, Getologda bepul tarif mavjud — 1 ta bot yaratish mumkin. Pullik tariflarda ko'proq bot va qo'shimcha imkoniyatlar ochiladi.", ru: "Да, в Getolog есть бесплатный тариф — можно создать 1 бота. В платных тарифах доступно больше ботов и дополнительные функции." },
+      },
+      {
+        q: { uz: "Bot yaratish uchun dasturlash bilimi kerakmi?", ru: "Нужны ли навыки программирования для создания бота?" },
+        a: { uz: "Yo'q, umuman kerak emas. BotFather dan token olasiz va Getolog botiga yuborasiz — 2 daqiqada tayyor.", ru: "Нет, совсем не нужны. Получаете токен в BotFather и отправляете боту Getolog — готово за 2 минуты." },
+      },
+      {
+        q: { uz: "Nechta bot yaratsa bo'ladi?", ru: "Сколько ботов можно создать?" },
+        a: { uz: "Bepul tarifda 1 ta, Standart tarifda 2 ta, Biznes tarifda 5 tagacha bot yaratish mumkin.", ru: "В бесплатном тарифе 1 бот, в Стандарте 2, в Бизнесе до 5 ботов." },
+      },
+    ],
   },
   {
     slug: "pullik-kanal-uchun-maslahatlar",
@@ -201,6 +235,16 @@ export const articles: Article[] = [
 <h2>5. Автоматизируйте техническую часть</h2>
 <p>Приём оплаты, выдача ссылок, отслеживание подписок — это отнимает время. <a href="/ru/blog/obuna-bot-sozlash">Настройте бота подписок</a> и сосредоточьтесь только на контенте.</p>`,
     },
+    faq: [
+      {
+        q: { uz: "Pullik Telegram kanal uchun qancha narx qo'yish kerak?", ru: "Какую цену установить для платного Telegram-канала?" },
+        a: { uz: "O'zbekiston bozorida optimal narx 30,000–100,000 so'm/oy. Avval pastroq boshlang, obunachillar soni oshganda narxni ko'taring.", ru: "На рынке Узбекистана оптимальная цена — 30 000–100 000 сум/мес. Начните ниже и повышайте по мере роста числа подписчиков." },
+      },
+      {
+        q: { uz: "Pullik kanalda qancha tez-tez post qilish kerak?", ru: "Как часто нужно публиковать посты в платном канале?" },
+        a: { uz: "Haftada kamida 3 ta post tavsiya etiladi. Muhimi muntazamlik — va'da qilgan jadvalga rioya qilish kerak.", ru: "Рекомендуется минимум 3 поста в неделю. Главное — регулярность и соблюдение обещанного графика." },
+      },
+    ],
   },
   {
     slug: "invite-link-xavfsizligi",
@@ -274,5 +318,19 @@ export const articles: Article[] = [
 
 <p>Систему одноразовых ссылок можно автоматически настроить через <a href="/ru/blog/obuna-bot-sozlash">бота подписок</a>. Также читайте о <a href="/ru/blog/telegram-kanalni-pullik-qilish">монетизации канала</a>.</p>`,
     },
+    faq: [
+      {
+        q: { uz: "Telegram invite link necha marta ishlaydi?", ru: "Сколько раз работает invite-ссылка Telegram?" },
+        a: { uz: "Oddiy invite link cheksiz yoki belgilangan miqdorda ishlaydi. Bir martalik invite link esa faqat 1 marta, 1 kishi uchun ishlaydi — keyin avtomatik bekor bo'ladi.", ru: "Обычная invite-ссылка работает неограниченное или заданное число раз. Одноразовая — только 1 раз для 1 человека, после чего автоматически аннулируется." },
+      },
+      {
+        q: { uz: "Invite link tarqalib ketsa nima qilish kerak?", ru: "Что делать, если invite-ссылка утекла?" },
+        a: { uz: "Darhol eski linkni bekor qiling va yangi bir martalik link yarating. Getolog orqali bu jarayon avtomatik — har bir to'lov uchun alohida link yaratiladi.", ru: "Немедленно аннулируйте старую ссылку и создайте новую одноразовую. Через Getolog это автоматически — для каждой оплаты создаётся отдельная ссылка." },
+      },
+      {
+        q: { uz: "Bot token va karta raqami xavfsiz saqlanadimi?", ru: "Безопасно ли хранятся токен бота и номер карты?" },
+        a: { uz: "Ha, barcha ma'lumotlar shifrlangan holda saqlanadi. Getolog ularni hech qachon ochiq ko'rinishda saqlamaydi va uchinchi tomonlarga bermaydi.", ru: "Да, все данные хранятся в зашифрованном виде. Getolog никогда не хранит их в открытом виде и не передаёт третьим лицам." },
+      },
+    ],
   },
 ];
