@@ -1,0 +1,10 @@
+---
+import Article from "../../blog/[slug].astro";
+import { articles } from "../../../data/articles";
+
+export function getStaticPaths() {
+  return articles.map((a) => ({ params: { slug: a.slug } }));
+}
+---
+
+<Article lang="ru" />

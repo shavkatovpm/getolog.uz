@@ -1,0 +1,197 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import { type Lang, meta, langPrefix } from "../../i18n/translations";
+import { articles } from "../../data/articles";
+
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+const prefix = langPrefix(lang);
+
+const blogMeta = {
+  title: { uz: "Maqolalar — Getolog", ru: "Статьи — Getolog" },
+  desc: {
+    uz: "Telegram kanalni monetizatsiya qilish, obuna boshqaruvi va bot sozlash haqida foydali maqolalar.",
+    ru: "Полезные статьи о монетизации Telegram-каналов, управлении подписками и настройке ботов.",
+  },
+  heading: { uz: "Maqolalar", ru: "Статьи" },
+  subtitle: {
+    uz: "Telegram kanalni monetizatsiya qilish haqida foydali ma'lumotlar",
+    ru: "Полезная информация о монетизации Telegram-каналов",
+  },
+  readMore: { uz: "Batafsil o'qish →", ru: "Читать далее →" },
+};
+
+const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<Layout title={blogMeta.title[lang]} description={blogMeta.desc[lang]} lang={lang}>
+  <Navbar lang={lang} />
+
+  <section class="blog-hero">
+    <div class="container">
+      <h1 class="blog-hero__title">{blogMeta.heading[lang]}</h1>
+      <p class="blog-hero__subtitle">{blogMeta.subtitle[lang]}</p>
+    </div>
+  </section>
+
+  <section class="blog-list-section">
+    <div class="container">
+      <div class="blog-grid">
+        {sorted.map((article) => {
+          const dateObj = new Date(article.date);
+          const dateStr = dateObj.toLocaleDateString(lang === "uz" ? "uz-UZ" : "ru-RU", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+          return (
+            <a href={`${prefix}/blog/${article.slug}`} class="blog-card reveal">
+              <div class="blog-card__meta">
+                <span class="blog-card__category">{article.category[lang]}</span>
+                <span class="blog-card__date">{dateStr}</span>
+              </div>
+              <h2 class="blog-card__title">{article.title[lang]}</h2>
+              <p class="blog-card__desc">{article.description[lang]}</p>
+              <span class="blog-card__link">{blogMeta.readMore[lang]}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <Footer lang={lang} />
+</Layout>
+
+<style>
+  .blog-hero {
+    padding: 140px 0 60px;
+    text-align: center;
+  }
+
+  .blog-hero__title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .blog-hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--light-400);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .blog-list-section {
+    padding-bottom: 80px;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 840px;
+    margin: 0 auto;
+  }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--dark-800);
+    border: 1px solid rgba(230, 233, 255, 0.06);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    transition: all var(--transition);
+    text-decoration: none;
+  }
+
+  .blog-card:hover {
+    border-color: rgba(139, 142, 255, 0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .blog-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .blog-card__category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(139, 142, 255, 0.1);
+    padding: 4px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.3px;
+  }
+
+  .blog-card__date {
+    font-size: 0.8rem;
+    color: var(--light-400);
+  }
+
+  .blog-card__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .blog-card__desc {
+    font-size: 0.9rem;
+    color: var(--light-400);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .blog-card__link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+    transition: all var(--transition);
+  }
+
+  .blog-card:hover .blog-card__link {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .blog-hero {
+      padding: 110px 0 40px;
+    }
+
+    .blog-hero__title {
+      font-size: 1.75rem;
+    }
+
+    .blog-hero__subtitle {
+      font-size: 0.95rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .blog-card {
+      padding: 24px 20px;
+    }
+
+    .blog-card:hover {
+      transform: none;
+    }
+
+    .blog-list-section {
+      padding-bottom: 40px;
+    }
+  }
+</style>

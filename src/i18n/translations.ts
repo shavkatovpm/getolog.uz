@@ -8,6 +8,7 @@ export const nav = {
   howItWorks: { uz: "Qanday ishlaydi", ru: "Как работает" } as T,
   pricing: { uz: "Tariflar", ru: "Тарифы" } as T,
   faq: { uz: "FAQ", ru: "FAQ" } as T,
+  blog: { uz: "Maqolalar", ru: "Статьи" } as T,
   start: { uz: "Boshlash", ru: "Начать" } as T,
 };
 
@@ -231,6 +232,7 @@ export const footer = {
   tagline: { uz: "Yopiq kanallar uchun avtomatlashtirish", ru: "Автоматизация закрытых каналов" } as T,
   bot: { uz: "Bot", ru: "Бот" } as T,
   help: { uz: "Yordam", ru: "Помощь" } as T,
+  blog: { uz: "Maqolalar", ru: "Статьи" } as T,
   info: { uz: "Ma'lumot", ru: "Информация" } as T,
   offerta: { uz: "Offerta", ru: "Оферта" } as T,
   copyright: { uz: "© 2026 Getolog. Barcha huquqlar himoyalangan.", ru: "© 2026 Getolog. Все права защищены." } as T,
@@ -273,6 +275,11 @@ export const meta = {
   offertaDesc: {
     uz: "Getolog xizmati ommaviy oferta shartnomasi. Xizmat ko'rsatish shartlari.",
     ru: "Публичная оферта сервиса Getolog. Условия оказания услуг.",
+  } as T,
+  blogTitle: { uz: "Maqolalar — Getolog", ru: "Статьи — Getolog" } as T,
+  blogDesc: {
+    uz: "Telegram kanalni monetizatsiya qilish, obuna boshqaruvi va bot sozlash haqida foydali maqolalar.",
+    ru: "Полезные статьи о монетизации Telegram-каналов, управлении подписками и настройке ботов.",
   } as T,
 };
 

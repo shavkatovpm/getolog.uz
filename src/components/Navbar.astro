@@ -23,6 +23,7 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
       <li role="none"><a href={prefix + "/#how-it-works"} role="menuitem">{nav.howItWorks[lang]}</a></li>
       <li role="none"><a href={prefix + "/#pricing"} role="menuitem">{nav.pricing[lang]}</a></li>
       <li role="none"><a href={prefix + "/#faq"} role="menuitem">{nav.faq[lang]}</a></li>
+      <li role="none"><a href={prefix + "/blog"} role="menuitem">{nav.blog[lang]}</a></li>
       <li class="navbar__links-lang" role="none"><a href={altHref} class="navbar__lang" role="menuitem">{altFlag}</a></li>
       <li class="navbar__links-cta" role="none">
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full" role="menuitem">
@@ -247,6 +248,7 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
     .navbar__links.open li:nth-child(4) { transition-delay: 0.25s; }
     .navbar__links.open li:nth-child(5) { transition-delay: 0.3s; }
     .navbar__links.open li:nth-child(6) { transition-delay: 0.35s; }
+    .navbar__links.open li:nth-child(7) { transition-delay: 0.4s; }
 
     .navbar__links a {
       padding: 16px 0;
