@@ -33,15 +33,15 @@ export const articles: Article[] = [
     readTime: { uz: "3 daqiqa", ru: "3 минуты" },
     category: { uz: "Monetizatsiya", ru: "Монетизация" },
     html: {
-      uz: `<p><strong>Telegram kanalni pullik qilish</strong> — bu kanalga kirish uchun obunachidan oylik yoki bir martalik to'lov olish. O'zbekistonda signal, ta'lim va VIP kanallar bu usulda oyiga 1–10 mln so'm daromad olmoqda.</p>
+      uz: `<p><strong>Telegram kanalni pullik qilish</strong> — bu kanalga kirish uchun obunachidan oylik yoki bir martalik to'lov olish. O'zbekistonda ta'lim kanallari va kurs egalar bu usulda oyiga 1–10 mln so'm daromad olmoqda.</p>
 
 <h2>1. Pullik obuna — eng barqaror model</h2>
 <p>Obunachi har oy to'lov qiladi, evaziga yopiq kanalga kirish huquqi oladi. Muddat tugaganda avtomatik chiqariladi.</p>
 <p>Qaysi kanallarga mos:</p>
 <ul>
-<li><strong>Signal kanallar</strong> — kripto, forex, aksiya</li>
-<li><strong>Ta'lim</strong> — kurslar, darslar, bilim bazasi</li>
-<li><strong>VIP guruhlar</strong> — eksklyuziv tahlillar</li>
+<li><strong>Onlayn kurslar</strong> — til o'rgatish, dasturlash, dizayn, marketing</li>
+<li><strong>Ta'lim kanallari</strong> — darslar, bilim bazasi, o'quv materiallari</li>
+<li><strong>Professional hamjamiyatlar</strong> — mentorlik, mastermind guruhlar</li>
 </ul>
 <p>Eng katta muammo — obunachini qo'lda boshqarish (to'lov tekshirish, link berish, muddatni kuzatish). <a href="/blog/obuna-bot-sozlash">Obuna botni sozlash</a> orqali bu jarayonni to'liq avtomatlashtirish mumkin.</p>
 
@@ -57,15 +57,15 @@ export const articles: Article[] = [
 <h2>Qaysi usul eng yaxshi?</h2>
 <p>Barqarorlik bo'yicha pullik obuna yetakchi — daromad har oy prognoz qilinadi. Qolgan usullar qo'shimcha sifatida ishlaydi. <a href="/blog/pullik-kanal-uchun-maslahatlar">Pullik kanal yuritish bo'yicha maslahatlar</a> ham foydali bo'ladi.</p>`,
 
-      ru: `<p><strong>Монетизация Telegram-канала</strong> — это получение оплаты от подписчиков за доступ к закрытому каналу. В Узбекистане сигнальные, образовательные и VIP-каналы зарабатывают от 1 до 10 млн сум в месяц этим способом.</p>
+      ru: `<p><strong>Монетизация Telegram-канала</strong> — это получение оплаты от подписчиков за доступ к закрытому каналу. В Узбекистане образовательные каналы и авторы курсов зарабатывают от 1 до 10 млн сум в месяц этим способом.</p>
 
 <h2>1. Платная подписка — самая стабильная модель</h2>
 <p>Подписчик оплачивает ежемесячно и получает доступ к закрытому каналу. По истечении срока автоматически удаляется.</p>
 <p>Для каких каналов подходит:</p>
 <ul>
-<li><strong>Сигнальные</strong> — крипто, форекс, акции</li>
-<li><strong>Образовательные</strong> — курсы, уроки, база знаний</li>
-<li><strong>VIP-группы</strong> — эксклюзивная аналитика</li>
+<li><strong>Онлайн-курсы</strong> — изучение языков, программирование, дизайн, маркетинг</li>
+<li><strong>Образовательные каналы</strong> — уроки, база знаний, учебные материалы</li>
+<li><strong>Профессиональные сообщества</strong> — менторство, мастермайнд-группы</li>
 </ul>
 <p>Главная проблема — ручное управление подписчиками (проверка оплаты, выдача ссылок, отслеживание сроков). <a href="/ru/blog/obuna-bot-sozlash">Настройка бота подписок</a> полностью автоматизирует этот процесс.</p>
 
@@ -92,7 +92,7 @@ export const articles: Article[] = [
       },
       {
         q: { uz: "Qaysi turdagi kanallar eng ko'p daromad oladi?", ru: "Какие типы каналов зарабатывают больше всего?" },
-        a: { uz: "Signal kanallar (kripto, forex), ta'lim kanallari va VIP guruhlar eng ko'p daromad oladi. O'zbekistonda bu kanallar oyiga 1-10 mln so'm ishlamoqda.", ru: "Сигнальные каналы (крипто, форекс), образовательные каналы и VIP-группы зарабатывают больше всего. В Узбекистане такие каналы получают от 1 до 10 млн сум в месяц." },
+        a: { uz: "Ta'lim kanallari va onlayn kurs egalari eng ko'p daromad oladi — til o'rgatish, dasturlash, dizayn kurslari. O'zbekistonda bunday kanallar oyiga 1-10 mln so'm ishlamoqda.", ru: "Образовательные каналы и авторы онлайн-курсов зарабатывают больше всего — языковые курсы, программирование, дизайн. В Узбекистане такие каналы получают от 1 до 10 млн сум в месяц." },
       },
     ],
   },
@@ -207,7 +207,7 @@ export const articles: Article[] = [
 </ul>
 
 <h2>4. Natijalarni ko'rsating</h2>
-<p>Signal kanal bo'lsa — o'tgan signallar natijasini baham ko'ring. Ta'lim kanali bo'lsa — o'quvchilar muvaffaqiyatini ulashing. Natija — eng kuchli sotuvchi.</p>
+<p>O'quvchilaringizning muvaffaqiyat hikoyalarini ulashing — kim qanday natijaga erishdi, kurs nima berdi. Natija — eng kuchli sotuvchi.</p>
 
 <h2>5. Texnik ishlarni avtomatlashtiring</h2>
 <p>To'lov qabul qilish, invite link berish, obuna kuzatish — bu ishlar vaqtingizni oladi. <a href="/blog/obuna-bot-sozlash">Obuna botni sozlash</a> orqali bularni avtomatlashtirsangiz, faqat kontentga e'tibor qarataverasiz.</p>`,
@@ -230,7 +230,7 @@ export const articles: Article[] = [
 </ul>
 
 <h2>4. Показывайте результаты</h2>
-<p>Сигнальный канал — публикуйте результаты прошлых сигналов. Образовательный — делитесь историями успеха учеников. Результат — самый сильный продавец.</p>
+<p>Делитесь историями успеха учеников — кто каких результатов достиг, что дал курс. Результат — самый сильный продавец.</p>
 
 <h2>5. Автоматизируйте техническую часть</h2>
 <p>Приём оплаты, выдача ссылок, отслеживание подписок — это отнимает время. <a href="/ru/blog/obuna-bot-sozlash">Настройте бота подписок</a> и сосредоточьтесь только на контенте.</p>`,
