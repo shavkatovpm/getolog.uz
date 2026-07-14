@@ -6,7 +6,7 @@ type T = Record<Lang, string>;
 export const nav = {
   features: { uz: "Imkoniyatlar", ru: "Возможности" } as T,
   howItWorks: { uz: "Qanday ishlaydi", ru: "Как работает" } as T,
-  pricing: { uz: "Tariflar", ru: "Тарифы" } as T,
+  pricing: { uz: "Tarif narxlari", ru: "Тарифы" } as T,
   faq: { uz: "FAQ", ru: "FAQ" } as T,
   blog: { uz: "Maqolalar", ru: "Статьи" } as T,
   start: { uz: "Boshlash", ru: "Начать" } as T,
@@ -118,7 +118,7 @@ export const problems = {
 
 /* ───── How It Works ───── */
 export const howItWorks = {
-  title: { uz: "3 qadam — bot tayyor", ru: "3 шага — бот готов" } as T,
+  title: { uz: "3 qadamda tayyor", ru: "3 шага — бот готов" } as T,
   subtitle: { uz: "Texnik bilim talab qilinmaydi", ru: "Технические знания не требуются" } as T,
   steps: [
     {
@@ -148,7 +148,7 @@ export const howItWorks = {
 /* ───── Pricing ───── */
 export const pricing = {
   title: { uz: "Tariflar", ru: "Тарифы" } as T,
-  subtitle: { uz: "Kanalingiz hajmiga mos tarifni tanlang", ru: "Выберите тариф, подходящий вашему каналу" } as T,
+  subtitle: { uz: "Mos tarifni tanlang", ru: "Выберите тариф, подходящий вашему каналу" } as T,
   badge: { uz: "Tavsiya", ru: "Рекомендуем" } as T,
   startBtn: { uz: "Boshlash", ru: "Начать" } as T,
   compareLink: { uz: "Batafsil taqqoslash →", ru: "Подробное сравнение →" } as T,

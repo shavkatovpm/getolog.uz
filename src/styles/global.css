@@ -253,7 +253,8 @@ img {
 }
 
 .section__subtitle {
-  font-size: 1.1rem;
+  font-family: 'Kalam', cursive;
+  font-size: 1.25rem;
   color: var(--light-400);
   max-width: 560px;
   margin: 0 auto;
