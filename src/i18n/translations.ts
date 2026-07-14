@@ -147,7 +147,7 @@ export const howItWorks = {
 
 /* ───── Pricing ───── */
 export const pricing = {
-  title: { uz: "Tariflar", ru: "Тарифы" } as T,
+  title: { uz: "Tarif narxlari", ru: "Тарифы" } as T,
   subtitle: { uz: "Mos tarifni tanlang", ru: "Выберите тариф, подходящий вашему каналу" } as T,
   badge: { uz: "Tavsiya", ru: "Рекомендуем" } as T,
   startBtn: { uz: "Boshlash", ru: "Начать" } as T,
