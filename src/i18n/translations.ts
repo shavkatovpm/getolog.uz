@@ -158,10 +158,10 @@ export const pricing = {
   business: { uz: "Biznes", ru: "Бизнес" } as T,
   currency: { uz: "so'm", ru: "сум" } as T,
   currencyMonth: { uz: "so'm/oy", ru: "сум/мес" } as T,
-  freeSubs: { uz: "10 obunachigacha (sinov)", ru: "до 10 подписчиков (тест)" } as T,
-  startSubs: { uz: "200 obunachigacha", ru: "до 200 подписчиков" } as T,
-  proSubs: { uz: "500 obunachigacha", ru: "до 500 подписчиков" } as T,
-  businessSubs: { uz: "1000 obunachigacha", ru: "до 1000 подписчиков" } as T,
+  freeSubs: { uz: "20 faol obunachi", ru: "до 20 подписчиков" } as T,
+  startSubs: { uz: "200 faol obunachi", ru: "до 200 подписчиков" } as T,
+  proSubs: { uz: "500 faol obunachi", ru: "до 500 подписчиков" } as T,
+  businessSubs: { uz: "1000 faol obunachi", ru: "до 1000 подписчиков" } as T,
   // Features (teaser card lines)
   featSubs: { uz: "Faol obunachi", ru: "Активные подписчики" } as T,
   featChannels: { uz: "Kanal soni", ru: "Количество каналов" } as T,
@@ -172,6 +172,7 @@ export const pricing = {
   featReferral: { uz: "Referal + Win-back", ru: "Реферал + Win-back" } as T,
   featAutopost: { uz: "Avto-post", ru: "Автопостинг" } as T,
   featCRM: { uz: "Mini-CRM", ru: "Мини-CRM" } as T,
+  featBranding: { uz: "Getolog brendi ko'rsatiladi", ru: "Отображается брендинг Getolog" } as T,
 };
 
 /* ───── FAQ ───── */
@@ -209,8 +210,8 @@ export const faq = {
     {
       q: { uz: "Bepul tarifda cheklovi bormi?", ru: "Есть ли ограничения в бесплатном тарифе?" } as T,
       a: {
-        uz: "Bepul tarifda 10 tagacha obunachi va 1 ta kanal bilan sinab ko'rasiz. Obuna boshqaruvi, muddat nazorati va qo'lda to'lov ishlaydi. Payme/Click avtomatik, referal, win-back va avto-post kabi imkoniyatlar Pro va Biznes tariflarida mavjud.",
-        ru: "На бесплатном тарифе — до 10 подписчиков и 1 канал. Управление подписками, контроль срока и оплата вручную работают. Payme/Click автоматически, реферал, win-back и автопостинг доступны на тарифах Pro и Biznes.",
+        uz: "Bepul tarifda 20 tagacha obunachi va 1 ta kanal bilan sinab ko'rasiz. Obuna boshqaruvi, muddat nazorati va qo'lda to'lov ishlaydi, bot ichida Getolog brendi ko'rsatiladi. Payme/Click avtomatik, referal, win-back va avto-post kabi imkoniyatlar Pro va Biznes tariflarida mavjud.",
+        ru: "На бесплатном тарифе — до 20 подписчиков и 1 канал. Управление подписками, контроль срока и оплата вручную работают, в боте отображается брендинг Getolog. Payme/Click автоматически, реферал, win-back и автопостинг доступны на тарифах Pro и Biznes.",
       } as T,
     },
     {
@@ -364,6 +365,10 @@ export const pricePage = {
       name: { uz: "Mini-CRM", ru: "Мини-CRM" } as T,
       desc: { uz: "Har bir obunachi bo'yicha batafsil karta va tarix", ru: "Подробная карточка и история по каждому подписчику" } as T,
     },
+    branding: {
+      name: { uz: "Getolog brendi ko'rsatiladi", ru: "Отображается брендинг Getolog" } as T,
+      desc: { uz: "Obunachi botga kirganda Getolog logotipi/nomi ko'rinadi", ru: "При входе подписчика в бот виден логотип/название Getolog" } as T,
+    },
   },
   // Mobile card labels (mirror of features, shorter)
   mSubs: { uz: "Faol obunachi", ru: "Активные подписчики" } as T,
@@ -378,6 +383,7 @@ export const pricePage = {
   mAutopost: { uz: "Avto-post", ru: "Автопостинг" } as T,
   mCleanup: { uz: "Deleted-akkaunt tozalash", ru: "Очистка удалённых аккаунтов" } as T,
   mCRM: { uz: "Mini-CRM", ru: "Мини-CRM" } as T,
+  mBranding: { uz: "Getolog brendi ko'rsatiladi", ru: "Отображается брендинг Getolog" } as T,
   // Values
   valAsosiy: { uz: "Asosiy", ru: "Базовая" } as T,
   valToliq: { uz: "To'liq", ru: "Полная" } as T,
