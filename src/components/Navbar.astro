@@ -219,7 +219,7 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
       overflow: hidden;
       flex-direction: column;
       gap: 0;
-      background: rgba(240, 241, 243, 0.98);
+      background: rgba(240, 241, 243, 0.8);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
       padding: 0 32px;
@@ -283,6 +283,7 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
 
     .navbar__links-lang {
       display: block;
+      text-align: right;
     }
 
     .navbar__lang {
@@ -302,9 +303,18 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
 
     .navbar__links-cta a {
       border-bottom: none;
-      padding: 0;
+      padding: 16px 24px;
+      position: relative;
+      color: #FFFFFF;
       text-align: center;
       justify-content: center;
+    }
+
+    .navbar__links-cta a svg {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     .navbar__right {
@@ -336,7 +346,6 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
   const navbar = document.getElementById("navbar")!;
   const burger = document.getElementById("burgerBtn")!;
   const navLinks = document.getElementById("navLinks")!;
-  let scrollPosition = 0;
 
   // Scroll detection with throttle
   let ticking = false;
@@ -353,19 +362,13 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
   }, { passive: true });
 
   function lockScroll() {
-    scrollPosition = window.scrollY;
+    document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollPosition}px`;
-    document.body.style.width = "100%";
   }
 
   function unlockScroll() {
+    document.documentElement.style.removeProperty("overflow");
     document.body.style.removeProperty("overflow");
-    document.body.style.removeProperty("position");
-    document.body.style.removeProperty("top");
-    document.body.style.removeProperty("width");
-    window.scrollTo(0, scrollPosition);
   }
 
   function openMenu() {
