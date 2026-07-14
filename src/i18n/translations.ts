@@ -37,13 +37,13 @@ export const hero = {
     uz: 'Assalomu alaykum! "IT Pro Academy" kanaliga kirish uchun to\'lov usulini tanlang:',
     ru: 'Здравствуйте! Для входа в канал "IT Pro Academy" выберите тариф подписки:',
   } as T,
-  phoneBtn1: { uz: "1 oy — 50 000 so'm", ru: "1 месяц — 50 000 сум" } as T,
-  phoneBtn2: { uz: "6 oy — 250 000 so'm", ru: "6 месяцев — 250 000 сум" } as T,
-  phoneBtn3: { uz: "Doimiy — 500 000 so'm", ru: "Навсегда — 500 000 сум" } as T,
-  phoneUserMsg: { uz: "1 oy — 50 000 so'm", ru: "1 месяц — 50 000 сум" } as T,
+  phoneBtn1: { uz: "1 oy — 100 000 so'm", ru: "1 месяц — 100 000 сум" } as T,
+  phoneBtn2: { uz: "3 oy — 270 000 so'm", ru: "3 месяца — 270 000 сум" } as T,
+  phoneBtn3: { uz: "12 oy — 960 000 so'm", ru: "12 месяцев — 960 000 сум" } as T,
+  phoneUserMsg: { uz: "3 oy — 270 000 so'm", ru: "3 месяца — 270 000 сум" } as T,
   phoneCardInfo: {
-    uz: "Karta: 8600 **** **** 1234<br/>Summa: 50 000 so'm<br/><br/>To'lovni amalga oshiring va chek rasmini yuboring.",
-    ru: "Карта: 8600 **** **** 1234<br/>Сумма: 50 000 сум<br/><br/>Выполните перевод и отправьте фото чека.",
+    uz: "Karta: 8600 **** **** 1234<br/>Summa: 270 000 so'm<br/><br/>To'lovni amalga oshiring va chek rasmini yuboring.",
+    ru: "Карта: 8600 **** **** 1234<br/>Сумма: 270 000 сум<br/><br/>Выполните перевод и отправьте фото чека.",
   } as T,
   phoneSuccess: {
     uz: 'To\'lov tasdiqlandi! Mana sizning linkingiz:<br/><br/><span class="invite-link">t.me/+aBcDeFgHiJk</span><br/><br/>Bu link faqat 1 marta ishlaydi.',
@@ -67,8 +67,8 @@ export const problems = {
         ru: "Проверить оплату, создать ссылку, добавить в канал — каждый раз одно и то же.",
       } as T,
       solution: {
-        uz: "To'lov tasdiqlangach bot <strong>avtomatik invite link</strong> beradi. Siz faqat tasdiqlaysiz.",
-        ru: "После подтверждения оплаты бот <strong>автоматически выдаёт invite-ссылку</strong>. Вы только подтверждаете.",
+        uz: "Payme yoki Click orqali <strong>avtomatik</strong>, xohlasangiz qo'lda chek orqali ham — to'lov tasdiqlangach bot <strong>avtomatik invite link</strong> beradi.",
+        ru: "Автоматически через Payme или Click, а при желании — вручную по чеку: после подтверждения оплаты бот <strong>автоматически выдаёт invite-ссылку</strong>.",
       } as T,
     },
     {
@@ -81,8 +81,8 @@ export const problems = {
         ru: "Кто когда вошёл, у кого истёк срок — вручную следить практически невозможно.",
       } as T,
       solution: {
-        uz: "Muddat tugashiga <strong>3 va 1 kun</strong> qolganda bot ogohlantiradi. Tugagach — <strong>avtomatik chiqaradi</strong>.",
-        ru: "За <strong>3 и 1 день</strong> до окончания бот предупреждает. По истечении — <strong>автоматически удаляет</strong>.",
+        uz: "Muddat tugashiga <strong>3 va 1 kun</strong> qolganda bot ogohlantiradi. Tugagach — <strong>avtomatik chiqaradi</strong>, so'ng <strong>win-back</strong> xabari bilan qaytishga taklif qiladi.",
+        ru: "За <strong>3 и 1 день</strong> до окончания бот предупреждает. По истечении — <strong>автоматически удаляет</strong>, а затем предлагает вернуться через <strong>win-back</strong>.",
       } as T,
     },
     {
@@ -109,8 +109,8 @@ export const problems = {
         ru: "Нанять разработчика — в среднем 500$. Писать самому — месяцы работы.",
       } as T,
       solution: {
-        uz: "Kod yozish shart emas. <strong>Bot tokenini yuboring</strong> — 2 daqiqada tayyor bot olasiz.",
-        ru: "Код писать не нужно. <strong>Отправьте токен бота</strong> — и за 2 минуты получите готового бота.",
+        uz: "Kod yozish shart emas. <strong>Bot tokenini yuboring</strong> — 2 daqiqada tayyor bot olasiz, tariflaringizni (1/3/6/12 oy) o'zingiz sozlaysiz.",
+        ru: "Код писать не нужно. <strong>Отправьте токен бота</strong> — за 2 минуты получите готового бота, тарифы (1/3/6/12 мес) настраиваете сами.",
       } as T,
     },
   ],
@@ -129,17 +129,17 @@ export const howItWorks = {
       } as T,
     },
     {
-      title: { uz: "Kanal va narxni sozlang", ru: "Настройте канал и цену" } as T,
+      title: { uz: "Kanal va tariflarni sozlang", ru: "Настройте канал и тарифы" } as T,
       text: {
-        uz: "Kanal yoki guruhni ulang, obuna narxi va muddatini belgilang, karta raqamingizni kiriting.",
-        ru: "Подключите канал или группу, установите цену и срок подписки, введите номер карты.",
+        uz: "Kanal yoki guruhni ulang, 1/3/6/12 oylik tariflarni belgilang, Payme/Click yoki karta raqamingizni kiriting.",
+        ru: "Подключите канал или группу, задайте тарифы на 1/3/6/12 месяцев, укажите Payme/Click или номер карты.",
       } as T,
     },
     {
       title: { uz: "Bot ishlaydi — siz kuzatasiz", ru: "Бот работает — вы наблюдаете" } as T,
       text: {
-        uz: "Obunachilar bot orqali to'lov qiladi, invite link oladi, kanalga kiradi. Hammasi avtomatik.",
-        ru: "Подписчики оплачивают через бота, получают invite-ссылку, входят в канал. Всё автоматически.",
+        uz: "Obunachilar bot orqali to'lov qiladi, invite link oladi, kanalga kiradi. Muddat tugasa — avtomatik chiqadi, ketganlarga win-back taklifi boradi. Hammasi avtomatik.",
+        ru: "Подписчики оплачивают через бота, получают invite-ссылку, входят в канал. Истёк срок — автоматически удаляются, ушедшим приходит win-back. Всё автоматически.",
       } as T,
     },
   ],
@@ -153,22 +153,25 @@ export const pricing = {
   startBtn: { uz: "Boshlash", ru: "Начать" } as T,
   compareLink: { uz: "Batafsil taqqoslash →", ru: "Подробное сравнение →" } as T,
   free: { uz: "Bepul", ru: "Бесплатный" } as T,
-  standard: { uz: "Standard", ru: "Стандарт" } as T,
-  premium: { uz: "Biznes", ru: "Бизнес" } as T,
+  start: { uz: "Start", ru: "Старт" } as T,
+  pro: { uz: "Pro", ru: "Про" } as T,
+  business: { uz: "Biznes", ru: "Бизнес" } as T,
   currency: { uz: "so'm", ru: "сум" } as T,
   currencyMonth: { uz: "so'm/oy", ru: "сум/мес" } as T,
-  // Features
-  feat1bot: { uz: "1 ta bot", ru: "1 бот" } as T,
-  feat2bot: { uz: "2 ta bot", ru: "2 бота" } as T,
-  feat5bot: { uz: "5 ta bot", ru: "5 ботов" } as T,
-  featCard: { uz: "Karta orqali to'lov", ru: "Оплата картой" } as T,
-  featStats: { uz: "Statistika", ru: "Статистика" } as T,
-  featAuto: { uz: "Avtomatik boshqaruvi", ru: "Автоматическое управление" } as T,
-  featNoAd: { uz: "Reklamani o'chirish", ru: "Отключение рекламы" } as T,
-  featMultiAdmin: { uz: "Multi-admin", ru: "Мульти-админ" } as T,
-  feat2admin: { uz: "2 ta multi-admin", ru: "2 мульти-админа" } as T,
-  feat5admin: { uz: "5 ta multi-admin", ru: "5 мульти-админов" } as T,
-  featPayme: { uz: "Click / Payme", ru: "Click / Payme" } as T,
+  freeSubs: { uz: "10 obunachigacha (sinov)", ru: "до 10 подписчиков (тест)" } as T,
+  startSubs: { uz: "200 obunachigacha", ru: "до 200 подписчиков" } as T,
+  proSubs: { uz: "500 obunachigacha", ru: "до 500 подписчиков" } as T,
+  businessSubs: { uz: "1000 obunachigacha", ru: "до 1000 подписчиков" } as T,
+  // Features (teaser card lines)
+  featSubs: { uz: "Faol obunachi", ru: "Активные подписчики" } as T,
+  featChannels: { uz: "Kanal soni", ru: "Количество каналов" } as T,
+  featManualPay: { uz: "Qo'lda to'lov tasdiqlash", ru: "Подтверждение оплаты вручную" } as T,
+  featExpiry: { uz: "Muddat nazorati + eslatma", ru: "Контроль срока + напоминания" } as T,
+  featPlans: { uz: "Tarif rejalari (1/3/6/12 oy)", ru: "Тарифные планы (1/3/6/12 мес)" } as T,
+  featPayme: { uz: "Payme / Click avtomatik", ru: "Payme / Click автоматически" } as T,
+  featReferral: { uz: "Referal + Win-back", ru: "Реферал + Win-back" } as T,
+  featAutopost: { uz: "Avto-post", ru: "Автопостинг" } as T,
+  featCRM: { uz: "Mini-CRM", ru: "Мини-CRM" } as T,
 };
 
 /* ───── FAQ ───── */
@@ -206,8 +209,22 @@ export const faq = {
     {
       q: { uz: "Bepul tarifda cheklovi bormi?", ru: "Есть ли ограничения в бесплатном тарифе?" } as T,
       a: {
-        uz: "Funksionallik bir xil. Yagona farq — obunachilar botga kirganda Getolog reklamasi ko'rinadi. Pullik tarifda reklama yo'q.",
-        ru: "Функционал одинаковый. Единственное отличие — при входе в бот подписчики видят рекламу Getolog. В платном тарифе рекламы нет.",
+        uz: "Bepul tarifda 10 tagacha obunachi va 1 ta kanal bilan sinab ko'rasiz. Obuna boshqaruvi, muddat nazorati va qo'lda to'lov ishlaydi. Payme/Click avtomatik, referal, win-back va avto-post kabi imkoniyatlar Pro va Biznes tariflarida mavjud.",
+        ru: "На бесплатном тарифе — до 10 подписчиков и 1 канал. Управление подписками, контроль срока и оплата вручную работают. Payme/Click автоматически, реферал, win-back и автопостинг доступны на тарифах Pro и Biznes.",
+      } as T,
+    },
+    {
+      q: { uz: "Payme yoki Click shart emasmi?", ru: "Обязательно ли подключать Payme или Click?" } as T,
+      a: {
+        uz: "Yo'q. Qo'lda to'lov (obunachi chek yuboradi, siz bir tugma bilan tasdiqlaysiz) barcha tariflarda ishlaydi. Payme/Click avtomatik integratsiyasi esa Pro va Biznes tariflarida qo'shimcha qulaylik sifatida mavjud.",
+        ru: "Нет. Оплата вручную (подписчик отправляет чек, вы подтверждаете одной кнопкой) работает на всех тарифах. Автоматическая интеграция Payme/Click доступна дополнительно на тарифах Pro и Biznes.",
+      } as T,
+    },
+    {
+      q: { uz: "Referal va win-back nima?", ru: "Что такое реферал и win-back?" } as T,
+      a: {
+        uz: "Referal — obunachingiz yangi a'zo taklif qilsa, unga bonus beriladi. Win-back — muddati tugab ketgan obunachiga avtomatik qaytish taklifi yuboriladi. Ikkalasi ham Pro va Biznes tariflarida mavjud.",
+        ru: "Реферал — бонус подписчику, приведшему нового участника. Win-back — автоматическое предложение вернуться тем, у кого истёк срок. Оба доступны на тарифах Pro и Biznes.",
       } as T,
     },
     {
@@ -262,8 +279,8 @@ export const meta = {
   } as T,
   priceTitle: { uz: "Tariflar — Getolog", ru: "Тарифы — Getolog" } as T,
   priceDesc: {
-    uz: "Getolog tarif rejalari. Bepul, Standart va Biznes tariflarni batafsil taqqoslang.",
-    ru: "Тарифные планы Getolog. Подробное сравнение тарифов: Бесплатный, Стандарт и Бизнес.",
+    uz: "Getolog tarif rejalari. Bepul, Start, Pro va Biznes tariflarni batafsil taqqoslang.",
+    ru: "Тарифные планы Getolog. Подробное сравнение тарифов: Бесплатный, Старт, Про и Бизнес.",
   } as T,
   skipLink: { uz: "Asosiy kontentga o'tish", ru: "Перейти к основному контенту" } as T,
   infoTitle: { uz: "Getolog haqida — Ma'lumot", ru: "О сервисе Getolog — Информация" } as T,
@@ -293,102 +310,78 @@ export const pricePage = {
   featureCol: { uz: "Imkoniyat", ru: "Возможность" } as T,
   ctaTitle: { uz: "Boshlashga tayyormisiz?", ru: "Готовы начать?" } as T,
   ctaSubtitle: { uz: "2 daqiqada sozlang. Bepul boshlang.", ru: "Настройте за 2 минуты. Начните бесплатно." } as T,
+  scaleNote: {
+    uz: "1000 dan ortiq obunachi? Scale rejasi: $150 dan boshlab, har qo'shimcha 100 obunachi uchun +$10, har qo'shimcha kanal uchun +$15.",
+    ru: "Более 1000 подписчиков? План Scale: от $150, +$10 за каждые дополнительные 100 подписчиков, +$15 за каждый доп. канал.",
+  } as T,
   // Table features
   features: {
-    card: {
-      name: { uz: "Karta orqali to'lov", ru: "Оплата картой" } as T,
-      desc: { uz: "Obunachilar to'g'ridan-to'g'ri karta orqali to'lov qiladi", ru: "Подписчики оплачивают напрямую картой" } as T,
+    subs: {
+      name: { uz: "Faol obunachi", ru: "Активные подписчики" } as T,
+      desc: { uz: "Bir vaqtda boshqarilishi mumkin bo'lgan obunachilar soni", ru: "Сколько подписчиков можно вести одновременно" } as T,
     },
-    stats: {
-      name: { uz: "Statistika", ru: "Статистика" } as T,
-      desc: { uz: "Obunalar, daromad va foydalanuvchilar haqida hisobot", ru: "Отчёт о подписках, доходах и пользователях" } as T,
+    channels: {
+      name: { uz: "Kanal soni", ru: "Количество каналов" } as T,
+      desc: { uz: "Bitta hisobda ulash mumkin bo'lgan kanal/guruh soni", ru: "Сколько каналов/групп можно подключить на аккаунт" } as T,
     },
-    auto: {
-      name: { uz: "Avtomatik obuna boshqaruvi", ru: "Автоматическое управление подписками" } as T,
-      desc: { uz: "Muddat tugashi, eslatma va kanaldan chiqarish avtomatik", ru: "Истечение срока, напоминания и удаление из канала — автоматически" } as T,
+    manage: {
+      name: { uz: "Obunachi boshqaruvi", ru: "Управление подписчиками" } as T,
+      desc: { uz: "To'lov evaziga qo'shish, chiqarish, qayta kirish imkoni", ru: "Добавление по оплате, удаление, повторный вход" } as T,
     },
-    invite: {
-      name: { uz: "Bir martalik invite link", ru: "Одноразовая invite-ссылка" } as T,
-      desc: { uz: "Har bir to'lov uchun faqat 1 marta ishlaydigan havola", ru: "Ссылка, которая работает только 1 раз для каждой оплаты" } as T,
+    expiry: {
+      name: { uz: "Muddat nazorati + eslatma", ru: "Контроль срока + напоминания" } as T,
+      desc: { uz: "Muddat tugashiga 3 va 1 kun qolganda ogohlantirish, so'ng avtomatik chiqarish", ru: "Уведомление за 3 и 1 день до истечения, затем автоудаление" } as T,
     },
-    welcome: {
-      name: { uz: "Custom welcome xabar", ru: "Приветственное сообщение" } as T,
-      desc: { uz: "Yangi obunachiga shaxsiy xush kelibsiz xabari", ru: "Персональное приветствие для новых подписчиков" } as T,
+    manualPay: {
+      name: { uz: "Qo'lda to'lov", ru: "Оплата вручную" } as T,
+      desc: { uz: "Integratsiyasiz ham ishlaydi — chek yuboriladi, bir tugma bilan tasdiqlanadi", ru: "Работает и без интеграции — чек отправляется, подтверждается одной кнопкой" } as T,
     },
-    users: {
-      name: { uz: "Foydalanuvchilarni boshqarish", ru: "Управление пользователями" } as T,
-      desc: { uz: "Obunachilarni ko'rish, boshqarish va blok qilish", ru: "Просмотр, управление и блокировка подписчиков" } as T,
-    },
-    botLimit: {
-      name: { uz: "Bot limiti", ru: "Лимит ботов" } as T,
-      desc: { uz: "Bitta akkauntdan nechta bot yaratish mumkinligi", ru: "Сколько ботов можно создать с одного аккаунта" } as T,
-    },
-    multiAdmin: {
-      name: { uz: "Multi-admin", ru: "Мульти-админ" } as T,
-      desc: { uz: "Botni boshqa adminlar bilan birgalikda boshqarish", ru: "Совместное управление ботом с другими админами" } as T,
-    },
-    ads: {
-      name: { uz: "Reklama", ru: "Реклама" } as T,
-      desc: { uz: "Obunachilar botga kirganda Getolog reklamasi ko'rsatiladi", ru: "Реклама Getolog при входе подписчиков в бот" } as T,
-    },
-    branding: {
-      name: { uz: "Getolog brending", ru: "Брендинг Getolog" } as T,
-      desc: {
-        uz: '"Ushbu bot @getolog_bot tomonidan ishlab chiqildi" yozuvi ko\'rinadi',
-        ru: 'Надпись "Этот бот создан @getolog_bot" отображается в боте',
-      } as T,
-    },
-    receipt: {
-      name: { uz: "Chek tasdiqlash usuli", ru: "Способ подтверждения чека" } as T,
-      desc: { uz: "To'lov chekini tasdiqlash — qo'lda yoki avtomatik", ru: "Подтверждение чека оплаты — вручную или автоматически" } as T,
+    plans: {
+      name: { uz: "Tarif rejalari (1/3/6/12 oy)", ru: "Тарифные планы (1/3/6/12 мес)" } as T,
+      desc: { uz: "Obunachilar uchun moslashuvchan muddatlar, uzoq muddatga chegirma", ru: "Гибкие сроки для подписчиков, скидка за долгий срок" } as T,
     },
     payme: {
-      name: { uz: "Click / Payme integratsiya", ru: "Интеграция Click / Payme" } as T,
-      desc: { uz: "Click va Payme orqali avtomatik to'lov qabul qilish", ru: "Автоматический приём оплаты через Click и Payme" } as T,
+      name: { uz: "Payme / Click avtomatik", ru: "Payme / Click автоматически" } as T,
+      desc: { uz: "Obunachi to'laydi, bot o'zi kanalga qo'shadi", ru: "Подписчик платит — бот сам добавляет в канал" } as T,
     },
-    priority: {
-      name: { uz: "Prioritet qo'llab-quvvatlash", ru: "Приоритетная поддержка" } as T,
-      desc: { uz: "Tezkor yordam va ustuvor xizmat ko'rsatish", ru: "Быстрая помощь и приоритетное обслуживание" } as T,
+    analytics: {
+      name: { uz: "Analitika", ru: "Аналитика" } as T,
+      desc: { uz: "Obunachilar, daromad va chiqib ketganlar statistikasi", ru: "Статистика подписчиков, дохода и оттока" } as T,
+    },
+    referral: {
+      name: { uz: "Referal + Win-back", ru: "Реферал + Win-back" } as T,
+      desc: { uz: "Yangi a'zo olib kelganga bonus, ketganlarga avtomatik qaytish taklifi", ru: "Бонус за приглашённых, автопредложение вернуться ушедшим" } as T,
+    },
+    autopost: {
+      name: { uz: "Avto-post", ru: "Автопостинг" } as T,
+      desc: { uz: "Postlarni belgilangan vaqtda joylash va avtomatik o'chirish", ru: "Публикация постов по расписанию и автоудаление" } as T,
+    },
+    cleanup: {
+      name: { uz: "Deleted-akkaunt tozalash", ru: "Очистка удалённых аккаунтов" } as T,
+      desc: { uz: "O'chirilgan Telegram akkauntlarni ro'yxatdan avtomatik tozalaydi", ru: "Автоматически удаляет из списка удалённые Telegram-аккаунты" } as T,
+    },
+    crm: {
+      name: { uz: "Mini-CRM", ru: "Мини-CRM" } as T,
+      desc: { uz: "Har bir obunachi bo'yicha batafsil karta va tarix", ru: "Подробная карточка и история по каждому подписчику" } as T,
     },
   },
-  // Mobile card labels
-  mBotLimit: { uz: "Bot limiti", ru: "Лимит ботов" } as T,
-  mBotLimitDesc: { uz: "Bitta akkauntdan nechta bot", ru: "Сколько ботов с одного аккаунта" } as T,
-  mCard: { uz: "Karta orqali to'lov", ru: "Оплата картой" } as T,
-  mCardDesc: { uz: "Obunachilar karta orqali to'lov qiladi", ru: "Подписчики оплачивают картой" } as T,
-  mStats: { uz: "Statistika", ru: "Статистика" } as T,
-  mStatsDesc: { uz: "Obunalar, daromad va foydalanuvchilar hisoboti", ru: "Отчёт о подписках, доходах и пользователях" } as T,
-  mAuto: { uz: "Avtomatik obuna boshqaruvi", ru: "Автоматическое управление" } as T,
-  mAutoDesc: { uz: "Eslatma va kanaldan chiqarish avtomatik", ru: "Напоминания и удаление из канала — автоматически" } as T,
-  mInvite: { uz: "Bir martalik invite link", ru: "Одноразовая invite-ссылка" } as T,
-  mInviteDesc: { uz: "Faqat 1 marta ishlaydigan havola", ru: "Ссылка, работающая только 1 раз" } as T,
-  mWelcome: { uz: "Custom welcome xabar", ru: "Приветственное сообщение" } as T,
-  mWelcomeDesc: { uz: "Shaxsiy xush kelibsiz xabari", ru: "Персональное приветствие" } as T,
-  mUsers: { uz: "Foydalanuvchilarni boshqarish", ru: "Управление пользователями" } as T,
-  mUsersDesc: { uz: "Ko'rish, boshqarish va blok qilish", ru: "Просмотр, управление и блокировка" } as T,
-  mReceipt: { uz: "Chek tasdiqlash", ru: "Подтверждение чека" } as T,
-  mReceiptDesc: { uz: "To'lov chekini tasdiqlash usuli", ru: "Способ подтверждения оплаты" } as T,
-  mMultiAdmin: { uz: "Multi-admin", ru: "Мульти-админ" } as T,
-  mMultiAdminDesc: { uz: "Botni boshqalar bilan boshqarish", ru: "Совместное управление ботом" } as T,
-  mPayme: { uz: "Click / Payme", ru: "Click / Payme" } as T,
-  mPaymeDesc: { uz: "Avtomatik to'lov qabul qilish", ru: "Автоматический приём оплаты" } as T,
-  mAds: { uz: "Reklama", ru: "Реклама" } as T,
-  mAdsDesc: { uz: "Botga kirganda Getolog reklamasi", ru: "Реклама Getolog при входе в бот" } as T,
-  mBranding: { uz: "Getolog brending", ru: "Брендинг Getolog" } as T,
-  mBrandingDesc: {
-    uz: '"Ushbu bot @getolog_bot tomonidan ishlab chiqildi" yozuvi',
-    ru: 'Надпись "Этот бот создан @getolog_bot"',
-  } as T,
-  mPriority: { uz: "Prioritet qo'llab-quvvatlash", ru: "Приоритетная поддержка" } as T,
-  mPriorityDesc: { uz: "Tezkor yordam va ustuvor xizmat", ru: "Быстрая помощь и приоритет" } as T,
+  // Mobile card labels (mirror of features, shorter)
+  mSubs: { uz: "Faol obunachi", ru: "Активные подписчики" } as T,
+  mChannels: { uz: "Kanal soni", ru: "Количество каналов" } as T,
+  mManage: { uz: "Obunachi boshqaruvi", ru: "Управление подписчиками" } as T,
+  mExpiry: { uz: "Muddat nazorati + eslatma", ru: "Контроль срока + напоминания" } as T,
+  mManualPay: { uz: "Qo'lda to'lov", ru: "Оплата вручную" } as T,
+  mPlans: { uz: "Tarif rejalari (1/3/6/12 oy)", ru: "Тарифные планы (1/3/6/12 мес)" } as T,
+  mPayme: { uz: "Payme / Click avtomatik", ru: "Payme / Click автоматически" } as T,
+  mAnalytics: { uz: "Analitika", ru: "Аналитика" } as T,
+  mReferral: { uz: "Referal + Win-back", ru: "Реферал + Win-back" } as T,
+  mAutopost: { uz: "Avto-post", ru: "Автопостинг" } as T,
+  mCleanup: { uz: "Deleted-akkaunt tozalash", ru: "Очистка удалённых аккаунтов" } as T,
+  mCRM: { uz: "Mini-CRM", ru: "Мини-CRM" } as T,
   // Values
-  val1: { uz: "1 ta", ru: "1" } as T,
-  val2: { uz: "2 ta", ru: "2" } as T,
-  val5: { uz: "5 ta", ru: "5" } as T,
-  valManual: { uz: "Qo'lda", ru: "Вручную" } as T,
-  valAuto: { uz: "Avtomatik", ru: "Автоматически" } as T,
-  valYes: { uz: "Bor", ru: "Есть" } as T,
-  valNo: { uz: "Yo'q", ru: "Нет" } as T,
+  valAsosiy: { uz: "Asosiy", ru: "Базовая" } as T,
+  valToliq: { uz: "To'liq", ru: "Полная" } as T,
+  valToliqExport: { uz: "To'liq + eksport", ru: "Полная + экспорт" } as T,
 };
 
 /* ───── Language helper ───── */

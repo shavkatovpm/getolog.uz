@@ -24,35 +24,53 @@ const prefix = langPrefix(lang);
           </div>
         </div>
         <ul class="pricing-card__features" aria-label={pricing.free[lang]}>
-          <li class="included">{pricing.feat1bot[lang]}</li>
-          <li class="included">{pricing.featCard[lang]}</li>
-          <li class="included">{pricing.featStats[lang]}</li>
-          <li class="included">{pricing.featAuto[lang]}</li>
-          <li class="excluded">{pricing.featNoAd[lang]}</li>
-          <li class="excluded">{pricing.featMultiAdmin[lang]}</li>
+          <li class="included">{pricing.freeSubs[lang]}</li>
+          <li class="included">{pricing.featManualPay[lang]}</li>
+          <li class="included">{pricing.featExpiry[lang]}</li>
+          <li class="included">{pricing.featPlans[lang]}</li>
           <li class="excluded">{pricing.featPayme[lang]}</li>
+          <li class="excluded">{pricing.featReferral[lang]}</li>
         </ul>
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
       </div>
 
-      <!-- Standard -->
-      <div class="pricing-card pricing-card--popular reveal">
-        <span class="popular-badge">{pricing.badge[lang]}</span>
+      <!-- Start -->
+      <div class="pricing-card reveal">
         <div class="pricing-card__header">
-          <h3 class="pricing-card__name">{pricing.standard[lang]}</h3>
+          <h3 class="pricing-card__name">{pricing.start[lang]}</h3>
           <div class="pricing-card__price">
-            <span class="price-amount">97 000</span>
+            <span class="price-amount">597 000</span>
             <span class="price-currency">{pricing.currencyMonth[lang]}</span>
           </div>
         </div>
-        <ul class="pricing-card__features" aria-label={pricing.standard[lang]}>
-          <li class="included">{pricing.feat2bot[lang]}</li>
-          <li class="included">{pricing.featCard[lang]}</li>
-          <li class="included">{pricing.featStats[lang]}</li>
-          <li class="included">{pricing.featAuto[lang]}</li>
-          <li class="included">{pricing.featNoAd[lang]}</li>
-          <li class="included">{pricing.feat2admin[lang]}</li>
+        <ul class="pricing-card__features" aria-label={pricing.start[lang]}>
+          <li class="included">{pricing.startSubs[lang]}</li>
+          <li class="included">{pricing.featManualPay[lang]}</li>
+          <li class="included">{pricing.featExpiry[lang]}</li>
+          <li class="included">{pricing.featPlans[lang]}</li>
           <li class="excluded">{pricing.featPayme[lang]}</li>
+          <li class="excluded">{pricing.featReferral[lang]}</li>
+        </ul>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card pricing-card--popular reveal">
+        <span class="popular-badge">{pricing.badge[lang]}</span>
+        <div class="pricing-card__header">
+          <h3 class="pricing-card__name">{pricing.pro[lang]}</h3>
+          <div class="pricing-card__price">
+            <span class="price-amount">1 270 000</span>
+            <span class="price-currency">{pricing.currencyMonth[lang]}</span>
+          </div>
+        </div>
+        <ul class="pricing-card__features" aria-label={pricing.pro[lang]}>
+          <li class="included">{pricing.proSubs[lang]}</li>
+          <li class="included">{pricing.featPayme[lang]}</li>
+          <li class="included">{pricing.featReferral[lang]}</li>
+          <li class="included">{pricing.featAutopost[lang]}</li>
+          <li class="included">{pricing.featExpiry[lang]}</li>
+          <li class="included">{pricing.featPlans[lang]}</li>
         </ul>
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
       </div>
@@ -60,20 +78,19 @@ const prefix = langPrefix(lang);
       <!-- Biznes -->
       <div class="pricing-card reveal">
         <div class="pricing-card__header">
-          <h3 class="pricing-card__name">{pricing.premium[lang]}</h3>
+          <h3 class="pricing-card__name">{pricing.business[lang]}</h3>
           <div class="pricing-card__price">
-            <span class="price-amount">497 000</span>
+            <span class="price-amount">1 890 000</span>
             <span class="price-currency">{pricing.currencyMonth[lang]}</span>
           </div>
         </div>
-        <ul class="pricing-card__features" aria-label={pricing.premium[lang]}>
-          <li class="included">{pricing.feat5bot[lang]}</li>
-          <li class="included">{pricing.featCard[lang]}</li>
-          <li class="included">{pricing.featStats[lang]}</li>
-          <li class="included">{pricing.featAuto[lang]}</li>
-          <li class="included">{pricing.featNoAd[lang]}</li>
-          <li class="included">{pricing.feat5admin[lang]}</li>
+        <ul class="pricing-card__features" aria-label={pricing.business[lang]}>
+          <li class="included">{pricing.businessSubs[lang]}</li>
           <li class="included">{pricing.featPayme[lang]}</li>
+          <li class="included">{pricing.featReferral[lang]}</li>
+          <li class="included">{pricing.featAutopost[lang]}</li>
+          <li class="included">{pricing.featCRM[lang]}</li>
+          <li class="included">{pricing.featPlans[lang]}</li>
         </ul>
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
       </div>
@@ -88,15 +105,15 @@ const prefix = langPrefix(lang);
 <style>
   .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    max-width: 1020px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1240px;
     margin: 0 auto;
   }
 
   .pricing-card {
-    background: var(--dark-800);
-    border: 1px solid rgba(230, 233, 255, 0.06);
+    background: #FFFFFF;
+    border: 1px solid rgba(26, 29, 34, 0.07);
     border-radius: var(--radius-lg);
     padding: 36px 28px;
     transition: all var(--transition);
@@ -104,14 +121,14 @@ const prefix = langPrefix(lang);
   }
 
   .pricing-card:hover {
-    border-color: rgba(139, 142, 255, 0.2);
+    border-color: rgba(91, 107, 122, 0.25);
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 40px rgba(20, 25, 35, 0.08);
   }
 
   .pricing-card--popular {
     border-color: var(--accent);
-    box-shadow: 0 0 30px rgba(139, 142, 255, 0.1);
+    box-shadow: 0 0 30px rgba(91, 107, 122, 0.12);
   }
 
   .pricing-card--popular:hover {
@@ -136,7 +153,7 @@ const prefix = langPrefix(lang);
     text-align: center;
     margin-bottom: 28px;
     padding-bottom: 28px;
-    border-bottom: 1px solid rgba(230, 233, 255, 0.06);
+    border-bottom: 1px solid rgba(26, 29, 34, 0.08);
   }
 
   .pricing-card__name {
@@ -185,7 +202,7 @@ const prefix = langPrefix(lang);
 
   .pricing-card__features li.included::before {
     content: '\2713';
-    color: #4ade80;
+    color: var(--success);
   }
 
   .pricing-card__features li.excluded {
@@ -216,13 +233,20 @@ const prefix = langPrefix(lang);
 
   @media (max-width: 900px) {
     .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 640px;
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .pricing-grid {
       grid-template-columns: 1fr;
       max-width: 400px;
-      gap: 20px;
     }
 
     .pricing-card--popular {
-      order: 0;
+      order: -1;
     }
   }
 

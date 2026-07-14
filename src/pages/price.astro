@@ -33,44 +33,65 @@ const f = pp.features;
             <div class="m-card__price">0 <span>{pricing.currency[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBotLimit[lang]}</span><span class="m-desc">{pp.mBotLimitDesc[lang]}</span></div><span class="m-value">{pp.val1[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCard[lang]}</span><span class="m-desc">{pp.mCardDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mStats[lang]}</span><span class="m-desc">{pp.mStatsDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAuto[lang]}</span><span class="m-desc">{pp.mAutoDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mInvite[lang]}</span><span class="m-desc">{pp.mInviteDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mWelcome[lang]}</span><span class="m-desc">{pp.mWelcomeDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mUsers[lang]}</span><span class="m-desc">{pp.mUsersDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReceipt[lang]}</span><span class="m-desc">{pp.mReceiptDesc[lang]}</span></div><span class="m-value">{pp.valManual[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mMultiAdmin[lang]}</span><span class="m-desc">{pp.mMultiAdminDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span><span class="m-desc">{pp.mPaymeDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAds[lang]}</span><span class="m-desc">{pp.mAdsDesc[lang]}</span></div><span class="m-value m-no">{pp.valYes[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBranding[lang]}</span><span class="m-desc">{pp.mBrandingDesc[lang]}</span></div><span class="m-value m-no">{pp.valYes[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPriority[lang]}</span><span class="m-desc">{pp.mPriorityDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">{pricing.freeSubs[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value">1</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManualPay[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPlans[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAnalytics[lang]}</span></div><span class="m-value">{pp.valAsosiy[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReferral[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAutopost[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCleanup[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCRM[lang]}</span></div><span class="m-value m-no">&times;</span></li>
           </ul>
           <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
         </div>
 
-        <!-- Standard -->
+        <!-- Start -->
+        <div class="m-card">
+          <div class="m-card__head">
+            <h3>{pricing.start[lang]}</h3>
+            <div class="m-card__price">597 000 <span>{pricing.currencyMonth[lang]}</span></div>
+          </div>
+          <ul class="m-card__list">
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">{pricing.startSubs[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value">1</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManualPay[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPlans[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAnalytics[lang]}</span></div><span class="m-value">{pp.valAsosiy[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReferral[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAutopost[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCleanup[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCRM[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+          </ul>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
+        </div>
+
+        <!-- Pro -->
         <div class="m-card m-card--popular">
           <span class="m-badge">{pricing.badge[lang]}</span>
           <div class="m-card__head">
-            <h3>{pricing.standard[lang]}</h3>
-            <div class="m-card__price">97 000 <span>{pricing.currencyMonth[lang]}</span></div>
+            <h3>{pricing.pro[lang]}</h3>
+            <div class="m-card__price">1 270 000 <span>{pricing.currencyMonth[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBotLimit[lang]}</span><span class="m-desc">{pp.mBotLimitDesc[lang]}</span></div><span class="m-value m-highlight">{pp.val2[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mMultiAdmin[lang]}</span><span class="m-desc">{pp.mMultiAdminDesc[lang]}</span></div><span class="m-value m-highlight">{pp.val2[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAds[lang]}</span><span class="m-desc">{pp.mAdsDesc[lang]}</span></div><span class="m-value m-yes">{pp.valNo[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCard[lang]}</span><span class="m-desc">{pp.mCardDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mStats[lang]}</span><span class="m-desc">{pp.mStatsDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAuto[lang]}</span><span class="m-desc">{pp.mAutoDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mInvite[lang]}</span><span class="m-desc">{pp.mInviteDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mWelcome[lang]}</span><span class="m-desc">{pp.mWelcomeDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mUsers[lang]}</span><span class="m-desc">{pp.mUsersDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReceipt[lang]}</span><span class="m-desc">{pp.mReceiptDesc[lang]}</span></div><span class="m-value">{pp.valManual[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span><span class="m-desc">{pp.mPaymeDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBranding[lang]}</span><span class="m-desc">{pp.mBrandingDesc[lang]}</span></div><span class="m-value m-no">{pp.valYes[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPriority[lang]}</span><span class="m-desc">{pp.mPriorityDesc[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">{pricing.proSubs[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value m-highlight">2</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManualPay[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPlans[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAnalytics[lang]}</span></div><span class="m-value m-highlight">{pp.valToliq[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReferral[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAutopost[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCleanup[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCRM[lang]}</span></div><span class="m-value m-no">&times;</span></li>
           </ul>
           <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
         </div>
@@ -78,23 +99,22 @@ const f = pp.features;
         <!-- Biznes -->
         <div class="m-card">
           <div class="m-card__head">
-            <h3>{pricing.premium[lang]}</h3>
-            <div class="m-card__price">497 000 <span>{pricing.currencyMonth[lang]}</span></div>
+            <h3>{pricing.business[lang]}</h3>
+            <div class="m-card__price">1 890 000 <span>{pricing.currencyMonth[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBotLimit[lang]}</span><span class="m-desc">{pp.mBotLimitDesc[lang]}</span></div><span class="m-value m-highlight">{pp.val5[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mMultiAdmin[lang]}</span><span class="m-desc">{pp.mMultiAdminDesc[lang]}</span></div><span class="m-value m-highlight">{pp.val5[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAds[lang]}</span><span class="m-desc">{pp.mAdsDesc[lang]}</span></div><span class="m-value m-yes">{pp.valNo[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBranding[lang]}</span><span class="m-desc">{pp.mBrandingDesc[lang]}</span></div><span class="m-value m-yes">{pp.valNo[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span><span class="m-desc">{pp.mPaymeDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCard[lang]}</span><span class="m-desc">{pp.mCardDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mStats[lang]}</span><span class="m-desc">{pp.mStatsDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAuto[lang]}</span><span class="m-desc">{pp.mAutoDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mInvite[lang]}</span><span class="m-desc">{pp.mInviteDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mWelcome[lang]}</span><span class="m-desc">{pp.mWelcomeDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mUsers[lang]}</span><span class="m-desc">{pp.mUsersDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReceipt[lang]}</span><span class="m-desc">{pp.mReceiptDesc[lang]}</span></div><span class="m-value m-highlight">{pp.valAuto[lang]}</span></li>
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPriority[lang]}</span><span class="m-desc">{pp.mPriorityDesc[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">{pricing.businessSubs[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value m-highlight">3</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManualPay[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPlans[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAnalytics[lang]}</span></div><span class="m-value m-highlight">{pp.valToliqExport[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReferral[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAutopost[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCleanup[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCRM[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
           </ul>
           <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
         </div>
@@ -112,103 +132,117 @@ const f = pp.features;
                   <span class="plan-price">0 {pricing.currency[lang]}</span>
                 </div>
               </th>
+              <th>
+                <div class="plan-head">
+                  <span class="plan-name">{pricing.start[lang]}</span>
+                  <span class="plan-price">597 000 {pricing.currencyMonth[lang]}</span>
+                </div>
+              </th>
               <th class="plan-popular">
                 <span class="table-badge">{pricing.badge[lang]}</span>
                 <div class="plan-head">
-                  <span class="plan-name">{pricing.standard[lang]}</span>
-                  <span class="plan-price">97 000 {pricing.currencyMonth[lang]}</span>
+                  <span class="plan-name">{pricing.pro[lang]}</span>
+                  <span class="plan-price">1 270 000 {pricing.currencyMonth[lang]}</span>
                 </div>
               </th>
               <th>
                 <div class="plan-head">
-                  <span class="plan-name">{pricing.premium[lang]}</span>
-                  <span class="plan-price">497 000 {pricing.currencyMonth[lang]}</span>
+                  <span class="plan-name">{pricing.business[lang]}</span>
+                  <span class="plan-price">1 890 000 {pricing.currencyMonth[lang]}</span>
                 </div>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><div class="feat-name">{f.card.name[lang]}</div><div class="feat-desc">{f.card.desc[lang]}</div></td>
+              <td><div class="feat-name">{f.subs.name[lang]}</div><div class="feat-desc">{f.subs.desc[lang]}</div></td>
+              <td>{pricing.freeSubs[lang]}</td>
+              <td>{pricing.startSubs[lang]}</td>
+              <td class="plan-popular">{pricing.proSubs[lang]}</td>
+              <td>{pricing.businessSubs[lang]}</td>
+            </tr>
+            <tr>
+              <td><div class="feat-name">{f.channels.name[lang]}</div><div class="feat-desc">{f.channels.desc[lang]}</div></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="plan-popular">2</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td><div class="feat-name">{f.manage.name[lang]}</div><div class="feat-desc">{f.manage.desc[lang]}</div></td>
+              <td>&check;</td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">{f.stats.name[lang]}</div><div class="feat-desc">{f.stats.desc[lang]}</div></td>
+              <td><div class="feat-name">{f.expiry.name[lang]}</div><div class="feat-desc">{f.expiry.desc[lang]}</div></td>
+              <td>&check;</td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">{f.auto.name[lang]}</div><div class="feat-desc">{f.auto.desc[lang]}</div></td>
+              <td><div class="feat-name">{f.manualPay.name[lang]}</div><div class="feat-desc">{f.manualPay.desc[lang]}</div></td>
+              <td>&check;</td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">{f.invite.name[lang]}</div><div class="feat-desc">{f.invite.desc[lang]}</div></td>
+              <td><div class="feat-name">{f.plans.name[lang]}</div><div class="feat-desc">{f.plans.desc[lang]}</div></td>
+              <td>&check;</td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
-            </tr>
-            <tr>
-              <td><div class="feat-name">{f.welcome.name[lang]}</div><div class="feat-desc">{f.welcome.desc[lang]}</div></td>
-              <td>&check;</td>
-              <td class="plan-popular">&check;</td>
-              <td>&check;</td>
-            </tr>
-            <tr>
-              <td><div class="feat-name">{f.users.name[lang]}</div><div class="feat-desc">{f.users.desc[lang]}</div></td>
-              <td>&check;</td>
-              <td class="plan-popular">&check;</td>
-              <td>&check;</td>
-            </tr>
-            <tr>
-              <td><div class="feat-name">{f.botLimit.name[lang]}</div><div class="feat-desc">{f.botLimit.desc[lang]}</div></td>
-              <td>{pp.val1[lang]}</td>
-              <td class="plan-popular">{pp.val2[lang]}</td>
-              <td>{pp.val5[lang]}</td>
-            </tr>
-            <tr>
-              <td><div class="feat-name">{f.multiAdmin.name[lang]}</div><div class="feat-desc">{f.multiAdmin.desc[lang]}</div></td>
-              <td><span class="t-no">&times;</span></td>
-              <td class="plan-popular">{pp.val2[lang]}</td>
-              <td>{pp.val5[lang]}</td>
-            </tr>
-            <tr>
-              <td><div class="feat-name">{f.ads.name[lang]}</div><div class="feat-desc">{f.ads.desc[lang]}</div></td>
-              <td><span class="t-no">{pp.valYes[lang]}</span></td>
-              <td class="plan-popular"><span class="t-yes">{pp.valNo[lang]}</span></td>
-              <td><span class="t-yes">{pp.valNo[lang]}</span></td>
-            </tr>
-            <tr>
-              <td><div class="feat-name">{f.branding.name[lang]}</div><div class="feat-desc">{f.branding.desc[lang]}</div></td>
-              <td><span class="t-no">{pp.valYes[lang]}</span></td>
-              <td class="plan-popular"><span class="t-no">{pp.valYes[lang]}</span></td>
-              <td><span class="t-yes">{pp.valNo[lang]}</span></td>
-            </tr>
-            <tr>
-              <td><div class="feat-name">{f.receipt.name[lang]}</div><div class="feat-desc">{f.receipt.desc[lang]}</div></td>
-              <td>{pp.valManual[lang]}</td>
-              <td class="plan-popular">{pp.valManual[lang]}</td>
-              <td><span class="t-highlight">{pp.valAuto[lang]}</span></td>
             </tr>
             <tr>
               <td><div class="feat-name">{f.payme.name[lang]}</div><div class="feat-desc">{f.payme.desc[lang]}</div></td>
               <td><span class="t-no">&times;</span></td>
-              <td class="plan-popular"><span class="t-no">&times;</span></td>
+              <td><span class="t-no">&times;</span></td>
+              <td class="plan-popular">&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
-              <td><div class="feat-name">{f.priority.name[lang]}</div><div class="feat-desc">{f.priority.desc[lang]}</div></td>
+              <td><div class="feat-name">{f.analytics.name[lang]}</div><div class="feat-desc">{f.analytics.desc[lang]}</div></td>
+              <td>{pp.valAsosiy[lang]}</td>
+              <td>{pp.valAsosiy[lang]}</td>
+              <td class="plan-popular"><span class="t-highlight">{pp.valToliq[lang]}</span></td>
+              <td><span class="t-highlight">{pp.valToliqExport[lang]}</span></td>
+            </tr>
+            <tr>
+              <td><div class="feat-name">{f.referral.name[lang]}</div><div class="feat-desc">{f.referral.desc[lang]}</div></td>
+              <td><span class="t-no">&times;</span></td>
+              <td><span class="t-no">&times;</span></td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td><div class="feat-name">{f.autopost.name[lang]}</div><div class="feat-desc">{f.autopost.desc[lang]}</div></td>
+              <td><span class="t-no">&times;</span></td>
+              <td><span class="t-no">&times;</span></td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td><div class="feat-name">{f.cleanup.name[lang]}</div><div class="feat-desc">{f.cleanup.desc[lang]}</div></td>
+              <td><span class="t-no">&times;</span></td>
+              <td><span class="t-no">&times;</span></td>
+              <td class="plan-popular">&check;</td>
+              <td>&check;</td>
+            </tr>
+            <tr>
+              <td><div class="feat-name">{f.crm.name[lang]}</div><div class="feat-desc">{f.crm.desc[lang]}</div></td>
+              <td><span class="t-no">&times;</span></td>
               <td><span class="t-no">&times;</span></td>
               <td class="plan-popular"><span class="t-no">&times;</span></td>
-              <td>&check;</td>
+              <td><span class="t-highlight">&check;</span></td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <p class="price-scale-note">{pp.scaleNote[lang]}</p>
     </div>
   </section>
 
@@ -255,12 +289,23 @@ const f = pp.features;
 
   /* Desktop table */
   .price-table-wrap {
-    max-width: 960px;
+    max-width: 1100px;
     margin: 0 auto;
+    overflow-x: auto;
   }
 
   .price-table-section {
-    padding-bottom: 80px;
+    padding-bottom: 60px;
+  }
+
+  .price-scale-note {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--light-400);
+    line-height: 1.6;
+    padding-bottom: 20px;
   }
 
   .price-table {
@@ -273,7 +318,7 @@ const f = pp.features;
     padding: 28px 16px 24px;
     text-align: center;
     vertical-align: bottom;
-    border-bottom: 1px solid rgba(230, 233, 255, 0.08);
+    border-bottom: 1px solid rgba(26, 29, 34, 0.08);
     position: relative;
   }
 
@@ -307,7 +352,7 @@ const f = pp.features;
   }
 
   .plan-popular {
-    background: rgba(139, 142, 255, 0.04);
+    background: rgba(91, 107, 122, 0.04);
   }
 
   .table-badge {
@@ -326,7 +371,7 @@ const f = pp.features;
     padding: 14px 16px;
     text-align: center;
     font-size: 0.9rem;
-    border-bottom: 1px solid rgba(230, 233, 255, 0.04);
+    border-bottom: 1px solid rgba(26, 29, 34, 0.04);
     color: var(--light);
   }
 
@@ -350,7 +395,7 @@ const f = pp.features;
   }
 
   .price-table tbody tr:hover td {
-    background: rgba(230, 233, 255, 0.02);
+    background: rgba(26, 29, 34, 0.02);
   }
 
   .price-table tfoot td {
@@ -374,7 +419,7 @@ const f = pp.features;
   /* Mobile card styles */
   .m-card {
     background: var(--dark-800);
-    border: 1px solid rgba(230, 233, 255, 0.06);
+    border: 1px solid rgba(26, 29, 34, 0.06);
     border-radius: var(--radius-lg);
     padding: 28px 24px;
     margin-bottom: 16px;
@@ -402,7 +447,7 @@ const f = pp.features;
     text-align: center;
     margin-bottom: 20px;
     padding-bottom: 16px;
-    border-bottom: 1px solid rgba(230, 233, 255, 0.06);
+    border-bottom: 1px solid rgba(26, 29, 34, 0.06);
   }
 
   .m-card__head h3 {
@@ -435,7 +480,7 @@ const f = pp.features;
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid rgba(230, 233, 255, 0.03);
+    border-bottom: 1px solid rgba(26, 29, 34, 0.03);
     font-size: 0.85rem;
   }
 
