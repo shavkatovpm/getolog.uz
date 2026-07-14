@@ -219,28 +219,12 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
       overflow: hidden;
       flex-direction: column;
       gap: 0;
-      background: rgba(20, 22, 26, 0.35);
+      background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
       padding: 0 32px;
       justify-content: flex-start;
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .navbar__links::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 72px;
-      background: rgba(240, 241, 243, 0.98);
-      z-index: 0;
-    }
-
-    .navbar__links > * {
-      position: relative;
-      z-index: 1;
     }
 
     .navbar__links.open {
@@ -308,8 +292,8 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
       justify-content: flex-end;
       gap: 14px;
       text-align: right;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-      color: #FFFFFF;
+      border-bottom: 1px solid rgba(26, 29, 34, 0.08);
+      color: var(--light);
     }
 
     .navbar__links a:hover {
@@ -340,7 +324,7 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
     }
 
     .navbar__lang:hover {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(26, 29, 34, 0.05);
     }
 
     .navbar__links-cta {
@@ -413,11 +397,13 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
   function lockScroll() {
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+    document.body.classList.add("nav-open");
   }
 
   function unlockScroll() {
     document.documentElement.style.removeProperty("overflow");
     document.body.style.removeProperty("overflow");
+    document.body.classList.remove("nav-open");
   }
 
   function openMenu() {

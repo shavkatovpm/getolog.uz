@@ -418,6 +418,14 @@ img {
   opacity: 1;
 }
 
+/* ========== MOBILE NAV OPEN — blur page content peeking below the menu ========== */
+@media (max-width: 768px) {
+  body.nav-open > *:not(nav) {
+    filter: blur(10px);
+    transition: filter 0.3s ease;
+  }
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .container {
