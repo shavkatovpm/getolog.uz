@@ -29,12 +29,12 @@ const lang = Astro.props.lang || "uz" as Lang;
 
     <div class="ariza-form__row">
       <label class="ariza-form__label" for="ariza-subs">{ariza.subscriberCount[lang]}</label>
-      <input class="ariza-form__input" id="ariza-subs" name="subscriber_count" type="text" placeholder={ariza.subscriberPlaceholder[lang]} maxlength="20" />
+      <input class="ariza-form__input" id="ariza-subs" name="subscriber_count" type="text" inputmode="numeric" placeholder={ariza.subscriberPlaceholder[lang]} maxlength="20" />
     </div>
 
     <div class="ariza-form__row">
       <label class="ariza-form__label" for="ariza-message">{ariza.message[lang]}</label>
-      <textarea class="ariza-form__input ariza-form__textarea" id="ariza-message" name="message" placeholder={ariza.messagePlaceholder[lang]} required maxlength="2000" rows="4"></textarea>
+      <textarea class="ariza-form__input ariza-form__textarea" id="ariza-message" name="message" placeholder={ariza.messagePlaceholder[lang]} maxlength="2000" rows="4"></textarea>
     </div>
 
     <button class="btn btn--primary btn--full ariza-form__submit" type="submit" id="arizaSubmit">
@@ -82,6 +82,8 @@ const lang = Astro.props.lang || "uz" as Lang;
     const statusEl = form.querySelector('#arizaStatus');
     const fullNameInput = form.querySelector('#ariza-full-name');
     const telegramInput = form.querySelector('#ariza-telegram');
+    const phoneInput = form.querySelector('#ariza-phone');
+    const subsInput = form.querySelector('#ariza-subs');
     let revertTimer = null;
 
     if (fullNameInput) applyFormatting(fullNameInput, formatFullName);
@@ -95,6 +97,24 @@ const lang = Astro.props.lang || "uz" as Lang;
         telegramInput.setSelectionRange(caret + 1, caret + 1);
       });
     }
+
+    function applyDigitsOnly(input, allowLeadingPlus) {
+      input.addEventListener('input', () => {
+        const value = input.value;
+        const hasPlus = allowLeadingPlus && value.startsWith('+');
+        const digits = value.replace(/\D/g, '');
+        const cleaned = hasPlus ? '+' + digits : digits;
+        if (cleaned === value) return;
+        const caret = input.selectionStart ?? value.length;
+        const removed = value.length - cleaned.length;
+        input.value = cleaned;
+        const newCaret = Math.max(0, caret - removed);
+        input.setSelectionRange(newCaret, newCaret);
+      });
+    }
+
+    if (phoneInput) applyDigitsOnly(phoneInput, true);
+    if (subsInput) applyDigitsOnly(subsInput, false);
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -124,11 +144,12 @@ const lang = Astro.props.lang || "uz" as Lang;
           form.reset();
           fieldsEl.hidden = true;
           successEl.hidden = false;
+          successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
           if (revertTimer) clearTimeout(revertTimer);
           revertTimer = setTimeout(() => {
             successEl.hidden = true;
             fieldsEl.hidden = false;
-          }, 10000);
+          }, 15000);
         }
       } catch {
         statusEl.textContent = errorText;
