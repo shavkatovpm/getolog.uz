@@ -6,47 +6,56 @@ const lang = Astro.props.lang || "uz" as Lang;
 ---
 
 <form class="ariza-form" id="arizaForm" novalidate>
-  <div class="ariza-form__row">
-    <label class="ariza-form__label" for="ariza-full-name">{ariza.fullName[lang]}</label>
-    <input class="ariza-form__input" id="ariza-full-name" name="full_name" type="text" placeholder={ariza.fullNamePlaceholder[lang]} required maxlength="120" />
+  <div class="ariza-form__fields" id="arizaFields">
+    <div class="ariza-form__row">
+      <label class="ariza-form__label" for="ariza-full-name">{ariza.fullName[lang]}</label>
+      <input class="ariza-form__input" id="ariza-full-name" name="full_name" type="text" placeholder={ariza.fullNamePlaceholder[lang]} required maxlength="120" />
+    </div>
+
+    <div class="ariza-form__row">
+      <label class="ariza-form__label" for="ariza-phone">{ariza.phoneNumber[lang]}</label>
+      <input class="ariza-form__input" id="ariza-phone" name="phone_number" type="tel" placeholder={ariza.phoneNumberPlaceholder[lang]} required maxlength="20" />
+    </div>
+
+    <div class="ariza-form__row">
+      <label class="ariza-form__label" for="ariza-telegram">{ariza.telegramUsername[lang]}</label>
+      <input class="ariza-form__input" id="ariza-telegram" name="telegram_username" type="text" placeholder={ariza.telegramPlaceholder[lang]} required maxlength="60" />
+    </div>
+
+    <div class="ariza-form__row">
+      <label class="ariza-form__label" for="ariza-channel">{ariza.channelTopic[lang]}</label>
+      <input class="ariza-form__input" id="ariza-channel" name="channel_topic" type="text" placeholder={ariza.channelTopicPlaceholder[lang]} required maxlength="120" />
+    </div>
+
+    <div class="ariza-form__row">
+      <label class="ariza-form__label" for="ariza-subs">{ariza.subscriberCount[lang]}</label>
+      <input class="ariza-form__input" id="ariza-subs" name="subscriber_count" type="text" placeholder={ariza.subscriberPlaceholder[lang]} maxlength="20" />
+    </div>
+
+    <div class="ariza-form__row">
+      <label class="ariza-form__label" for="ariza-message">{ariza.message[lang]}</label>
+      <textarea class="ariza-form__input ariza-form__textarea" id="ariza-message" name="message" placeholder={ariza.messagePlaceholder[lang]} required maxlength="2000" rows="4"></textarea>
+    </div>
+
+    <button class="btn btn--primary btn--full ariza-form__submit" type="submit" id="arizaSubmit">
+      {ariza.submitBtn[lang]}
+    </button>
+
+    <p class="ariza-form__status" id="arizaStatus" role="status" aria-live="polite"></p>
   </div>
 
-  <div class="ariza-form__row">
-    <label class="ariza-form__label" for="ariza-phone">{ariza.phoneNumber[lang]}</label>
-    <input class="ariza-form__input" id="ariza-phone" name="phone_number" type="tel" placeholder={ariza.phoneNumberPlaceholder[lang]} required maxlength="20" />
+  <div class="ariza-form__success" id="arizaSuccess" hidden>
+    <div class="ariza-form__success-icon" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <h3 class="ariza-form__success-title">{ariza.successTitle[lang]}</h3>
+    <p class="ariza-form__success-text" id="arizaSuccessText" set:html={ariza.successMsg[lang]} />
   </div>
-
-  <div class="ariza-form__row">
-    <label class="ariza-form__label" for="ariza-telegram">{ariza.telegramUsername[lang]}</label>
-    <input class="ariza-form__input" id="ariza-telegram" name="telegram_username" type="text" placeholder={ariza.telegramPlaceholder[lang]} required maxlength="60" />
-  </div>
-
-  <div class="ariza-form__row">
-    <label class="ariza-form__label" for="ariza-channel">{ariza.channelTopic[lang]}</label>
-    <input class="ariza-form__input" id="ariza-channel" name="channel_topic" type="text" placeholder={ariza.channelTopicPlaceholder[lang]} required maxlength="120" />
-  </div>
-
-  <div class="ariza-form__row">
-    <label class="ariza-form__label" for="ariza-subs">{ariza.subscriberCount[lang]}</label>
-    <input class="ariza-form__input" id="ariza-subs" name="subscriber_count" type="text" placeholder={ariza.subscriberPlaceholder[lang]} maxlength="20" />
-  </div>
-
-  <div class="ariza-form__row">
-    <label class="ariza-form__label" for="ariza-message">{ariza.message[lang]}</label>
-    <textarea class="ariza-form__input ariza-form__textarea" id="ariza-message" name="message" placeholder={ariza.messagePlaceholder[lang]} required maxlength="2000" rows="4"></textarea>
-  </div>
-
-  <button class="btn btn--primary btn--full ariza-form__submit" type="submit" id="arizaSubmit">
-    {ariza.submitBtn[lang]}
-  </button>
-
-  <p class="ariza-form__status" id="arizaStatus" role="status" aria-live="polite"></p>
 </form>
 
 <script define:vars={{
   submittingText: ariza.submittingBtn[lang],
   submitText: ariza.submitBtn[lang],
-  successText: ariza.successMsg[lang],
   errorText: ariza.errorMsg[lang],
   rateLimitText: ariza.rateLimitMsg[lang],
 }}>
@@ -67,10 +76,13 @@ const lang = Astro.props.lang || "uz" as Lang;
 
   const forms = document.querySelectorAll('#arizaForm');
   forms.forEach((form) => {
+    const fieldsEl = form.querySelector('#arizaFields');
+    const successEl = form.querySelector('#arizaSuccess');
     const submitBtn = form.querySelector('#arizaSubmit');
     const statusEl = form.querySelector('#arizaStatus');
     const fullNameInput = form.querySelector('#ariza-full-name');
     const telegramInput = form.querySelector('#ariza-telegram');
+    let revertTimer = null;
 
     if (fullNameInput) applyFormatting(fullNameInput, formatFullName);
 
@@ -109,9 +121,14 @@ const lang = Astro.props.lang || "uz" as Lang;
           statusEl.textContent = errorText;
           statusEl.classList.add('ariza-form__status--error');
         } else {
-          statusEl.innerHTML = successText;
-          statusEl.classList.add('ariza-form__status--success');
           form.reset();
+          fieldsEl.hidden = true;
+          successEl.hidden = false;
+          if (revertTimer) clearTimeout(revertTimer);
+          revertTimer = setTimeout(() => {
+            successEl.hidden = true;
+            fieldsEl.hidden = false;
+          }, 10000);
         }
       } catch {
         statusEl.textContent = errorText;
@@ -181,18 +198,60 @@ const lang = Astro.props.lang || "uz" as Lang;
     min-height: 1.2em;
   }
 
-  .ariza-form__status--success {
-    color: var(--success);
+  .ariza-form__status--error {
+    color: var(--danger);
   }
 
-  .ariza-form__status--success :global(a) {
+  .ariza-form__success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 48px 32px;
+    animation: ariza-success-in 0.4s ease;
+  }
+
+  .ariza-form__success-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--success);
+    color: #FFFFFF;
+    animation: ariza-success-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .ariza-form__success-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--light);
+  }
+
+  .ariza-form__success-text {
+    font-size: 0.98rem;
+    color: var(--light-400);
+    line-height: 1.7;
+    max-width: 420px;
+  }
+
+  .ariza-form__success-text :global(a) {
     color: var(--accent);
     font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
-  .ariza-form__status--error {
-    color: var(--danger);
+  @keyframes ariza-success-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ariza-success-pop {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); }
   }
 </style>

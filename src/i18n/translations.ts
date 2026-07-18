@@ -494,6 +494,7 @@ export const ariza = {
   } as T,
   submitBtn: { uz: "Ariza yuborish", ru: "Отправить заявку" } as T,
   submittingBtn: { uz: "Yuborilmoqda...", ru: "Отправка..." } as T,
+  successTitle: { uz: "Ariza qabul qilindi!", ru: "Заявка принята!" } as T,
   successMsg: {
     uz: 'Arizangiz qabul qilindi! Tezroq javob olish uchun hoziroq <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a> supportga yozing.',
     ru: 'Ваша заявка принята! Чтобы получить ответ быстрее, напишите прямо сейчас в <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a> поддержку.',
