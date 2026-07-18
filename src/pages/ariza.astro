@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import ArizaForm from "../components/ArizaForm.astro";
+import { type Lang, ariza, meta } from "../i18n/translations";
+
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+---
+
+<Layout title={meta.arizaTitle[lang]} description={meta.arizaDesc[lang]} lang={lang}>
+  <Navbar lang={lang} />
+
+  <section class="ariza-hero">
+    <div class="container">
+      <h1 class="ariza-hero__title">{ariza.title[lang]}</h1>
+      <p class="ariza-hero__subtitle">{ariza.subtitle[lang]}</p>
+      <ArizaForm lang={lang} />
+    </div>
+  </section>
+
+  <Footer lang={lang} />
+</Layout>
+
+<style>
+  .ariza-hero {
+    padding: 140px 0 100px;
+  }
+
+  .ariza-hero__title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+
+  .ariza-hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--light-400);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    text-align: center;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .ariza-hero {
+      padding: 110px 0 60px;
+    }
+
+    .ariza-hero__title {
+      font-size: 1.75rem;
+    }
+
+    .ariza-hero__subtitle {
+      font-size: 0.95rem;
+      margin-bottom: 36px;
+    }
+  }
+</style>

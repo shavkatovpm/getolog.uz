@@ -16,7 +16,7 @@ const f = pp.features;
 
   <section class="price-hero">
     <div class="container">
-      <h1 class="price-hero__title">{pp.heroTitle[lang]}</h1>
+      <h1 class="price-hero__title" set:html={pp.heroTitle[lang]} />
       <p class="price-hero__subtitle">{pp.heroSubtitle[lang]}</p>
     </div>
   </section>
@@ -33,7 +33,7 @@ const f = pp.features;
             <div class="m-card__price">0 <span>{pricing.currency[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">{pricing.freeSubs[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">20</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value">1</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
@@ -50,14 +50,14 @@ const f = pp.features;
           <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
         </div>
 
-        <!-- Start -->
+        <!-- Minimal -->
         <div class="m-card">
           <div class="m-card__head">
-            <h3>{pricing.start[lang]}</h3>
-            <div class="m-card__price">597 000 <span>{pricing.currencyMonth[lang]}</span></div>
+            <h3>{pricing.minimal[lang]}</h3>
+            <div class="m-card__price">295 000 <span>{pricing.currencyMonth[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">{pricing.startSubs[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">100</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value">1</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
@@ -74,15 +74,39 @@ const f = pp.features;
           <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
         </div>
 
-        <!-- Pro -->
+        <!-- Standart -->
         <div class="m-card m-card--popular">
           <span class="m-badge">{pricing.badge[lang]}</span>
+          <div class="m-card__head">
+            <h3>{pricing.start[lang]}</h3>
+            <div class="m-card__price">590 000 <span>{pricing.currencyMonth[lang]}</span></div>
+          </div>
+          <ul class="m-card__list">
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">200</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value">1</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManualPay[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPlans[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mPayme[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAnalytics[lang]}</span></div><span class="m-value">{pp.valAsosiy[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mReferral[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mAutopost[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCleanup[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCRM[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBranding[lang]}</span></div><span class="m-value m-no">&times;</span></li>
+          </ul>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
+        </div>
+
+        <!-- Pro -->
+        <div class="m-card">
           <div class="m-card__head">
             <h3>{pricing.pro[lang]}</h3>
             <div class="m-card__price">1 270 000 <span>{pricing.currencyMonth[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">{pricing.proSubs[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">500</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value m-highlight">2</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
@@ -96,7 +120,7 @@ const f = pp.features;
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mCRM[lang]}</span></div><span class="m-value m-no">&times;</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mBranding[lang]}</span></div><span class="m-value m-no">&times;</span></li>
           </ul>
-          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
         </div>
 
         <!-- Biznes -->
@@ -106,7 +130,7 @@ const f = pp.features;
             <div class="m-card__price">1 890 000 <span>{pricing.currencyMonth[lang]}</span></div>
           </div>
           <ul class="m-card__list">
-            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">{pricing.businessSubs[lang]}</span></li>
+            <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mSubs[lang]}</span></div><span class="m-value m-highlight">1000</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mChannels[lang]}</span></div><span class="m-value m-highlight">3</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mManage[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
             <li class="m-feat"><div class="m-label-wrap"><span class="m-label">{pp.mExpiry[lang]}</span></div><span class="m-value m-yes">&check;</span></li>
@@ -138,12 +162,18 @@ const f = pp.features;
               </th>
               <th>
                 <div class="plan-head">
-                  <span class="plan-name">{pricing.start[lang]}</span>
-                  <span class="plan-price">597 000 {pricing.currencyMonth[lang]}</span>
+                  <span class="plan-name">{pricing.minimal[lang]}</span>
+                  <span class="plan-price">295 000 {pricing.currencyMonth[lang]}</span>
                 </div>
               </th>
               <th class="plan-popular">
                 <span class="table-badge">{pricing.badge[lang]}</span>
+                <div class="plan-head">
+                  <span class="plan-name">{pricing.start[lang]}</span>
+                  <span class="plan-price">590 000 {pricing.currencyMonth[lang]}</span>
+                </div>
+              </th>
+              <th>
                 <div class="plan-head">
                   <span class="plan-name">{pricing.pro[lang]}</span>
                   <span class="plan-price">1 270 000 {pricing.currencyMonth[lang]}</span>
@@ -160,16 +190,18 @@ const f = pp.features;
           <tbody>
             <tr>
               <td><div class="feat-name">{f.subs.name[lang]}</div><div class="feat-desc">{f.subs.desc[lang]}</div></td>
-              <td>{pricing.freeSubs[lang]}</td>
-              <td>{pricing.startSubs[lang]}</td>
-              <td class="plan-popular">{pricing.proSubs[lang]}</td>
-              <td>{pricing.businessSubs[lang]}</td>
+              <td>20</td>
+              <td>100</td>
+              <td class="plan-popular">200</td>
+              <td>500</td>
+              <td>1000</td>
             </tr>
             <tr>
               <td><div class="feat-name">{f.channels.name[lang]}</div><div class="feat-desc">{f.channels.desc[lang]}</div></td>
               <td>1</td>
               <td>1</td>
-              <td class="plan-popular">2</td>
+              <td class="plan-popular">1</td>
+              <td>2</td>
               <td>3</td>
             </tr>
             <tr>
@@ -178,12 +210,14 @@ const f = pp.features;
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
+              <td>&check;</td>
             </tr>
             <tr>
               <td><div class="feat-name">{f.expiry.name[lang]}</div><div class="feat-desc">{f.expiry.desc[lang]}</div></td>
               <td>&check;</td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
+              <td>&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
@@ -192,12 +226,14 @@ const f = pp.features;
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
+              <td>&check;</td>
             </tr>
             <tr>
               <td><div class="feat-name">{f.plans.name[lang]}</div><div class="feat-desc">{f.plans.desc[lang]}</div></td>
               <td>&check;</td>
               <td>&check;</td>
               <td class="plan-popular">&check;</td>
+              <td>&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
@@ -206,33 +242,38 @@ const f = pp.features;
               <td><span class="t-no">&times;</span></td>
               <td class="plan-popular">&check;</td>
               <td>&check;</td>
+              <td>&check;</td>
             </tr>
             <tr>
               <td><div class="feat-name">{f.analytics.name[lang]}</div><div class="feat-desc">{f.analytics.desc[lang]}</div></td>
               <td>{pp.valAsosiy[lang]}</td>
               <td>{pp.valAsosiy[lang]}</td>
-              <td class="plan-popular"><span class="t-highlight">{pp.valToliq[lang]}</span></td>
+              <td class="plan-popular">{pp.valAsosiy[lang]}</td>
+              <td><span class="t-highlight">{pp.valToliq[lang]}</span></td>
               <td><span class="t-highlight">{pp.valToliqExport[lang]}</span></td>
             </tr>
             <tr>
               <td><div class="feat-name">{f.referral.name[lang]}</div><div class="feat-desc">{f.referral.desc[lang]}</div></td>
               <td><span class="t-no">&times;</span></td>
               <td><span class="t-no">&times;</span></td>
-              <td class="plan-popular">&check;</td>
+              <td class="plan-popular"><span class="t-no">&times;</span></td>
+              <td>&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
               <td><div class="feat-name">{f.autopost.name[lang]}</div><div class="feat-desc">{f.autopost.desc[lang]}</div></td>
               <td><span class="t-no">&times;</span></td>
               <td><span class="t-no">&times;</span></td>
-              <td class="plan-popular">&check;</td>
+              <td class="plan-popular"><span class="t-no">&times;</span></td>
+              <td>&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
               <td><div class="feat-name">{f.cleanup.name[lang]}</div><div class="feat-desc">{f.cleanup.desc[lang]}</div></td>
               <td><span class="t-no">&times;</span></td>
               <td><span class="t-no">&times;</span></td>
-              <td class="plan-popular">&check;</td>
+              <td class="plan-popular"><span class="t-no">&times;</span></td>
+              <td>&check;</td>
               <td>&check;</td>
             </tr>
             <tr>
@@ -240,6 +281,7 @@ const f = pp.features;
               <td><span class="t-no">&times;</span></td>
               <td><span class="t-no">&times;</span></td>
               <td class="plan-popular"><span class="t-no">&times;</span></td>
+              <td><span class="t-no">&times;</span></td>
               <td><span class="t-highlight">&check;</span></td>
             </tr>
             <tr>
@@ -248,12 +290,14 @@ const f = pp.features;
               <td><span class="t-no">&times;</span></td>
               <td class="plan-popular"><span class="t-no">&times;</span></td>
               <td><span class="t-no">&times;</span></td>
+              <td><span class="t-no">&times;</span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <p class="price-scale-note">{pp.scaleNote[lang]}</p>
+      <p class="price-hero__intro">{pp.priceIntro[lang]}</p>
     </div>
   </section>
 
@@ -286,11 +330,25 @@ const f = pp.features;
     letter-spacing: -0.5px;
   }
 
+  .price-hero__title :global(.price-hero__hand) {
+    font-family: 'Kalam', cursive;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
   .price-hero__subtitle {
     font-size: 1.1rem;
     color: var(--light-400);
     max-width: 480px;
     margin: 0 auto;
+  }
+
+  .price-hero__intro {
+    font-size: 0.95rem;
+    color: var(--light-400);
+    max-width: 620px;
+    margin: 20px auto 0;
+    line-height: 1.7;
   }
 
   /* Mobile cards — hidden on desktop */
@@ -555,6 +613,10 @@ const f = pp.features;
 
     .price-hero__subtitle {
       font-size: 0.95rem;
+    }
+
+    .price-hero__intro {
+      font-size: 0.88rem;
     }
 
     .price-table-section {

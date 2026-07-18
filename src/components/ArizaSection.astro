@@ -1,0 +1,17 @@
+---
+import { type Lang, ariza } from "../i18n/translations";
+import ArizaForm from "./ArizaForm.astro";
+
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || "uz" as Lang;
+---
+
+<section class="section section--alt" id="ariza">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">{ariza.title[lang]}</h2>
+      <p class="section__subtitle">{ariza.subtitle[lang]}</p>
+    </div>
+    <ArizaForm lang={lang} />
+  </div>
+</section>

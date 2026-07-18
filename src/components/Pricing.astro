@@ -34,29 +34,29 @@ const prefix = langPrefix(lang);
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
       </div>
 
-      <!-- Start -->
-      <div class="pricing-card reveal">
+      <!-- Standart -->
+      <div class="pricing-card pricing-card--popular reveal">
+        <span class="popular-badge">{pricing.badge[lang]}</span>
         <div class="pricing-card__header">
           <h3 class="pricing-card__name">{pricing.start[lang]}</h3>
           <div class="pricing-card__price">
-            <span class="price-amount">597 000</span>
+            <span class="price-amount">590 000</span>
             <span class="price-currency">{pricing.currencyMonth[lang]}</span>
           </div>
         </div>
         <ul class="pricing-card__features" aria-label={pricing.start[lang]}>
           <li class="included">{pricing.startSubs[lang]}</li>
+          <li class="included">{pricing.featPayme[lang]}</li>
           <li class="included">{pricing.featManualPay[lang]}</li>
           <li class="included">{pricing.featExpiry[lang]}</li>
           <li class="included">{pricing.featPlans[lang]}</li>
-          <li class="excluded">{pricing.featPayme[lang]}</li>
           <li class="excluded">{pricing.featReferral[lang]}</li>
         </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
       </div>
 
       <!-- Pro -->
-      <div class="pricing-card pricing-card--popular reveal">
-        <span class="popular-badge">{pricing.badge[lang]}</span>
+      <div class="pricing-card reveal">
         <div class="pricing-card__header">
           <h3 class="pricing-card__name">{pricing.pro[lang]}</h3>
           <div class="pricing-card__price">
@@ -72,26 +72,6 @@ const prefix = langPrefix(lang);
           <li class="included">{pricing.featExpiry[lang]}</li>
           <li class="included">{pricing.featPlans[lang]}</li>
         </ul>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--full">{pricing.startBtn[lang]}</a>
-      </div>
-
-      <!-- Biznes -->
-      <div class="pricing-card reveal">
-        <div class="pricing-card__header">
-          <h3 class="pricing-card__name">{pricing.business[lang]}</h3>
-          <div class="pricing-card__price">
-            <span class="price-amount">1 890 000</span>
-            <span class="price-currency">{pricing.currencyMonth[lang]}</span>
-          </div>
-        </div>
-        <ul class="pricing-card__features" aria-label={pricing.business[lang]}>
-          <li class="included">{pricing.businessSubs[lang]}</li>
-          <li class="included">{pricing.featPayme[lang]}</li>
-          <li class="included">{pricing.featReferral[lang]}</li>
-          <li class="included">{pricing.featAutopost[lang]}</li>
-          <li class="included">{pricing.featCRM[lang]}</li>
-          <li class="included">{pricing.featPlans[lang]}</li>
-        </ul>
         <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--outline btn--full">{pricing.startBtn[lang]}</a>
       </div>
     </div>
@@ -105,9 +85,9 @@ const prefix = langPrefix(lang);
 <style>
   .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    max-width: 1240px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1020px;
     margin: 0 auto;
   }
 
@@ -233,16 +213,9 @@ const prefix = langPrefix(lang);
 
   @media (max-width: 900px) {
     .pricing-grid {
-      grid-template-columns: repeat(2, 1fr);
-      max-width: 640px;
-      gap: 20px;
-    }
-  }
-
-  @media (max-width: 560px) {
-    .pricing-grid {
       grid-template-columns: 1fr;
       max-width: 400px;
+      gap: 20px;
     }
   }
 
