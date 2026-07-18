@@ -1,8 +1,9 @@
 ---
-import { type Lang, hero } from "../i18n/translations";
+import { type Lang, hero, langPrefix } from "../i18n/translations";
 
 interface Props { lang?: Lang }
 const lang = Astro.props.lang || "uz" as Lang;
+const prefix = langPrefix(lang);
 ---
 
 <section class="hero" id="main-content">
@@ -22,7 +23,7 @@ const lang = Astro.props.lang || "uz" as Lang;
           {hero.startBtn[lang]}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a href="#how-it-works" class="btn btn--ghost btn--lg">{hero.howBtn[lang]}</a>
+        <a href={prefix + "/ariza"} class="btn btn--ghost btn--lg">{hero.consultBtn[lang]}</a>
       </div>
       <div class="hero__stats fade-in-up delay-4">
         <div class="stat">
@@ -246,6 +247,11 @@ const lang = Astro.props.lang || "uz" as Lang;
     gap: 16px;
     margin-bottom: 56px;
     opacity: 0;
+  }
+
+  .hero__actions .btn {
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .hero__stats {
@@ -574,6 +580,11 @@ const lang = Astro.props.lang || "uz" as Lang;
       margin-bottom: 40px;
     }
 
+    .hero__actions .btn--lg {
+      padding: 16px 20px;
+      font-size: 1rem;
+    }
+
     .hero__stats {
       gap: 28px;
     }
@@ -630,21 +641,13 @@ const lang = Astro.props.lang || "uz" as Lang;
     }
 
     .hero__actions {
-      flex-direction: column;
       margin-bottom: 32px;
       gap: 10px;
     }
 
-    .hero__actions .btn--ghost {
-      display: none;
-    }
-
-    .hero__actions .btn--primary {
-      width: fit-content;
-      max-width: 100%;
-      align-self: center;
-      padding-left: 24px;
-      padding-right: 24px;
+    .hero__actions .btn--lg {
+      padding: 14px 10px;
+      font-size: 0.9rem;
     }
 
     .hero__stats {

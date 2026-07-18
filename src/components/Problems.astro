@@ -24,7 +24,7 @@ const icons: Record<string, string> = {
   <div class="container">
     <div class="section__header">
       <h2 class="section__title">{problems.title[lang]}</h2>
-      <p class="section__subtitle">{problems.subtitle[lang]}</p>
+      <p class="section__subtitle" set:html={problems.subtitle[lang]} />
     </div>
 
     <div class="feature-groups">
@@ -102,6 +102,10 @@ const icons: Record<string, string> = {
     line-height: 1.55;
   }
 
+  :global(.problems-subtitle-break) {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     .feature-groups {
       grid-template-columns: 1fr;
@@ -110,6 +114,10 @@ const icons: Record<string, string> = {
 
     .feature-group {
       padding: 26px 22px;
+    }
+
+    :global(.problems-subtitle-break) {
+      display: block;
     }
   }
 </style>

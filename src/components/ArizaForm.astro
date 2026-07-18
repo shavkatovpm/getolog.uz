@@ -109,7 +109,7 @@ const lang = Astro.props.lang || "uz" as Lang;
           statusEl.textContent = errorText;
           statusEl.classList.add('ariza-form__status--error');
         } else {
-          statusEl.textContent = successText;
+          statusEl.innerHTML = successText;
           statusEl.classList.add('ariza-form__status--success');
           form.reset();
         }
@@ -147,7 +147,7 @@ const lang = Astro.props.lang || "uz" as Lang;
 
   .ariza-form__input {
     font-family: 'Inter Tight', sans-serif;
-    font-size: 0.95rem;
+    font-size: 16px;
     padding: 13px 16px;
     border-radius: var(--radius);
     border: 1.5px solid var(--dark-600);
@@ -183,6 +183,13 @@ const lang = Astro.props.lang || "uz" as Lang;
 
   .ariza-form__status--success {
     color: var(--success);
+  }
+
+  .ariza-form__status--success :global(a) {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   .ariza-form__status--error {

@@ -24,6 +24,7 @@ export const hero = {
   } as T,
   startBtn: { uz: "Boshlash", ru: "Начать" } as T,
   howBtn: { uz: "Qanday ishlaydi?", ru: "Как работает?" } as T,
+  consultBtn: { uz: "Maslahat", ru: "Консультация" } as T,
   stat1num: { uz: "2 daqiqa", ru: "2 минуты" } as T,
   stat1label: { uz: "sozlash", ru: "настройка" } as T,
   stat2num: { uz: "0 so'm", ru: "0 сум" } as T,
@@ -55,8 +56,8 @@ export const hero = {
 export const problems = {
   title: { uz: "Getolog imkoniyatlari", ru: "Возможности Getolog" } as T,
   subtitle: {
-    uz: "Kanalingiz uchun kerak bo'lgan hamma narsa — bitta botda",
-    ru: "Всё, что нужно для вашего канала — в одном боте",
+    uz: 'Kanalingiz uchun kerak bo\'lgan<br class="problems-subtitle-break" />hamma narsa bitta botda',
+    ru: 'Всё, что нужно для вашего канала<br class="problems-subtitle-break" />— в одном боте',
   } as T,
   groups: [
     {
@@ -242,6 +243,8 @@ export const pricing = {
 /* ───── FAQ ───── */
 export const faq = {
   title: { uz: "Ko'p so'raladigan savollar", ru: "Часто задаваемые вопросы" } as T,
+  helpText: { uz: "Savolingizga javob topmadingizmi?", ru: "Не нашли ответ на свой вопрос?" } as T,
+  helpLink: { uz: "Yordam oling →", ru: "Получить помощь →" } as T,
   items: [
     {
       q: { uz: "Getolog qanday ishlaydi?", ru: "Как работает Getolog?" } as T,
@@ -307,6 +310,7 @@ export const cta = {
   title: { uz: "Kanalingizni avtomatlashtirishga tayyormisiz?", ru: "Готовы автоматизировать свой канал?" } as T,
   subtitle: { uz: "2 daqiqada sozlang. Bepul boshlang.", ru: "Настройте за 2 минуты. Начните бесплатно." } as T,
   btn: { uz: "Telegram'da boshlash", ru: "Начать в Telegram" } as T,
+  consultBtn: { uz: "Maslahat olish", ru: "Получить консультацию" } as T,
 };
 
 /* ───── Footer ───── */
@@ -491,8 +495,8 @@ export const ariza = {
   submitBtn: { uz: "Ariza yuborish", ru: "Отправить заявку" } as T,
   submittingBtn: { uz: "Yuborilmoqda...", ru: "Отправка..." } as T,
   successMsg: {
-    uz: "Arizangiz qabul qilindi! Tez orada siz bilan bog'lanamiz.",
-    ru: "Ваша заявка принята! Мы свяжемся с вами в ближайшее время.",
+    uz: 'Arizangiz qabul qilindi! Tezroq javob olish uchun hoziroq <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a> supportga yozing.',
+    ru: 'Ваша заявка принята! Чтобы получить ответ быстрее, напишите прямо сейчас в <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a> поддержку.',
   } as T,
   errorMsg: {
     uz: "Xatolik yuz berdi. Birozdan keyin qayta urinib ko'ring.",

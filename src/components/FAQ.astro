@@ -1,8 +1,9 @@
 ---
-import { type Lang, faq as faqData } from "../i18n/translations";
+import { type Lang, faq as faqData, langPrefix } from "../i18n/translations";
 
 interface Props { lang?: Lang }
 const lang = Astro.props.lang || "uz" as Lang;
+const prefix = langPrefix(lang);
 
 const faqs = faqData.items.map(item => ({
   q: item.q[lang],
@@ -56,6 +57,11 @@ const faqs = faqData.items.map(item => ({
         ))
       }
     </div>
+
+    <p class="faq-help">
+      {faqData.helpText[lang]}
+      <a href={prefix + "/ariza"} class="faq-help__link">{faqData.helpLink[lang]}</a>
+    </p>
   </div>
 </section>
 
@@ -129,6 +135,24 @@ const faqs = faqData.items.map(item => ({
 
   .faq-item.open .faq-item__answer > p {
     padding: 0 24px 20px;
+  }
+
+  .faq-help {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 0.95rem;
+    color: var(--light-400);
+  }
+
+  .faq-help__link {
+    color: var(--accent);
+    font-weight: 600;
+    margin-left: 6px;
+  }
+
+  .faq-help__link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   @media (max-width: 768px) {
