@@ -40,7 +40,7 @@ from app.db.models import (
     SubscriberStatus,
     SubscriptionPlan,
 )
-from app.services.formatting import format_amount
+from app.services.formatting import format_amount, format_expiry
 from app.services.subscription_service import plan_duration_label, shows_branding
 
 logger = logging.getLogger(__name__)
@@ -121,13 +121,42 @@ async def subscriber_start(message: Message, session: AsyncSession) -> None:
         await message.answer(f"Bu {_kind_word(channel)} uchun hozircha tarif narxlari sozlanmagan.")
         return
 
+    # Obunasi hozir faol bo'lsa — tarif tanlashni taklif qilishdan oldin uning
+    # muddatini ko'rsatamiz: obunachi qachongacha obunasi borligini istalgan
+    # vaqtda /start orqali tekshira olishi kerak (xabar tarixida ko'milib
+    # ketmasin). Tugmalar baribir qoladi — muddatni oldindan uzaytirish mumkin.
+    sub_result = await session.execute(
+        select(Subscriber).where(
+            Subscriber.channel_id == channel.id,
+            Subscriber.user_id == message.from_user.id,
+            Subscriber.status == SubscriberStatus.active,
+        )
+    )
+    subscriber = sub_result.scalar_one_or_none()
+
     intro = f"{channel.welcome_message}\n\n" if channel.welcome_message else ""
     footer = f"\n\n{BRANDING_FOOTER}" if shows_branding(admin) else ""
-    await message.answer(
-        f"{intro}«{channel.title}» {_kind_word(channel, izafet_dative=True)} obuna bo'lish uchun tarifni tanlang:"
-        f"{footer}",
-        reply_markup=plan_choice_keyboard(plans),
+
+    if subscriber is not None:
+        body = (
+            f"«{channel.title}» {_kind_word(channel, izafet_dative=True)} obunangiz faol ✅\n\n"
+            f"Amal qilish muddati: {format_expiry(subscriber.end_date)}"
+        )
+        if subscriber.end_date is not None:
+            body += "\n\nMuddatni oldindan uzaytirish uchun tarifni tanlang:"
+    else:
+        body = (
+            f"{intro}«{channel.title}» {_kind_word(channel, izafet_dative=True)} "
+            "obuna bo'lish uchun tarifni tanlang:"
+        )
+
+    # Umrbod obunachiga tarif tugmalari keraksiz — uzaytiradigan muddati yo'q.
+    keyboard = (
+        None
+        if subscriber is not None and subscriber.end_date is None
+        else plan_choice_keyboard(plans)
     )
+    await message.answer(f"{body}{footer}", reply_markup=keyboard)
 
 
 @router.callback_query(F.data.startswith("choose_plan:"))
@@ -324,11 +353,25 @@ async def on_member_joined(event: ChatMemberUpdated, session: AsyncSession) -> N
     if payment is None:
         return
 
+    # Muddat qo'shilgandan KEYIN ham ko'rinib tursin: bu xabar "Kirish" tugmali
+    # xabarning o'rnini oladi, u yerda muddat bor edi — shuni yozmasak, obunachi
+    # qachongacha obunasi borligini bilmay qoladi.
+    sub_result = await session.execute(
+        select(Subscriber).where(
+            Subscriber.channel_id == channel.id, Subscriber.user_id == user_id
+        )
+    )
+    subscriber = sub_result.scalar_one_or_none()
+
+    text = f"✅ Siz «{channel.title}» {_kind_word(channel, izafet_dative=True)} qo'shildingiz!"
+    if subscriber is not None:
+        text += f"\n\nAmal qilish muddati: {format_expiry(subscriber.end_date)}"
+        if subscriber.end_date is not None:
+            text += "\n\nObuna holatini istalgan vaqtda /start orqali ko'rishingiz mumkin."
+
     try:
         await event.bot.edit_message_text(
-            chat_id=user_id,
-            message_id=payment.invite_message_id,
-            text=f"✅ Siz «{channel.title}» {_kind_word(channel, izafet_dative=True)} qo'shildingiz!",
+            chat_id=user_id, message_id=payment.invite_message_id, text=text
         )
     except TelegramAPIError:
         pass

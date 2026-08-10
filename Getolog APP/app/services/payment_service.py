@@ -19,6 +19,7 @@ from app.db.models import (
     SubscriptionPlan,
 )
 from app.services.channel_service import create_join_request_link, get_bot_for_channel
+from app.services.formatting import format_expiry
 from app.services.subscription_service import plan_duration
 
 
@@ -95,7 +96,7 @@ async def approve_payment(session: AsyncSession, payment: Payment) -> None:
             + (
                 "Endi obunangiz umrbod (muddatsiz)."
                 if end_date is None
-                else f"Yangi amal qilish muddati: {end_date.strftime('%d.%m.%Y %H:%M')} sanagacha."
+                else f"Yangi amal qilish muddati: {format_expiry(end_date)} sanagacha."
             ),
         )
         return
@@ -115,11 +116,7 @@ async def approve_payment(session: AsyncSession, payment: Payment) -> None:
     invite_link = await create_join_request_link(bot, channel.telegram_channel_id)
     is_group = channel.chat_type == ChatType.group
     kind = "guruhga" if is_group else "kanalga"
-    expiry_line = (
-        "Amal qilish muddati: Umrbod (muddatsiz)"
-        if end_date is None
-        else f"Amal qilish muddati: {end_date.strftime('%d.%m.%Y %H:%M')} sanagacha"
-    )
+    expiry_line = f"Amal qilish muddati: {format_expiry(end_date)}"
     sent = await bot.send_message(
         payment.user_id,
         "To'lovingiz tasdiqlandi ✅\n\n"
