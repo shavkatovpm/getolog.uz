@@ -4,10 +4,14 @@ import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
 import { type Lang, meta, langPrefix } from "../../i18n/translations";
 import { articles } from "../../data/articles";
+import { landingPages } from "../../data/landing";
 
 interface Props { lang?: Lang }
 const lang = Astro.props.lang || "uz" as Lang;
 const prefix = langPrefix(lang);
+
+const guidesTitle = { uz: "Mavzu bo'yicha qo'llanmalar", ru: "Руководства по темам" };
+const blogUrl = `https://getolog.uz${prefix}/blog`;
 
 const blogMeta = {
   title: { uz: "Maqolalar — Getolog", ru: "Статьи — Getolog" },
@@ -29,10 +33,59 @@ const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
 <Layout title={blogMeta.title[lang]} description={blogMeta.desc[lang]} lang={lang}>
   <Navbar lang={lang} />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": blogUrl,
+        "name": blogMeta.heading[lang],
+        "description": blogMeta.desc[lang],
+        "url": blogUrl,
+        "inLanguage": lang,
+        "isPartOf": { "@id": "https://getolog.uz/#website" },
+        "publisher": { "@id": "https://getolog.uz/#organization" },
+      },
+      {
+        "@type": "ItemList",
+        "itemListOrder": "https://schema.org/ItemListOrderDescending",
+        "numberOfItems": sorted.length + landingPages.length,
+        "itemListElement": [
+          ...sorted.map((a, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": a.title[lang],
+            "url": `https://getolog.uz${prefix}/blog/${a.slug}`,
+          })),
+          ...landingPages.map((p, i) => ({
+            "@type": "ListItem",
+            "position": sorted.length + i + 1,
+            "name": p.h1[lang],
+            "url": `https://getolog.uz${prefix}/${p.slug}`,
+          })),
+        ],
+      },
+    ],
+  })} />
+
   <section class="blog-hero">
     <div class="container">
       <h1 class="blog-hero__title">{blogMeta.heading[lang]}</h1>
       <p class="blog-hero__subtitle">{blogMeta.subtitle[lang]}</p>
+    </div>
+  </section>
+
+  <section class="blog-guides">
+    <div class="container">
+      <h2 class="blog-guides__title">{guidesTitle[lang]}</h2>
+      <div class="blog-guides__grid">
+        {landingPages.map((p) => (
+          <a href={`${prefix}/${p.slug}`} class="blog-guides__item">
+            <span class="blog-guides__cat">{p.category[lang]}</span>
+            <span class="blog-guides__name">{p.h1[lang]}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -47,7 +100,7 @@ const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
             day: "numeric",
           });
           return (
-            <a href={`${prefix}/blog/${article.slug}`} class="blog-card reveal">
+            <a href={`${prefix}/blog/${article.slug}`} class="blog-card">
               <div class="blog-card__meta">
                 <span class="blog-card__category">{article.category[lang]}</span>
                 <span class="blog-card__date">{dateStr}</span>
@@ -66,6 +119,54 @@ const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
 </Layout>
 
 <style>
+  .blog-guides {
+    padding-bottom: 48px;
+  }
+
+  .blog-guides__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+
+  .blog-guides__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+
+  .blog-guides__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px;
+    background: var(--dark-800);
+    border: 1px solid rgba(26, 29, 34, 0.06);
+    border-radius: var(--radius);
+    transition: border-color var(--transition), transform var(--transition);
+  }
+
+  .blog-guides__item:hover {
+    border-color: rgba(91, 107, 122, 0.28);
+    transform: translateY(-2px);
+  }
+
+  .blog-guides__cat {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+
+  .blog-guides__name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--light);
+    line-height: 1.45;
+  }
+
   .blog-hero {
     padding: 140px 0 60px;
     text-align: center;

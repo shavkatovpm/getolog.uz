@@ -12,6 +12,8 @@ export interface Article {
   title: T;
   description: T;
   date: string;
+  /** Oxirgi yangilangan sana — schema'dagi dateModified uchun */
+  updated?: string;
   readTime: T;
   category: T;
   html: T;
@@ -30,6 +32,7 @@ export const articles: Article[] = [
       ru: "4 реальных способа заработка на Telegram-канале — платная подписка, реклама, партнёрка и продажа продуктов.",
     },
     date: "2026-03-20",
+    updated: "2026-08-10",
     readTime: { uz: "5 daqiqa", ru: "5 минут" },
     category: { uz: "Monetizatsiya", ru: "Монетизация" },
     html: {
@@ -112,7 +115,7 @@ export const articles: Article[] = [
     faq: [
       {
         q: { uz: "Telegram kanalni pullik qilish qancha turadi?", ru: "Сколько стоит сделать Telegram-канал платным?" },
-        a: { uz: "Getolog orqali bepul boshlash mumkin. Pullik tariflar 97,000 so'mdan boshlanadi. To'lov to'g'ridan-to'g'ri sizning kartangizga tushadi — Getolog komissiya olmaydi.", ru: "Через Getolog можно начать бесплатно. Платные тарифы от 97 000 сум. Оплата поступает напрямую на вашу карту — Getolog не берёт комиссию." },
+        a: { uz: "Getolog orqali bepul boshlash mumkin — bepul tarif 20 tagacha faol obunachi uchun. Pullik tariflar 295 000 so'mdan boshlanadi. To'lov to'g'ridan-to'g'ri sizning kartangizga tushadi — Getolog komissiya olmaydi.", ru: "Через Getolog можно начать бесплатно — бесплатный тариф рассчитан до 20 активных подписчиков. Платные тарифы от 295 000 сум. Оплата поступает напрямую на вашу карту — Getolog не берёт комиссию." },
       },
       {
         q: { uz: "Pullik kanal uchun nechta obunachi kerak?", ru: "Сколько подписчиков нужно для платного канала?" },
@@ -139,6 +142,7 @@ export const articles: Article[] = [
       ru: "Пошаговая инструкция: от получения токена в BotFather до запуска бота подписок через Getolog.",
     },
     date: "2026-03-15",
+    updated: "2026-08-10",
     readTime: { uz: "4 daqiqa", ru: "4 минуты" },
     category: { uz: "Yo'riqnoma", ru: "Инструкция" },
     html: {
@@ -288,6 +292,7 @@ export const articles: Article[] = [
       ru: "Практические способы увеличения и удержания подписчиков платного Telegram-канала.",
     },
     date: "2026-03-10",
+    updated: "2026-08-10",
     readTime: { uz: "5 daqiqa", ru: "5 минут" },
     category: { uz: "Strategiya", ru: "Стратегия" },
     html: {
@@ -399,6 +404,7 @@ export const articles: Article[] = [
       ru: "Почему обычные invite-ссылки опасны и как одноразовые ссылки защищают ваш канал.",
     },
     date: "2026-03-05",
+    updated: "2026-08-10",
     readTime: { uz: "4 daqiqa", ru: "4 минуты" },
     category: { uz: "Xavfsizlik", ru: "Безопасность" },
     html: {

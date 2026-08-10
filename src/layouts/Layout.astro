@@ -6,16 +6,23 @@ interface Props {
   title: string;
   description?: string;
   lang?: Lang;
+  /** Sahifaga xos og:image (bo'lmasa logotip ishlatiladi) */
+  image?: string;
+  /** article sahifalarida "article" bo'ladi */
+  ogType?: "website" | "article";
 }
 
 const {
   title,
   lang = "uz" as Lang,
   description = meta.defaultDesc[lang],
+  image = "https://getolog.uz/logo.png",
+  ogType = "website",
 } = Astro.props;
 
 const site = Astro.site || new URL('https://getolog.uz');
 const canonicalURL = new URL(Astro.url.pathname, site);
+const ogImage = image.startsWith("http") ? image : new URL(image, site).href;
 
 // hreflang URLs
 const pathname = Astro.url.pathname.replace(/^\/ru/, '') || '/';
@@ -35,21 +42,24 @@ const ruURL = new URL('/ru' + pathname, site);
     <link rel="alternate" hreflang="uz" href={uzURL.href} />
     <link rel="alternate" hreflang="ru" href={ruURL.href} />
     <link rel="alternate" hreflang="x-default" href={uzURL.href} />
+    <link rel="alternate" type="application/rss+xml" title="Getolog" href="https://getolog.uz/rss.xml" />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:site_name" content="Getolog" />
     <meta property="og:locale" content={lang === "uz" ? "uz_UZ" : "ru_RU"} />
     <meta property="og:locale:alternate" content={lang === "uz" ? "ru_RU" : "uz_UZ"} />
-    <meta property="og:image" content="https://getolog.uz/logo.png" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={title} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://getolog.uz/logo.png" />
+    <meta name="twitter:image" content={ogImage} />
 
     <ClientRouter />
 
@@ -64,49 +74,70 @@ const ruURL = new URL('/ru' + pathname, site);
     <!-- Schema.org structured data -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Getolog",
-      "url": "https://getolog.uz",
-      "description": description,
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web",
-      "inLanguage": [lang === "uz" ? "uz" : "ru"],
-      "offers": [
+      "@graph": [
         {
-          "@type": "Offer",
-          "name": "Bepul",
-          "price": "0",
-          "priceCurrency": "UZS"
+          "@type": "Organization",
+          "@id": "https://getolog.uz/#organization",
+          "name": "Getolog",
+          "url": "https://getolog.uz",
+          "logo": {
+            "@type": "ImageObject",
+            "@id": "https://getolog.uz/#logo",
+            "url": "https://getolog.uz/logo.png",
+            "width": 512,
+            "height": 512,
+          },
+          "description": meta.defaultDesc[lang],
+          "areaServed": { "@type": "Country", "name": "Uzbekistan" },
+          "knowsLanguage": ["uz", "ru"],
+          "sameAs": [
+            "https://t.me/getologbot",
+            "https://t.me/getolog_bot",
+          ],
+          "contactPoint": [{
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "url": "https://t.me/getolog_bot",
+            "availableLanguage": ["uz", "ru"],
+          }],
         },
         {
-          "@type": "Offer",
-          "name": "Minimal",
-          "price": "295000",
-          "priceCurrency": "UZS",
-          "unitText": "oy"
+          "@type": "WebSite",
+          "@id": "https://getolog.uz/#website",
+          "url": "https://getolog.uz",
+          "name": "Getolog",
+          "description": meta.defaultDesc[lang],
+          "publisher": { "@id": "https://getolog.uz/#organization" },
+          "inLanguage": ["uz", "ru"],
         },
         {
-          "@type": "Offer",
-          "name": "Standart",
-          "price": "590000",
-          "priceCurrency": "UZS",
-          "unitText": "oy"
+          "@type": "SoftwareApplication",
+          "@id": "https://getolog.uz/#software",
+          "name": "Getolog",
+          "url": "https://getolog.uz",
+          "description": description,
+          "applicationCategory": "BusinessApplication",
+          "applicationSubCategory": "Telegram subscription automation",
+          "operatingSystem": "Web, Telegram",
+          "inLanguage": [lang === "uz" ? "uz" : "ru"],
+          "publisher": { "@id": "https://getolog.uz/#organization" },
+          "featureList": [
+            lang === "uz" ? "To'lovni bot orqali qabul qilish" : "Приём оплаты через бота",
+            lang === "uz" ? "Bir martalik invite-link" : "Одноразовая invite-ссылка",
+            lang === "uz" ? "Obuna muddati nazorati va eslatmalar" : "Контроль срока подписки и напоминания",
+            lang === "uz" ? "Muddati tugagan obunachini avtomatik chiqarish" : "Автоудаление подписчиков с истёкшим сроком",
+            lang === "uz" ? "Tarif rejalari: 1 / 3 / 6 / 12 oy" : "Тарифные планы: 1 / 3 / 6 / 12 месяцев",
+            lang === "uz" ? "Obunachilar va daromad statistikasi" : "Статистика подписчиков и дохода",
+          ],
+          "offers": [
+            { "@type": "Offer", "name": "Bepul", "price": "0", "priceCurrency": "UZS", "category": "free" },
+            { "@type": "Offer", "name": "Minimal", "price": "295000", "priceCurrency": "UZS", "unitText": "oy" },
+            { "@type": "Offer", "name": "Standart", "price": "590000", "priceCurrency": "UZS", "unitText": "oy" },
+            { "@type": "Offer", "name": "Pro", "price": "1270000", "priceCurrency": "UZS", "unitText": "oy" },
+            { "@type": "Offer", "name": "Biznes", "price": "1890000", "priceCurrency": "UZS", "unitText": "oy" },
+          ],
         },
-        {
-          "@type": "Offer",
-          "name": "Pro",
-          "price": "1270000",
-          "priceCurrency": "UZS",
-          "unitText": "oy"
-        },
-        {
-          "@type": "Offer",
-          "name": "Biznes",
-          "price": "1890000",
-          "priceCurrency": "UZS",
-          "unitText": "oy"
-        }
-      ]
+      ],
     })} />
   </head>
   <body>
@@ -120,23 +151,6 @@ const ruURL = new URL('/ru' + pathname, site);
 </style>
 
 <script>
-  // Scroll reveal with IntersectionObserver
-  const revealElements = document.querySelectorAll('.reveal');
-
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: '0px 0px -80px 0px' }
-  );
-
-  revealElements.forEach((el) => revealObserver.observe(el));
-
   // Rounded favicon from logo.png
   const faviconImg = new Image();
   faviconImg.crossOrigin = 'anonymous';

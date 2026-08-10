@@ -95,29 +95,45 @@ const sections = [
     title: { uz: "Tarif rejalar", ru: "Тарифные планы" },
     html: {
       uz: `<div class="doc-tariff">
-<h3>Bepul</h3>
-<p>1 ta bot ishlab chiqish mumkin. Botda Getolog reklamasi va brendingi ko'rinadi. Hamkor qo'shish imkoni yo'q. Xizmatni sinab ko'rish va boshlash uchun yetarli.</p>
+<h3>Bepul — 0 so'm</h3>
+<p>20 tagacha faol obunachi, 1 ta kanal. Bot xabarlarida Getolog brendi ko'rsatiladi. Xizmatni sinab ko'rish va boshlash uchun yetarli.</p>
 </div>
 <div class="doc-tariff">
-<h3>Standart — 97 000 so'm/oy</h3>
-<p>2 tagacha bot ishlab chiqish mumkin. Reklama olib tashlanadi, lekin Getolog brendingi qoladi. 2 tagacha hamkor qo'shish mumkin.</p>
+<h3>Minimal — 295 000 so'm/oy</h3>
+<p>100 tagacha faol obunachi, 1 ta kanal. Getolog brendi olib tashlanadi. Muddat nazorati va eslatmalar to'liq ishlaydi.</p>
 </div>
 <div class="doc-tariff">
-<h3>Biznes — 497 000 so'm/oy</h3>
-<p>5 tagacha bot ishlab chiqish mumkin. Reklama ham, brending ham olib tashlanadi. 5 tagacha hamkor qo'shish mumkin. Kelajakda Click va Payme orqali avtomatik to'lov qabul qilish imkoniyati qo'shiladi.</p>
+<h3>Standart — 590 000 so'm/oy</h3>
+<p>200 tagacha faol obunachi, 1 ta kanal. Tarif rejalari (1/3/6/12 oy) va kengaytirilgan boshqaruv imkoniyatlari.</p>
+</div>
+<div class="doc-tariff">
+<h3>Pro — 1 270 000 so'm/oy</h3>
+<p>500 tagacha faol obunachi, 2 tagacha kanal. Kengaytirilgan analitika va qo'shimcha avtomatlashtirish.</p>
+</div>
+<div class="doc-tariff">
+<h3>Biznes — 1 890 000 so'm/oy</h3>
+<p>1000 tagacha faol obunachi, 3 tagacha kanal. Barcha imkoniyatlar ochiq.</p>
 </div>
 <p class="doc-link"><a href="${prefix}/price">Tariflarni batafsil taqqoslash →</a></p>`,
       ru: `<div class="doc-tariff">
-<h3>Бесплатный</h3>
-<p>Можно создать 1 бота. В боте отображается реклама и брендинг Getolog. Нет возможности добавить помощников. Достаточно для тестирования и начала работы.</p>
+<h3>Бесплатный — 0 сум</h3>
+<p>До 20 активных подписчиков, 1 канал. В сообщениях бота отображается брендинг Getolog. Достаточно для тестирования и начала работы.</p>
 </div>
 <div class="doc-tariff">
-<h3>Стандарт — 97 000 сум/мес</h3>
-<p>До 2 ботов. Реклама убирается, но брендинг Getolog остаётся. Можно добавить до 2 помощников.</p>
+<h3>Минимал — 295 000 сум/мес</h3>
+<p>До 100 активных подписчиков, 1 канал. Брендинг Getolog убирается. Контроль срока и напоминания работают полностью.</p>
 </div>
 <div class="doc-tariff">
-<h3>Бизнес — 497 000 сум/мес</h3>
-<p>До 5 ботов. Убирается и реклама, и брендинг. Можно добавить до 5 помощников. В будущем будет добавлена возможность автоматического приёма оплаты через Click и Payme.</p>
+<h3>Стандарт — 590 000 сум/мес</h3>
+<p>До 200 активных подписчиков, 1 канал. Тарифные планы (1/3/6/12 мес) и расширенное управление.</p>
+</div>
+<div class="doc-tariff">
+<h3>Про — 1 270 000 сум/мес</h3>
+<p>До 500 активных подписчиков, до 2 каналов. Расширенная аналитика и дополнительная автоматизация.</p>
+</div>
+<div class="doc-tariff">
+<h3>Бизнес — 1 890 000 сум/мес</h3>
+<p>До 1000 активных подписчиков, до 3 каналов. Все возможности открыты.</p>
 </div>
 <p class="doc-link"><a href="${prefix}/price">Подробное сравнение тарифов →</a></p>`,
     },
@@ -182,9 +198,9 @@ const pageDesc = {
           "offers": {
             "@type": "AggregateOffer",
             "lowPrice": "0",
-            "highPrice": "497000",
+            "highPrice": "1890000",
             "priceCurrency": "UZS",
-            "offerCount": 3
+            "offerCount": 5
           }
         }
       },

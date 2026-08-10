@@ -1,0 +1,10 @@
+---
+import LandingPage from "../[slug].astro";
+import { landingPages } from "../../data/landing";
+
+export function getStaticPaths() {
+  return landingPages.map((p) => ({ params: { slug: p.slug } }));
+}
+---
+
+<LandingPage lang="ru" />

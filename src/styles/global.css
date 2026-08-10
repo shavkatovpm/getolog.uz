@@ -396,30 +396,6 @@ img {
 .delay-4 { animation-delay: 0.4s; }
 .delay-5 { animation-delay: 0.5s; }
 
-/* Scroll reveal animations */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Stagger delays for multiple items */
-.reveal:nth-child(1) { transition-delay: 0.1s; }
-.reveal:nth-child(2) { transition-delay: 0.2s; }
-.reveal:nth-child(3) { transition-delay: 0.3s; }
-.reveal:nth-child(4) { transition-delay: 0.4s; }
-.reveal:nth-child(5) { transition-delay: 0.5s; }
-.reveal:nth-child(6) { transition-delay: 0.6s; }
-.reveal:nth-child(7) { transition-delay: 0.7s; }
-.reveal:nth-child(8) { transition-delay: 0.8s; }
-.reveal:nth-child(9) { transition-delay: 0.9s; }
-.reveal:nth-child(10) { transition-delay: 1s; }
-
 /* ========== GLASSMORPHISM CARDS ========== */
 .problem-card {
   position: relative;
@@ -519,10 +495,5 @@ img {
 
   html {
     scroll-behavior: auto;
-  }
-
-  .reveal {
-    opacity: 1;
-    transform: none;
   }
 }

@@ -1,9 +1,12 @@
 ---
 import { type Lang, footer as ft, langPrefix } from "../i18n/translations";
+import { landingPages } from "../data/landing";
 
 interface Props { lang?: Lang }
 const lang = Astro.props.lang || "uz" as Lang;
 const prefix = langPrefix(lang);
+
+const guidesLabel = { uz: "Qo'llanmalar", ru: "Руководства" };
 ---
 
 <footer class="footer" role="contentinfo">
@@ -17,14 +20,22 @@ const prefix = langPrefix(lang);
         <p class="footer__tagline">{ft.tagline[lang]}</p>
       </div>
       <nav class="footer__links" aria-label={lang === "uz" ? "Footer navigatsiya" : "Навигация"}>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">{ft.bot[lang]}</a>
-        <a href="https://t.me/getologbot" target="_blank" rel="noopener noreferrer">{ft.help[lang]}</a>
+        <a href="https://t.me/getologbot" target="_blank" rel="noopener noreferrer">{ft.bot[lang]}</a>
+        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">{ft.help[lang]}</a>
         <a href={prefix + "/#faq"}>FAQ</a>
         <a href={prefix + "/blog"}>{ft.blog[lang]}</a>
         <a href={prefix + "/info"}>{ft.info[lang]}</a>
         <a href={prefix + "/offerta"}>{ft.offerta[lang]}</a>
       </nav>
     </div>
+    <nav class="footer__guides" aria-label={guidesLabel[lang]}>
+      <p class="footer__guides-title">{guidesLabel[lang]}</p>
+      <ul>
+        {landingPages.map((p) => (
+          <li><a href={`${prefix}/${p.slug}`}>{p.keyword[lang]}</a></li>
+        ))}
+      </ul>
+    </nav>
     <div class="footer__bottom">
       <p>{ft.copyright[lang]}</p>
     </div>
@@ -32,6 +43,40 @@ const prefix = langPrefix(lang);
 </footer>
 
 <style>
+  .footer__guides {
+    padding: 24px 0;
+    border-top: 1px solid rgba(26, 29, 34, 0.06);
+    margin-bottom: 8px;
+  }
+
+  .footer__guides-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--light-400);
+    margin-bottom: 12px;
+  }
+
+  .footer__guides ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+
+  .footer__guides a {
+    font-size: 0.85rem;
+    color: var(--light-400);
+    transition: color var(--transition);
+  }
+
+  .footer__guides a:hover {
+    color: var(--accent);
+  }
+
   .footer {
     border-top: 1px solid rgba(26, 29, 34, 0.08);
     padding: 48px 0 32px;

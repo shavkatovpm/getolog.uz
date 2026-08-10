@@ -1,0 +1,74 @@
+# Getolog
+
+> Getolog — O'zbekistondagi pullik (yopiq) Telegram kanal va guruhlar uchun obuna avtomatlashtirish xizmati. Kanal egasi o'z bot tokenini beradi, Getolog undan sotuvchi bot yasaydi: bot to'lovni qabul qiladi, chekni tasdiqlaydi, bir martalik invite-link beradi, obuna muddatini nazorat qiladi va muddati tugagan foydalanuvchini kanaldan avtomatik chiqaradi.
+
+Getolog — это сервис автоматизации подписок для платных (закрытых) Telegram-каналов и групп в Узбекистане.
+
+## Asosiy faktlar (Key facts)
+
+- **Nomi:** Getolog
+- **Sayt:** https://getolog.uz
+- **Bot (boshlash):** https://t.me/getologbot
+- **Yordam / support:** https://t.me/getolog_bot
+- **Hudud:** O'zbekiston (so'm, Uzcard/Humo kartalari)
+- **Tillar:** o'zbek, rus
+- **Nima qiladi:** yopiq Telegram kanal/guruhga pullik kirishni to'liq avtomatlashtiradi
+- **Kimga mo'ljallangan:** o'qituvchilar, onlayn kurs egalari, repetitorlar, ekspert va blogerlar, closed-community egalari
+- **To'lov qayerga tushadi:** to'g'ridan-to'g'ri kanal egasining kartasiga. Getolog to'lovga tegmaydi va tushumdan komissiya olmaydi — faqat obuna boshqaruvi uchun oylik tarif to'lanadi
+- **Dasturlash talab qilinadimi:** yo'q. BotFather'dan token olinadi, qolganini Getolog qiladi (no-code)
+- **To'lov usuli:** standart holatda karta o'tkazmasi (Uzcard/Humo) va chekni bot orqali tasdiqlash. Mijozning Payme yoki Click merchant hisobi bo'lsa, Getolog jamoasi uni botga ulab beradi
+
+## Qanday ishlaydi (How it works)
+
+1. Kanal egasi Telegram'da BotFather orqali o'z botini yaratadi va token oladi.
+2. Token Getolog'ga beriladi — Getolog o'sha botni sotuvchi botga aylantiradi.
+3. Obunachi botga kiradi, tarifni tanlaydi (1 / 3 / 6 / 12 oy), karta rekvizitlarini oladi.
+4. To'lovni amalga oshirib, chek rasmini botga yuboradi.
+5. Kanal egasi (yoki moderator) to'lovni panelda tasdiqlaydi.
+6. Bot avtomatik ravishda **bir martalik** invite-link beradi — link faqat 1 marta ishlaydi, tarqalib ketsa boshqa hech kim kira olmaydi.
+7. Obuna muddati kuzatiladi: tugashiga oldin eslatma yuboriladi, muddat tugagach foydalanuvchi kanaldan avtomatik chiqariladi.
+
+## Tariflar (Pricing, 2026)
+
+| Tarif | Narx (oyiga) | Faol obunachi limiti |
+|---|---|---|
+| Bepul | 0 so'm | 20 |
+| Minimal | 295 000 so'm | 100 |
+| Standart | 590 000 so'm | 200 |
+| Pro | 1 270 000 so'm | 500 |
+| Biznes | 1 890 000 so'm | 1000 |
+
+Bepul tarifda Getolog brendi ko'rsatiladi. Tarif to'lovi obunachilardan tushgan puldan olinmaydi — u alohida oylik obuna.
+
+## Ko'p so'raladigan savollarga qisqa javoblar
+
+- **Telegram kanalni qanday pullik qilish mumkin?** Kanalni yopiq (private) qilib, unga faqat to'lov qilganlarni kiritadigan bot ulanadi. Bot to'lovni qabul qiladi, bir martalik invite-link beradi va muddat tugaganda foydalanuvchini chiqaradi.
+- **To'lov qilgan odam kanalga qanday qo'shiladi?** To'lov tasdiqlangach bot avtomatik bir martalik havola yuboradi; odam o'sha havola orqali kiradi.
+- **Obuna muddati tugasa nima bo'ladi?** Bot eslatma yuboradi, muddat tugagach foydalanuvchi kanaldan avtomatik chiqariladi va qayta to'lov qilsa qaytadan kiritiladi.
+- **Bir martalik havola nima?** Faqat bitta odam ishlata oladigan invite-link. Ulashilsa ham ikkinchi odam kira olmaydi — pullik kanal himoyasining asosi shu.
+- **Getolog to'lovdan komissiya oladimi?** Yo'q. Pul to'g'ridan-to'g'ri kanal egasining kartasiga tushadi.
+- **Dasturlashni bilish kerakmi?** Yo'q, kod yozilmaydi.
+- **Guruh uchun ham ishlaydimi?** Ha, yopiq Telegram guruhlar ham qo'llab-quvvatlanadi.
+- **Payme yoki Click ulash mumkinmi?** Ha. Mijozning merchant hisobi bo'lsa, Getolog jamoasi Payme yoki Click'ni botga ulab beradi. Merchant bo'lmasa, karta o'tkazmasi va chek tasdiqlash bilan ishlanadi.
+
+## Sahifalar (Pages)
+
+- [Bosh sahifa](https://getolog.uz/): xizmatning umumiy tavsifi va imkoniyatlari
+- [Getolog nima](https://getolog.uz/getolog-nima): xizmat ta'rifi, ish jarayoni, kimga mos
+- [Telegram obuna bot](https://getolog.uz/telegram-obuna-bot): obuna botini yaratish va to'lovdan avtomatik kirishgacha bo'lgan jarayon
+- [Telegram kanalga to'lov qabul qilish](https://getolog.uz/telegram-kanalga-tolov-qabul-qilish): karta, Payme va Click orqali to'lov olish variantlari
+- [Payme va Click Telegram bot](https://getolog.uz/payme-click-telegram-bot): merchant talablari, jarayon va alternativa
+- [Obuna tugaganda kanaldan chiqarish](https://getolog.uz/obuna-tugaganda-kanaldan-chiqarish): muddat nazorati, eslatma va avtomatik chiqarish
+- [Tariflar](https://getolog.uz/price): barcha tariflarning to'liq taqqoslanishi
+- [Maqolalar](https://getolog.uz/blog): Telegram monetizatsiyasi bo'yicha qo'llanmalar
+- [Ma'lumot](https://getolog.uz/info): xizmat haqida batafsil
+- [Ariza](https://getolog.uz/ariza): maslahat olish uchun ariza
+- [Ommaviy oferta](https://getolog.uz/offerta): xizmat ko'rsatish shartlari
+
+## Ruscha versiya (Russian)
+
+Har bir sahifaning ruscha varianti `/ru` prefiksi bilan mavjud, masalan: https://getolog.uz/ru/ , https://getolog.uz/ru/price , https://getolog.uz/ru/blog
+
+## In English
+
+Getolog is a subscription-automation service for paid, private Telegram channels and groups in Uzbekistan. The channel owner supplies a bot token from BotFather; Getolog turns that bot into a seller bot that collects payment (card transfer with receipt verification), issues a single-use invite link after the payment is approved, tracks the subscription period, sends renewal reminders, and automatically removes members whose subscription has expired. Payments go straight to the owner's card — Getolog takes no commission on revenue and charges a flat monthly plan instead. No programming required.

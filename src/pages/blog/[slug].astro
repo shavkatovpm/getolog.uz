@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
 import { type Lang, langPrefix } from "../../i18n/translations";
 import { articles } from "../../data/articles";
+import { landingPages } from "../../data/landing";
 
 interface Props { lang?: Lang }
 const lang = Astro.props.lang || "uz" as Lang;
@@ -23,8 +24,30 @@ const dateStr = dateObj.toLocaleDateString(lang === "uz" ? "uz-UZ" : "ru-RU", {
   day: "numeric",
 });
 
+const updatedStr = article.updated
+  ? new Date(article.updated).toLocaleDateString(lang === "uz" ? "uz-UZ" : "ru-RU", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : null;
+
+/* Har bir maqolani mos landing sahifalarga bog'laymiz — ichki link tarmog'i */
+const relatedMap: Record<string, string[]> = {
+  "telegram-kanalni-pullik-qilish": ["getolog-nima", "telegram-kanalga-tolov-qabul-qilish", "telegram-obuna-bot"],
+  "obuna-bot-sozlash": ["telegram-obuna-bot", "getolog-nima", "obuna-tugaganda-kanaldan-chiqarish"],
+  "pullik-kanal-uchun-maslahatlar": ["obuna-tugaganda-kanaldan-chiqarish", "telegram-obuna-bot", "getolog-nima"],
+  "invite-link-xavfsizligi": ["obuna-tugaganda-kanaldan-chiqarish", "telegram-obuna-bot", "telegram-kanalga-tolov-qabul-qilish"],
+};
+
+const relatedLanding = (relatedMap[article.slug] || [])
+  .map((s) => landingPages.find((p) => p.slug === s))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
 const backText = { uz: "Barcha maqolalar", ru: "Все статьи" };
 const readTimeLabel = { uz: "O'qish vaqti", ru: "Время чтения" };
+const updatedLabel = { uz: "Yangilangan", ru: "Обновлено" };
+const relatedTitle = { uz: "Shuni ham o'qing", ru: "Читайте также" };
 const faqTitle = { uz: "Ko'p so'raladigan savollar", ru: "Часто задаваемые вопросы" };
 
 const articleUrl = `https://getolog.uz${prefix}/blog/${slug}`;
@@ -37,14 +60,18 @@ const schemaData = {
   "@graph": [
     {
       "@type": "Article",
+      "@id": articleUrl + "#article",
       "headline": article.title[lang],
       "description": article.description[lang],
       "datePublished": article.date,
-      "dateModified": article.date,
+      "dateModified": article.updated || article.date,
+      "image": "https://getolog.uz/logo.png",
       "author": { "@type": "Organization", "name": "Getolog", "url": "https://getolog.uz" },
-      "publisher": { "@type": "Organization", "name": "Getolog", "url": "https://getolog.uz", "logo": { "@type": "ImageObject", "url": "https://getolog.uz/logo.png" } },
+      "publisher": { "@id": "https://getolog.uz/#organization" },
       "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
       "inLanguage": lang,
+      "about": { "@id": "https://getolog.uz/#software" },
+      "articleSection": article.category[lang],
     },
     {
       "@type": "BreadcrumbList",
@@ -70,7 +97,7 @@ export function getStaticPaths() {
 }
 ---
 
-<Layout title={`${article.title[lang]} — Getolog`} description={article.description[lang]} lang={lang}>
+<Layout title={`${article.title[lang]} — Getolog`} description={article.description[lang]} lang={lang} ogType="article">
   <Navbar lang={lang} />
 
   <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
@@ -89,6 +116,7 @@ export function getStaticPaths() {
         <div class="article-meta">
           <span class="article-category">{article.category[lang]}</span>
           <span class="article-date">{dateStr}</span>
+          {updatedStr && <span class="article-date">{updatedLabel[lang]}: {updatedStr}</span>}
           <span class="article-read">{readTimeLabel[lang]}: {article.readTime[lang]}</span>
         </div>
         <h1 class="article-title">{article.title[lang]}</h1>
@@ -111,16 +139,31 @@ export function getStaticPaths() {
         </section>
       )}
 
+      {relatedLanding.length > 0 && (
+        <section class="article-related">
+          <h2>{relatedTitle[lang]}</h2>
+          <ul>
+            {relatedLanding.map((p) => (
+              <li><a href={`${prefix}/${p.slug}`}>{p.h1[lang]}</a></li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <div class="article-cta">
         <p class="article-cta__text">
           {lang === "uz"
             ? "Telegram kanalingizni avtomatlashtirishga tayyormisiz?"
             : "Готовы автоматизировать свой Telegram-канал?"}
         </p>
-        <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--lg">
+        <a href="https://t.me/getologbot" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--lg">
           {lang === "uz" ? "Boshlash" : "Начать"}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
+        <p class="article-cta__help">
+          {lang === "uz" ? "Savolingiz bormi? Support: " : "Есть вопрос? Поддержка: "}
+          <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a>
+        </p>
       </div>
     </div>
   </article>
@@ -280,6 +323,50 @@ export function getStaticPaths() {
     font-weight: 600;
     color: var(--white);
     margin-bottom: 24px;
+  }
+
+  .article-cta__help {
+    margin-top: 18px;
+    font-size: 0.88rem;
+    color: var(--light-400);
+  }
+
+  .article-cta__help a {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .article-related {
+    max-width: 720px;
+    margin: 48px auto 0;
+    padding-top: 40px;
+    border-top: 1px solid rgba(26, 29, 34, 0.06);
+  }
+
+  .article-related h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+
+  .article-related ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .article-related a {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  .article-related a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   @media (max-width: 768px) {
