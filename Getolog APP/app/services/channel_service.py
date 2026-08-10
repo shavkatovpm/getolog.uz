@@ -27,14 +27,26 @@ def missing_rights(member: ChatMemberAdministrator, chat_type: ChatType = ChatTy
     return [right for right in REQUIRED_RIGHTS[chat_type] if not getattr(member, right, False)]
 
 
-async def create_single_use_invite_link(bot: Bot, chat_id: int) -> str:
-    """Bir marta ishlatiladigan, faqat bitta odam kira oladigan taklif havolasi yaratadi.
+async def create_join_request_link(bot: Bot, chat_id: int) -> str:
+    """Bosilganda darrov kiritmaydigan, avval SO'ROV yuboradigan havola yaratadi.
 
-    Bu Telegram cheklovlari doirasidagi yagona to'g'ri usul — Bot API orqali
-    odamni kanalga to'g'ridan-to'g'ri qo'shib bo'lmaydi, faqat shunday havola
-    orqali taklif qilish mumkin.
+    Bot API orqali odamni kanalga to'g'ridan-to'g'ri qo'shib bo'lmaydi — faqat
+    havola orqali taklif qilinadi. Ilgari `member_limit=1` ishlatilardi, lekin
+    unda havolani olgan obunachi uni BOSHQA odamga bersa, o'sha begona odam
+    kirib olardi: bot faqat to'lovchining ID'sini biladi va muddat tugaganda
+    aynan o'shani chiqarishga urinadi — kanalda o'tirgan begona esa abadiy
+    qolib ketardi (to'lovchining o'zi esa umuman kira olmasdi, chunki yagona
+    o'rin band bo'lgan).
+
+    `creates_join_request=True` bilan havola ochilganda odam darrov qo'shilmaydi,
+    balki so'rov yuboradi va Telegram botga uning ID'sini beradi — bot faqat
+    haqiqiy to'lovchini tasdiqlaydi (`subscriber_flow.on_join_request`).
+    Shu sabab bu havolani ulashishning ma'nosi qolmaydi.
+
+    Eslatma: Telegram `member_limit` bilan `creates_join_request`ni birga
+    qabul qilmaydi — chegara endi havolada emas, tasdiqlashda qo'yiladi.
     """
-    link = await bot.create_chat_invite_link(chat_id=chat_id, member_limit=1)
+    link = await bot.create_chat_invite_link(chat_id=chat_id, creates_join_request=True)
     return link.invite_link
 
 

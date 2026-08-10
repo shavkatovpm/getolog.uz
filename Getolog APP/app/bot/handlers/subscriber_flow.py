@@ -7,13 +7,21 @@ tugmalari bilan) bildirishnoma oladi, u ham **bosh bot** orqali
 (`app/bot/handlers/payment_review.py`).
 """
 
+import logging
+from datetime import datetime, timezone
 from html import escape
 
 from aiogram import F, Router
 from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
-from aiogram.types import BufferedInputFile, CallbackQuery, ChatMemberUpdated, Message
+from aiogram.types import (
+    BufferedInputFile,
+    CallbackQuery,
+    ChatJoinRequest,
+    ChatMemberUpdated,
+    Message,
+)
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -28,10 +36,14 @@ from app.db.models import (
     Payment,
     PaymentCard,
     PaymentStatus,
+    Subscriber,
+    SubscriberStatus,
     SubscriptionPlan,
 )
 from app.services.formatting import format_amount
 from app.services.subscription_service import plan_duration_label, shows_branding
+
+logger = logging.getLogger(__name__)
 
 router = Router(name="subscriber_flow")
 
@@ -209,6 +221,70 @@ async def receive_receipt(message: Message, state: FSMContext, session: AsyncSes
 @router.message(SubscriberPaymentStates.waiting_for_receipt)
 async def receive_receipt_wrong_type(message: Message) -> None:
     await message.answer("Iltimos, to'lov chekini rasm (screenshot) ko'rinishida yuboring.")
+
+
+@router.chat_join_request()
+async def on_join_request(event: ChatJoinRequest, session: AsyncSession) -> None:
+    """Kirish havolasi bosilganda keladi — bot kim so'rayotganini ko'rib qaror qiladi.
+
+    Havola `creates_join_request=True` bilan yaratiladi (`channel_service`), shuning
+    uchun hech kim to'g'ridan-to'g'ri kira olmaydi: Telegram avval botdan ruxsat
+    so'raydi. Bu yerda so'ragan odamning Telegram ID'si HAQIQIY obunachi (to'lovi
+    tasdiqlangan, muddati o'tmagan) bilan solishtiriladi.
+
+    Shu tufayli obunachi havolani boshqa odamga bersa ham foyda bermaydi — begona
+    odamning so'rovi rad etiladi. Ilgari bunday odam kirib olardi va muddat
+    tugaganda bot to'lovchini chiqarishga urinib, kanalda o'tirgan begonani
+    ko'rmasdi.
+    """
+    bot_row = await _get_bot_row(session, event.bot.id)
+    if bot_row is None:
+        return
+    channel_result = await session.execute(select(Channel).where(Channel.bot_id == bot_row.id))
+    channel = channel_result.scalar_one_or_none()
+    if channel is None or channel.telegram_channel_id != event.chat.id:
+        return
+
+    user_id = event.from_user.id
+    sub_result = await session.execute(
+        select(Subscriber).where(
+            Subscriber.channel_id == channel.id,
+            Subscriber.user_id == user_id,
+            Subscriber.status == SubscriberStatus.active,
+        )
+    )
+    subscriber = sub_result.scalar_one_or_none()
+    # `end_date is None` = umrbod obuna. Muddati o'tib ketgan (lekin hali
+    # scheduler yetib ulgurmagan) obunachi ham kiritilmaydi.
+    allowed = subscriber is not None and (
+        subscriber.end_date is None or subscriber.end_date > datetime.now(timezone.utc)
+    )
+
+    if allowed:
+        try:
+            await event.bot.approve_chat_join_request(chat_id=event.chat.id, user_id=user_id)
+        except TelegramAPIError:
+            logger.warning("Obunachi %s ning kirish so'rovini tasdiqlab bo'lmadi", user_id)
+        return
+
+    try:
+        await event.bot.decline_chat_join_request(chat_id=event.chat.id, user_id=user_id)
+    except TelegramAPIError:
+        logger.warning("Begona %s ning kirish so'rovini rad etib bo'lmadi", user_id)
+    logger.info(
+        "«%s» ga to'lovsiz kirish so'rovi rad etildi (user_id=%s)", channel.title, user_id
+    )
+    # Odam botga hech qachon /start bosmagan bo'lishi mumkin — u holda xabar
+    # yetmaydi, bu normal holat.
+    try:
+        await event.bot.send_message(
+            user_id,
+            f"«{channel.title}» {_kind_word(channel, izafet_dative=True)} kirish so'rovingiz "
+            "rad etildi — bu havola boshqa foydalanuvchiga biriktirilgan.\n\n"
+            "Obuna bo'lish uchun /start bosing va o'zingiz uchun tarif tanlang.",
+        )
+    except TelegramAPIError:
+        pass
 
 
 @router.chat_member()

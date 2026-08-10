@@ -18,7 +18,7 @@ from app.db.models import (
     SubscriberStatus,
     SubscriptionPlan,
 )
-from app.services.channel_service import create_single_use_invite_link, get_bot_for_channel
+from app.services.channel_service import create_join_request_link, get_bot_for_channel
 from app.services.subscription_service import plan_duration
 
 
@@ -112,7 +112,7 @@ async def approve_payment(session: AsyncSession, payment: Payment) -> None:
     except TelegramAPIError:
         pass
 
-    invite_link = await create_single_use_invite_link(bot, channel.telegram_channel_id)
+    invite_link = await create_join_request_link(bot, channel.telegram_channel_id)
     is_group = channel.chat_type == ChatType.group
     kind = "guruhga" if is_group else "kanalga"
     expiry_line = (
@@ -124,7 +124,9 @@ async def approve_payment(session: AsyncSession, payment: Payment) -> None:
         payment.user_id,
         "To'lovingiz tasdiqlandi ✅\n\n"
         f"{expiry_line}\n\n"
-        f"Pastdagi tugma orqali {kind} kiring (havola bir martalik, faqat siz uchun):",
+        f"Pastdagi tugma orqali {kind} kiring. Tugmani bosgach so'rovingiz "
+        "avtomatik tasdiqlanadi.\n\n"
+        "Havola faqat sizga biriktirilgan — boshqa odamga bersangiz u kira olmaydi.",
         reply_markup=channel_invite_keyboard(invite_link, is_group=is_group),
     )
     # Xabar ID'si saqlanadi — obunachi haqiqatan ham qo'shilganda (Telegram'dan
