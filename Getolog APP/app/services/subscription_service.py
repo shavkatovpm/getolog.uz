@@ -37,6 +37,23 @@ def plan_duration(plan: SubscriptionPlan) -> timedelta | None:
     return timedelta(days=30 * plan.duration_months)
 
 
+def shows_branding(admin: Admin) -> bool:
+    """Bu adminning obunachilariga Getolog brendi ko'rsatiladimi.
+
+    getolog.uz/price'dagi va'da: brend FAQAT Bepul tarifda chiqadi. Bunga
+    qo'shimcha qoida — bir marta pullik tarifga o'tgan admin (`ever_paid`)
+    keyin nima bo'lishidan qat'i nazar brendsiz qoladi:
+    - tarif muddati tugadi (`tariff_expiry` o'tib ketdi),
+    - to'lov kechikdi,
+    - pastroq tarifga yoki Bepulga tushirildi.
+
+    Sabab: mijoz "brendsiz ko'rinish"ni bir marta sotib olgan — uni qaytarib
+    olish mijoz uchun jazoga o'xshaydi va uning obunachilari oldida
+    kanalning ko'rinishini kutilmaganda o'zgartirib yuborardi.
+    """
+    return admin.tariff_plan == TariffPlan.free and not admin.ever_paid
+
+
 def plan_duration_label(plan: SubscriptionPlan) -> str:
     """Obunachiga ko'rsatiladigan muddat matni — "1 oy", "Umrbod" yoki (test uchun) "5 daqiqa"."""
     if plan.is_lifetime:

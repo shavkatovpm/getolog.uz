@@ -299,6 +299,10 @@ async def set_admin_tariff(request: web.Request) -> web.Response:
     # Tarif oshirilgani uchun oldingi limit-eslatmasi (agar bo'lsa) endi ahamiyatsiz —
     # yangi tarifda qayta hisoblanadi (`_check_tariff_limits`).
     admin.limit_exceeded_at = None
+    if plan != TariffPlan.free:
+        # Bir marta yoqilgach hech qachon o'chirilmaydi — keyinchalik tarif tugasa
+        # yoki Bepulga tushirilsa ham brend qaytib chiqmaydi (`shows_branding`).
+        admin.ever_paid = True
     await session.commit()
 
     main_bot = registry.get_main_bot()

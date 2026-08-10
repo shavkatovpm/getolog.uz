@@ -82,6 +82,14 @@ class Admin(Base):
         Enum(TariffPlan, name="tariff_plan"), default=TariffPlan.free
     )
     tariff_expiry: Mapped[date | None] = mapped_column(Date, nullable=True)
+
+    # Admin biror marta PULLIK tarifga o'tganmi. Bir marta `True` bo'lgach hech
+    # qachon `False`ga qaytmaydi — chunki Getolog brendi (obunachiga ko'rinadigan
+    # reklama satri) faqat hech qachon to'lamagan Bepul adminlarda chiqadi.
+    # Tarif muddati tugashi, to'lovning kechikishi yoki pastroq tarifga o'tish
+    # brendni QAYTA yoqmasligi kerak — mijoz bir marta sotib olgan "brendsiz"
+    # ko'rinishni yo'qotmaydi (`subscription_service.shows_branding`).
+    ever_paid: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     # Joriy tarif davri qachon boshlanganini bildiradi (`set_admin_tariff`da
     # yangi tarif berilganda "bugun"ga o'rnatiladi) — kun bo'yicha necha foizi
     # o'tganini hisoblash uchun kerak (dashboard navbar'idagi progress-bar).

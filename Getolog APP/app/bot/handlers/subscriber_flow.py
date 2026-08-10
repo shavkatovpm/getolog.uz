@@ -31,11 +31,12 @@ from app.db.models import (
     SubscriptionPlan,
 )
 from app.services.formatting import format_amount
-from app.services.subscription_service import plan_duration_label
+from app.services.subscription_service import plan_duration_label, shows_branding
 
 router = Router(name="subscriber_flow")
 
-# Barcha adminlarning obunachilariga (tarifidan qat'i nazar) Getolog brendi ko'rsatiladi.
+# Faqat hech qachon to'lamagan Bepul adminlarning obunachilariga ko'rsatiladi —
+# qoidaning o'zi `subscription_service.shows_branding`da (izohi bilan).
 BRANDING_FOOTER = "🤖 Getolog (getolog.uz) orqali ishlaydi"
 
 
@@ -109,9 +110,10 @@ async def subscriber_start(message: Message, session: AsyncSession) -> None:
         return
 
     intro = f"{channel.welcome_message}\n\n" if channel.welcome_message else ""
+    footer = f"\n\n{BRANDING_FOOTER}" if shows_branding(admin) else ""
     await message.answer(
         f"{intro}«{channel.title}» {_kind_word(channel, izafet_dative=True)} obuna bo'lish uchun tarifni tanlang:"
-        f"\n\n{BRANDING_FOOTER}",
+        f"{footer}",
         reply_markup=plan_choice_keyboard(plans),
     )
 
