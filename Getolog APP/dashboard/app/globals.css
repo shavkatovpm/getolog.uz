@@ -7,8 +7,37 @@
   --h-border: #dcdfe4;
   --h-accent: #5b6b7a;
   --h-success: #4f7d6e;
+  --h-warning: #b5790a;
   --h-danger: #a6564b;
   --h-surface: #ffffff;
+}
+
+/* Tizim afzalligi (data-theme aniq tanlanmaguncha) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --h-bg: #15171b;
+    --h-ink: #eceef1;
+    --h-muted: #9198a3;
+    --h-border: #2b2e34;
+    --h-accent: #8b96a8;
+    --h-success: #6fae98;
+    --h-warning: #dba43e;
+    --h-danger: #d97f72;
+    --h-surface: #1c1f24;
+  }
+}
+
+/* Qo'lda tanlangan tema — tizim afzalligidan ustun */
+:root[data-theme="dark"] {
+  --h-bg: #15171b;
+  --h-ink: #eceef1;
+  --h-muted: #9198a3;
+  --h-border: #2b2e34;
+  --h-accent: #8b96a8;
+  --h-success: #6fae98;
+  --h-warning: #dba43e;
+  --h-danger: #d97f72;
+  --h-surface: #1c1f24;
 }
 
 @theme inline {
@@ -18,6 +47,7 @@
   --color-h-border: var(--h-border);
   --color-h-accent: var(--h-accent);
   --color-h-success: var(--h-success);
+  --color-h-warning: var(--h-warning);
   --color-h-danger: var(--h-danger);
   --color-h-surface: var(--h-surface);
   --font-sans: var(--font-geist-sans);
@@ -28,4 +58,136 @@ body {
   background: var(--h-bg);
   color: var(--h-ink);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* Safari (iOS) 16px'dan kichik shriftli inputga fokus qilinganda avtomatik
+ * zoom qiladi — bu esa butun boshqaruv panelini o'z o'rnidan siljitib
+ * qo'yadi. Mobilda barcha input/select/textarea shriftini 16px'dan kam
+ * qilmaymiz (Tailwind'ning text-sm/text-xs klasslaridan ustun turishi uchun
+ * `!important`ga majburmiz — bu keng tarqalgan, qabul qilingan yechim). */
+@media (max-width: 1023px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* LogoLoader: 4 tomon parallel chiziladi, so'ng ortidan (boshidan) o'chib boradi */
+@keyframes logo-build {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+.animate-logo-build {
+  animation: logo-build 2.4s linear infinite;
+}
+
+/* ---------- Bo'limlar orasidagi o'tish ----------
+ * Faqat CSS (`transform`/`opacity`) — hech qanday animatsiya kutubxonasi
+ * yoki brauzer eksperimental API'si kerak emas, shuning uchun sekinlik
+ * qilmaydi. `DashboardShell` har bo'lim uchun `key={pathname}` beradi —
+ * React DOM'ni qayta yaratadi va shu animatsiya har safar qaytadan ishga
+ * tushadi.
+ *
+ * Ataylab `translateY` ISHLATILMAYDI — ichidagi kartalar (`.animate-card-in`)
+ * ham pastdan chiqadi, ikkalasi bir xil yo'nalishda bo'lsa bir-biriga
+ * qo'shilib "ikki marta silkinganday" ko'rinardi. Shuning uchun konteyner
+ * boshqa o'qda (kattalashib) kiradi — ikkalasi bir-biriga xalaqit bermaydi. */
+@keyframes section-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+.animate-section-in {
+  animation: section-in 280ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ---------- Kartalar/elementlar paydo bo'lishi ---------- */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+.animate-card-in {
+  animation: card-in 340ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ---------- Navbar ikonkasi faollashganda ---------- *
+ * /admin/test sahifasidagi 5 variantdan tanlangan: ikonka bosilganda jele
+ * kabi siqilib-cho'zilib joyiga qaytadi (elastik effekt). */
+@keyframes nav-icon-in {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scaleX(1.3) scaleY(0.7);
+  }
+  55% {
+    transform: scaleX(0.85) scaleY(1.2);
+  }
+  75% {
+    transform: scaleX(1.08) scaleY(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-nav-icon-in {
+  animation: nav-icon-in 480ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* ---------- Dropdown paneli ochilishi ---------- */
+@keyframes dd-fade-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+.dd-v4-panel {
+  animation: dd-fade-scale 160ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  transform-origin: top left;
+}
+
+/* ---------- Modal oyna ochilishi ---------- */
+@keyframes modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+.animate-modal-backdrop {
+  animation: modal-backdrop-in 150ms ease-out both;
+}
+
+@keyframes modal-panel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+.animate-modal-panel {
+  animation: modal-panel-in 180ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-section-in,
+  .animate-card-in,
+  .animate-nav-icon-in,
+  .animate-logo-build,
+  .dd-v4-panel,
+  .animate-modal-backdrop,
+  .animate-modal-panel {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

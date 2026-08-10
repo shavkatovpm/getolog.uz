@@ -32,6 +32,12 @@ def get_bot_by_telegram_id(telegram_id: int) -> Bot | None:
     return _bots_by_telegram_id.get(telegram_id)
 
 
+def unregister_bot(bot: Bot) -> None:
+    """Bot o'chirilganda (masalan admin dashboard orqali o'z botini o'chirsa) registrdan olib tashlaydi."""
+    _bots_by_token.pop(bot.token, None)
+    _bots_by_telegram_id.pop(bot.id, None)
+
+
 def all_bots() -> list[Bot]:
     """Server yopilganda barcha bot sessiyalarini to'g'ri yopish uchun ishlatiladi."""
     return list(_bots_by_token.values())

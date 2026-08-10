@@ -16,6 +16,7 @@ from aiohttp import web
 from sqlalchemy import select
 
 from app.bot import registry
+from app.bot.dispatcher import child_dp, main_dp
 from app.bot.webhook_server import create_app
 from app.config import settings
 from app.db.base import async_session_factory
@@ -31,7 +32,8 @@ async def _load_and_connect_bots() -> None:
     main_bot = Bot(token=settings.main_bot_token)
     registry.register_bot(main_bot)
     await main_bot.set_webhook(
-        url=f"{settings.webhook_base_url}/webhook/{settings.main_bot_token}"
+        url=f"{settings.webhook_base_url}/webhook/{settings.main_bot_token}",
+        allowed_updates=main_dp.resolve_used_update_types(),
     )
     me = await main_bot.get_me()
     logger.info("Bosh bot ulandi: @%s", me.username)
@@ -45,7 +47,10 @@ async def _load_and_connect_bots() -> None:
         bot = Bot(token=token)
         registry.register_bot(bot)
         try:
-            await bot.set_webhook(url=f"{settings.webhook_base_url}/webhook/{token}")
+            await bot.set_webhook(
+                url=f"{settings.webhook_base_url}/webhook/{token}",
+                allowed_updates=child_dp.resolve_used_update_types(),
+            )
         except Exception:  # noqa: BLE001 — bitta admin boti muammosi boshqalarga xalaqit bermasin
             logger.exception("Admin boti @%s uchun webhook o'rnatilmadi", bot_row.username)
 

@@ -32,10 +32,20 @@ class TariffPlan(str, enum.Enum):
     """GETOLOG'ning adminlarga taqdim etadigan o'z SaaS tariflari."""
 
     free = "free"
+    minimal = "minimal"
     start = "start"
     pro = "pro"
     business = "business"
     scale = "scale"
+
+
+class ChatType(str, enum.Enum):
+    """Bot ulangan Telegram chat turi — obuna/kirish nazorati mantig'i
+    ikkalasi uchun ham bir xil, faqat kerakli admin huquqlari farq qiladi
+    (guruhda `can_post_messages`/`can_delete_messages` ma'nosiz)."""
+
+    channel = "channel"
+    group = "group"
 
 
 class SubscriberStatus(str, enum.Enum):
@@ -62,6 +72,9 @@ class Admin(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True, index=True)
     full_name: Mapped[str] = mapped_column(String(255))
+    # Telegram username (@ belgisisiz) — Owner panelida admin(lar)ni aniqlash uchun
+    # ko'rsatiladi. Har /start bosilganda yangilanadi (username o'zgarishi mumkin).
+    username: Mapped[str | None] = mapped_column(String(255), nullable=True)
     language: Mapped[str] = mapped_column(String(8), default="uz")
 
     # GETOLOG'ning o'z SaaS tarifi — MVP'da faqat owner tomonidan qo'lda beriladi
@@ -69,6 +82,17 @@ class Admin(Base):
         Enum(TariffPlan, name="tariff_plan"), default=TariffPlan.free
     )
     tariff_expiry: Mapped[date | None] = mapped_column(Date, nullable=True)
+    # Joriy tarif davri qachon boshlanganini bildiradi (`set_admin_tariff`da
+    # yangi tarif berilganda "bugun"ga o'rnatiladi) — kun bo'yicha necha foizi
+    # o'tganini hisoblash uchun kerak (dashboard navbar'idagi progress-bar).
+    tariff_started_at: Mapped[date | None] = mapped_column(Date, nullable=True)
+
+    # Faol obunachilar soni joriy tarif limitidan oshib ketgan kun — FAQAT
+    # ESLATMA uchun (bot bloklanmaydi): dashboard'da ogohlantirish shu asosida
+    # ko'rsatiladi va limitdan birinchi marta oshganda adminga bir martalik
+    # xabar yuboriladi. Obunachi soni limit ostiga qaytganda (yoki tarif
+    # oshirilganda) `None`ga qaytariladi.
+    limit_exceeded_at: Mapped[date | None] = mapped_column(Date, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
@@ -104,6 +128,15 @@ class Bot(Base):
     token_encrypted: Mapped[str] = mapped_column(String)
     username: Mapped[str] = mapped_column(String(255), unique=True)
 
+    # Bot admin qilib qo'shilgan, lekin tarif limiti tufayli hali ULANMAGAN
+    # kanal/guruhning Telegram ID'si. Telegram `my_chat_member` hodisasini faqat
+    # BIR MARTA (status o'zgarganda) yuboradi va "bot qaysi chatlarda admin"
+    # degan so'rov Bot API'da yo'q — shuning uchun rad etilgan chatni shu yerda
+    # eslab qolamiz. Admin joy bo'shatib "✅ Admin qildim"ni bosganda shu ID
+    # bo'yicha jonli tekshirib ulanadi (`_retry_pending_channels`), aks holda
+    # u botni kanaldan chiqarib qayta qo'shishga majbur bo'lardi.
+    pending_chat_id: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -113,21 +146,26 @@ class Bot(Base):
 
 
 class Channel(Base):
-    """Adminning boti ulangan Telegram kanali."""
+    """Adminning boti ulangan Telegram kanali yoki yopiq guruhi (`chat_type`)."""
 
     __tablename__ = "channels"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    bot_id: Mapped[int] = mapped_column(ForeignKey("bots.id"))
+    # Bitta bot faqat bitta kanalni boshqaradi — boshqa kanal uchun admin
+    # yangi bot ulashi kerak (bittalik shu `unique=True` bilan bazada ham
+    # majburlanadi, `on_bot_status_changed_in_chat` ikkinchi kanalni rad etadi).
+    bot_id: Mapped[int] = mapped_column(ForeignKey("bots.id"), unique=True)
     telegram_channel_id: Mapped[int] = mapped_column(BigInteger)
     title: Mapped[str] = mapped_column(String(255))
+    chat_type: Mapped[ChatType] = mapped_column(Enum(ChatType, name="chat_type"), default=ChatType.channel)
 
     # Bot kanalda kerakli admin huquqlariga ega ekani tekshirilganmi
     permissions_ok: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    # Admin /narx orqali kiritadigan to'lov rekvizitlari (karta raqami va h.k.) —
-    # obunachiga tarif tanlaganda ko'rsatiladi
-    payment_instructions: Mapped[str | None] = mapped_column(String, nullable=True)
+    # Admin dashboard orqali tahrirlaydigan matn — obunachi shaxsiy botga
+    # /start bosganda tarif tanlashdan OLDIN shu matn ko'rsatiladi (masalan
+    # kanal haqida qisqa ma'lumot). Bo'sh bo'lsa standart matn ishlatiladi.
+    welcome_message: Mapped[str | None] = mapped_column(String, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
@@ -136,6 +174,7 @@ class Channel(Base):
     bot: Mapped["Bot"] = relationship(back_populates="channels")
     subscribers: Mapped[list["Subscriber"]] = relationship(back_populates="channel")
     plans: Mapped[list["SubscriptionPlan"]] = relationship(back_populates="channel")
+    payment_cards: Mapped[list["PaymentCard"]] = relationship(back_populates="channel")
 
 
 class Subscriber(Base):
@@ -152,6 +191,12 @@ class Subscriber(Base):
     channel_id: Mapped[int] = mapped_column(ForeignKey("channels.id"))
     user_id: Mapped[int] = mapped_column(BigInteger)  # obunachining Telegram ID'si
 
+    # To'lov tasdiqlangan paytdagi Telegram ma'lumotlari (`Payment.username`/
+    # `full_name`'dan ko'chiriladi — obunachi bilan alohida so'rovsiz). Telegram
+    # username'i bo'lmasligi mumkin, shuning uchun nullable.
+    username: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    full_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+
     status: Mapped[SubscriberStatus] = mapped_column(
         Enum(SubscriberStatus, name="subscriber_status"), default=SubscriberStatus.active
     )
@@ -159,7 +204,18 @@ class Subscriber(Base):
     joined_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
-    end_date: Mapped[date] = mapped_column(Date)
+    # To'liq sana+vaqt — juda qisqa (masalan test uchun daqiqalik) tariflar ham
+    # aniq hisoblanishi uchun (faqat "kun" darajasida saqlash yetarli emas).
+    # `None` = umrbod (lifetime) obunachi — hech qachon muddati tugamaydi va
+    # kanaldan avtomatik chiqarilmaydi (`scheduler._kick_expired_subscribers`
+    # va `_send_due_reminders` buni o'tkazib yuboradi).
+    end_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    # Joriy davrning umumiy uzunligi (daqiqada) — eslatmalar qanday chastotada
+    # yuborilishini belgilash uchun (masalan oylik tarifda "3 kun/1 kun oldin",
+    # juda qisqa test tarifida esa muddatga nisbatan foizli chegaralar
+    # ishlatiladi — `app/services/scheduler.py:_reminder_thresholds`).
+    duration_minutes: Mapped[int] = mapped_column(default=30 * 24 * 60)
 
     # Har bir eslatma faqat bir marta yuborilishi uchun (cron qayta ishga
     # tushsa yoki kechiksa ham takror xabar ketmaydi — "catch-up" mantiq shu
@@ -181,13 +237,40 @@ class SubscriptionPlan(Base):
     admin_id: Mapped[int] = mapped_column(ForeignKey("admins.id"))
     channel_id: Mapped[int] = mapped_column(ForeignKey("channels.id"))
 
-    duration_months: Mapped[int] = mapped_column()
+    # `is_lifetime=True` bo'lsa `duration_months` e'tiborga olinmaydi (shu
+    # sabab nullable) — reja umrbod, obunachi hech qachon chiqarilmaydi.
+    duration_months: Mapped[int | None] = mapped_column(nullable=True)
+    # Faqat test uchun: o'rnatilsa, `duration_months` o'rniga shu (juda qisqa,
+    # masalan 5 daqiqalik) muddat ishlatiladi — eslatma/kick oqimini oy kutmasdan
+    # tekshirish uchun (`app/services/subscription_service.py:plan_duration`).
+    duration_minutes: Mapped[int | None] = mapped_column(nullable=True)
+    is_lifetime: Mapped[bool] = mapped_column(Boolean, default=False)
     price: Mapped[float] = mapped_column(Numeric(12, 2))
     currency: Mapped[str] = mapped_column(String(8), default="UZS")
     active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     admin: Mapped["Admin"] = relationship(back_populates="subscription_plans")
     channel: Mapped["Channel"] = relationship(back_populates="plans")
+
+
+class PaymentCard(Base):
+    """Admin kanali uchun to'lov qabul qilinadigan bank kartasi. Bitta kanalga
+    bir nechta karta biriktirilishi mumkin (masalan Uzcard va Humo alohida) —
+    obunachi tarif tanlaganda shu kartalar ro'yxati ko'rsatiladi."""
+
+    __tablename__ = "payment_cards"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    channel_id: Mapped[int] = mapped_column(ForeignKey("channels.id"))
+    bank_name: Mapped[str] = mapped_column(String(100))
+    card_number: Mapped[str] = mapped_column(String(64))
+    owner_name: Mapped[str] = mapped_column(String(255))
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    channel: Mapped["Channel"] = relationship(back_populates="payment_cards")
 
 
 class Payment(Base):
@@ -202,6 +285,10 @@ class Payment(Base):
     admin_id: Mapped[int] = mapped_column(ForeignKey("admins.id"))
     plan_id: Mapped[int] = mapped_column(ForeignKey("subscription_plans.id"))
     user_id: Mapped[int] = mapped_column(BigInteger)  # obunachining Telegram ID'si
+    # Chek yuborilgan paytdagi Telegram ma'lumotlari — tasdiqlanganda
+    # `Subscriber.username`/`full_name`'ga ko'chiriladi.
+    username: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    full_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     amount: Mapped[float] = mapped_column(Numeric(12, 2))
     method: Mapped[str] = mapped_column(String(16), default="manual")
@@ -209,6 +296,12 @@ class Payment(Base):
         Enum(PaymentStatus, name="payment_status"), default=PaymentStatus.pending
     )
     receipt_file_id: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    # Tasdiqlangach yuborilgan "Kanalga kirish" xabarining ID'si — obunachi
+    # haqiqatan ham kanalga qo'shilganini Telegram tasdiqlagach (`chat_member`
+    # hodisasi), shu xabar "Siz qo'shildingiz ✅"ga tahrirlanadi
+    # (`app/bot/handlers/subscriber_flow.py:on_member_joined`).
+    invite_message_id: Mapped[int | None] = mapped_column(nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

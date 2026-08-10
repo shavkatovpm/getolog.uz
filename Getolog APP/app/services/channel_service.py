@@ -1,4 +1,4 @@
-"""Kanal bilan bog'liq Telegram amallari: huquq tekshirish, taklif havolasi, chiqarish."""
+"""Kanal/guruh bilan bog'liq Telegram amallari: huquq tekshirish, taklif havolasi, chiqarish."""
 
 from aiogram import Bot
 from aiogram.types import ChatMemberAdministrator
@@ -6,27 +6,25 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.bot import registry
-from app.db.models import Bot as BotModel, Channel
+from app.db.models import Bot as BotModel, Channel, ChatType
 
-# Bot kanalda obuna boshqaruvini to'liq bajarishi uchun zarur huquqlar:
-# a'zo qo'shish (invite havola yaratish), a'zo chiqarish (ban/unban),
-# post joylash va postni o'chirish (avto-post funksiyasi uchun, keyingi bosqich).
-REQUIRED_RIGHTS = (
-    "can_invite_users",
-    "can_restrict_members",
-    "can_post_messages",
-    "can_delete_messages",
-)
+# Bot obuna boshqaruvini to'liq bajarishi uchun zarur huquqlar. Kanalda post
+# joylash/o'chirish ham kerak (avto-post funksiyasi uchun, keyingi bosqich) —
+# guruhda bu tushunchaning o'zi yo'q, shuning uchun talab qilinmaydi.
+REQUIRED_RIGHTS: dict[ChatType, tuple[str, ...]] = {
+    ChatType.channel: ("can_invite_users", "can_restrict_members", "can_post_messages", "can_delete_messages"),
+    ChatType.group: ("can_invite_users", "can_restrict_members"),
+}
 
 
-def has_required_rights(member: ChatMemberAdministrator) -> bool:
-    """Bot kanalda kerakli barcha admin huquqlariga ega ekanini tekshiradi."""
-    return all(getattr(member, right, False) for right in REQUIRED_RIGHTS)
+def has_required_rights(member: ChatMemberAdministrator, chat_type: ChatType = ChatType.channel) -> bool:
+    """Bot chatda kerakli barcha admin huquqlariga ega ekanini tekshiradi."""
+    return all(getattr(member, right, False) for right in REQUIRED_RIGHTS[chat_type])
 
 
-def missing_rights(member: ChatMemberAdministrator) -> list[str]:
+def missing_rights(member: ChatMemberAdministrator, chat_type: ChatType = ChatType.channel) -> list[str]:
     """Yetishmayotgan huquqlar ro'yxatini qaytaradi (adminga xabar berish uchun)."""
-    return [right for right in REQUIRED_RIGHTS if not getattr(member, right, False)]
+    return [right for right in REQUIRED_RIGHTS[chat_type] if not getattr(member, right, False)]
 
 
 async def create_single_use_invite_link(bot: Bot, chat_id: int) -> str:

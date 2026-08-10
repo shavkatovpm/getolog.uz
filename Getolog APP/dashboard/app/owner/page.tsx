@@ -48,7 +48,10 @@ export default function OwnerOverviewPage() {
                 {stats.expiring_admins.map((a) => (
                   <li key={a.id} className="flex items-center justify-between p-3 text-sm">
                     <div>
-                      <div className="font-medium text-h-ink">{a.full_name}</div>
+                      <div className="font-medium text-h-ink">
+                        {a.full_name}
+                        {a.username && <span className="ml-1.5 font-normal text-h-muted">@{a.username}</span>}
+                      </div>
                       <div className="text-xs text-h-muted">{a.telegram_id}</div>
                     </div>
                     <div className="text-right">

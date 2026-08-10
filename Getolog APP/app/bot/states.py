@@ -14,3 +14,9 @@ class SubscriberPaymentStates(StatesGroup):
     """Obunachi to'lov chekini yuborish bosqichi."""
 
     waiting_for_receipt = State()
+
+
+class PaymentReviewStates(StatesGroup):
+    """Admin to'lovni bosh botda "❌ Bekor qilish" bosgach, izoh yozish bosqichi."""
+
+    waiting_for_reject_comment = State()

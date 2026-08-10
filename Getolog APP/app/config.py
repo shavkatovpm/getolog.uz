@@ -20,5 +20,11 @@ class Settings(BaseSettings):
     jwt_secret_key: str
     dashboard_origin: str = "https://app.getolog.uz"
 
+    # Tarif masalasida admin(mijoz) murojaat qiladigan jonli akkaunt (@ belgisisiz).
+    # Bosh bot emas, aynan odam — tarif faqat qo'lda belgilanadi, shuning uchun
+    # mijozni to'g'ridan-to'g'ri shu yerga yo'naltiramiz. Dashboard'dagi nusxasi:
+    # `dashboard/lib/tariff.ts:TARIFF_SUPPORT_URL` — ikkalasi bir xil bo'lsin.
+    support_username: str = "shavkatov_ff"
+
 
 settings = Settings()

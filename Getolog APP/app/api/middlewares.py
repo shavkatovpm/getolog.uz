@@ -10,12 +10,19 @@ from app.api.auth import decode_jwt
 from app.config import settings
 from app.db.base import async_session_factory
 
-PUBLIC_API_PATHS = {"/api/auth/telegram-code", "/api/auth/telegram-webapp"}
+PUBLIC_API_PATHS = {"/api/auth/telegram-code", "/api/auth/telegram-webapp", "/api/public/ariza"}
 
 # Dashboard prod manzilidan tashqari, mahalliy Next.js dev serveridan ham
 # so'rov yuborish mumkin bo'lishi uchun (haqiqiy origin reflect qilinadi,
-# wildcard emas — bu standart xavfsiz CORS pattern).
-ALLOWED_ORIGINS = {settings.dashboard_origin, "http://localhost:3000"}
+# wildcard emas — bu standart xavfsiz CORS pattern). getolog.uz — landing
+# saytdagi ariza forma shu yerdan so'rov yuboradi.
+ALLOWED_ORIGINS = {
+    settings.dashboard_origin,
+    "http://localhost:3000",
+    "https://getolog.uz",
+    "https://www.getolog.uz",
+    "http://localhost:4321",
+}
 
 
 @web.middleware
