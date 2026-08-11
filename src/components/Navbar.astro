@@ -376,73 +376,91 @@ const altHref = alt === "uz" ? pathname : '/ru' + pathname;
 </style>
 
 <script>
-  const navbar = document.getElementById("navbar")!;
-  const burger = document.getElementById("burgerBtn")!;
-  const navLinks = document.getElementById("navLinks")!;
+  // ClientRouter har navigatsiyada DOM'ni almashtiradi, shuning uchun
+  // navbar har safar qaytadan ulanadi. Eski listenerlar AbortController
+  // orqali uziladi — aks holda ular to'planib ketadi.
+  let navController: AbortController | null = null;
 
-  // Scroll detection with throttle
-  let ticking = false;
-  window.addEventListener("scroll", () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        if (!navLinks.classList.contains("open")) {
-          navbar.classList.toggle("scrolled", window.scrollY > 40);
-        }
-        ticking = false;
-      });
-      ticking = true;
+  function initNavbar() {
+    const navbar = document.getElementById("navbar");
+    const burger = document.getElementById("burgerBtn");
+    const navLinks = document.getElementById("navLinks");
+    if (!navbar || !burger || !navLinks) return;
+
+    navController?.abort();
+    navController = new AbortController();
+    const { signal } = navController;
+
+    // Sahifa allaqachon pastda ochilgan bo'lsa ham fon darhol qo'yilsin
+    navbar.classList.toggle("scrolled", window.scrollY > 40);
+
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (!navLinks.classList.contains("open")) {
+            navbar.classList.toggle("scrolled", window.scrollY > 40);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true, signal });
+
+    function lockScroll() {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      document.body.classList.add("nav-open");
     }
-  }, { passive: true });
 
-  function lockScroll() {
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    document.body.classList.add("nav-open");
-  }
+    function unlockScroll() {
+      document.documentElement.style.removeProperty("overflow");
+      document.body.style.removeProperty("overflow");
+      document.body.classList.remove("nav-open");
+    }
 
-  function unlockScroll() {
-    document.documentElement.style.removeProperty("overflow");
-    document.body.style.removeProperty("overflow");
-    document.body.classList.remove("nav-open");
-  }
+    function openMenu() {
+      burger!.classList.add("active");
+      burger!.setAttribute("aria-expanded", "true");
+      navLinks!.classList.add("open");
+      navbar!.classList.add("menu-open");
+      lockScroll();
+      const firstLink = navLinks!.querySelector("a");
+      if (firstLink) firstLink.focus();
+    }
 
-  function openMenu() {
-    burger.classList.add("active");
-    burger.setAttribute("aria-expanded", "true");
-    navLinks.classList.add("open");
-    navbar.classList.add("menu-open");
-    lockScroll();
-    const firstLink = navLinks.querySelector("a");
-    if (firstLink) firstLink.focus();
-  }
+    function closeMenu() {
+      burger!.classList.remove("active");
+      burger!.setAttribute("aria-expanded", "false");
+      navLinks!.classList.remove("open");
+      navbar!.classList.remove("menu-open");
+      unlockScroll();
+    }
 
-  function closeMenu() {
-    burger.classList.remove("active");
-    burger.setAttribute("aria-expanded", "false");
-    navLinks.classList.remove("open");
-    navbar.classList.remove("menu-open");
+    // Navigatsiyadan keyin menyu ochiq qolib, scroll qulflanib qolmasin
     unlockScroll();
-    burger.focus();
+
+    burger.addEventListener("click", () => {
+      if (navLinks.classList.contains("open")) {
+        closeMenu();
+        burger.focus();
+      } else {
+        openMenu();
+      }
+    }, { signal });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navLinks.classList.contains("open")) {
+        closeMenu();
+        burger.focus();
+      }
+    }, { signal });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => closeMenu(), { signal });
+    });
   }
 
-  burger.addEventListener("click", () => {
-    const isOpen = navLinks.classList.contains("open");
-    if (isOpen) {
-      closeMenu();
-    } else {
-      openMenu();
-    }
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && navLinks.classList.contains("open")) {
-      closeMenu();
-    }
-  });
-
-  navLinks.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      closeMenu();
-    });
-  });
+  initNavbar();
+  document.addEventListener("astro:page-load", initNavbar);
 </script>
