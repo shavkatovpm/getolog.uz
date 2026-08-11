@@ -400,6 +400,61 @@ export const landingPages: LandingPage[] = [
         },
       },
       {
+        h2: { uz: "Obuna botini qanday tanlash kerak?", ru: "Как выбрать бота подписки?" },
+        html: {
+          uz: `<p>"Eng yaxshi bot" degan yagona javob yo'q — tanlov kanalingizning hajmi va to'lov usuliga bog'liq. Amalda uchta yo'l bor: botni dasturchiga yozdirish, chet el obuna xizmatidan foydalanish yoki mahalliy tayyor yechim olish. Quyida ular bir xil mezonlar bo'yicha solishtirilgan.</p>
+<table>
+<thead><tr><th>Mezon</th><th>Dasturchiga yozdirish</th><th>Chet el xizmati</th><th>Getolog</th></tr></thead>
+<tbody>
+<tr><td>Ishga tushirish vaqti</td><td>2–8 hafta</td><td>bir necha kun</td><td>~10 daqiqa</td></tr>
+<tr><td>Boshlang'ich xarajat</td><td>3–10 mln so'm</td><td>odatda sinov davri</td><td>0 so'm (bepul tarif)</td></tr>
+<tr><td>Uzcard / Humo, so'mda to'lov</td><td>alohida yozilishi kerak</td><td>ko'pincha qo'llab-quvvatlanmaydi</td><td>ha</td></tr>
+<tr><td>Interfeys tili</td><td>o'zingiz belgilaysiz</td><td>ko'pincha ingliz / rus</td><td>o'zbek va rus</td></tr>
+<tr><td>Bir martalik invite-link</td><td>yozilishi kerak</td><td>odatda bor</td><td>ha</td></tr>
+<tr><td>Muddat nazorati va avtomatik chiqarish</td><td>yozilishi kerak</td><td>odatda bor</td><td>ha</td></tr>
+<tr><td>Tushumdan komissiya</td><td>yo'q</td><td>ko'pincha bor</td><td>yo'q</td></tr>
+<tr><td>Server va texnik xizmat</td><td>sizning zimmangizda</td><td>xizmatda</td><td>xizmatda</td></tr>
+<tr><td>Bot kimga tegishli</td><td>sizga</td><td>ko'pincha umumiy bot</td><td>sizga — o'z tokeningiz</td></tr>
+</tbody>
+</table>
+
+<h3>Tanlashdan oldin o'zingizga bering</h3>
+<ol>
+<li><strong>Obunachilar so'mda, Uzcard yoki Humo bilan to'laydimi?</strong> Ha bo'lsa, mahalliy to'lovni qo'llab-quvvatlamaydigan xizmat konversiyangizni yo'qotadi.</li>
+<li><strong>Bot muddat tugaganda odamni o'zi chiqaradimi?</strong> Chiqarmasa, bu bot emas — shunchaki to'lov qabul qiluvchi.</li>
+<li><strong>Havola bir martalikmi?</strong> Bo'lmasa, bitta to'langan link butun guruhga tarqaladi.</li>
+<li><strong>Tushumdan foiz olinadimi?</strong> 10 mln so'mlik oylik aylanmada 5% — bu 500 000 so'm, tarif narxidan qimmat tushishi mumkin.</li>
+<li><strong>Bot va obunachilar bazasi kimda qoladi?</strong> Xizmatdan chiqsangiz, ular sizda qolishi kerak.</li>
+</ol>
+<p>Getolog aynan shu beshta savolga javob berish uchun yozilgan: so'm va mahalliy kartalar, avtomatik chiqarish, bir martalik havola, komissiyasiz va sizning o'z botingiz ustida.</p>`,
+          ru: `<p>Единственного ответа «лучший бот» не существует — выбор зависит от размера канала и способа оплаты. На практике есть три пути: заказать бота разработчику, использовать зарубежный сервис подписок или взять локальное готовое решение. Ниже они сравнены по одинаковым критериям.</p>
+<table>
+<thead><tr><th>Критерий</th><th>Заказная разработка</th><th>Зарубежный сервис</th><th>Getolog</th></tr></thead>
+<tbody>
+<tr><td>Время запуска</td><td>2–8 недель</td><td>несколько дней</td><td>~10 минут</td></tr>
+<tr><td>Стартовые затраты</td><td>3–10 млн сум</td><td>обычно пробный период</td><td>0 сум (бесплатный тариф)</td></tr>
+<tr><td>Uzcard / Humo, оплата в сумах</td><td>нужно писать отдельно</td><td>чаще всего не поддерживается</td><td>да</td></tr>
+<tr><td>Язык интерфейса</td><td>определяете сами</td><td>чаще английский / русский</td><td>узбекский и русский</td></tr>
+<tr><td>Одноразовая invite-ссылка</td><td>нужно разрабатывать</td><td>обычно есть</td><td>да</td></tr>
+<tr><td>Контроль срока и автоудаление</td><td>нужно разрабатывать</td><td>обычно есть</td><td>да</td></tr>
+<tr><td>Комиссия с дохода</td><td>нет</td><td>чаще всего есть</td><td>нет</td></tr>
+<tr><td>Сервер и техподдержка</td><td>на вас</td><td>на сервисе</td><td>на сервисе</td></tr>
+<tr><td>Кому принадлежит бот</td><td>вам</td><td>чаще общий бот</td><td>вам — ваш токен</td></tr>
+</tbody>
+</table>
+
+<h3>Задайте себе эти вопросы до выбора</h3>
+<ol>
+<li><strong>Платят ли подписчики в сумах картами Uzcard или Humo?</strong> Если да, сервис без локальной оплаты будет терять вашу конверсию.</li>
+<li><strong>Удаляет ли бот человека сам по истечении срока?</strong> Если нет — это не бот подписки, а просто приём оплаты.</li>
+<li><strong>Ссылка одноразовая?</strong> Если нет, одна оплаченная ссылка разойдётся по всему чату.</li>
+<li><strong>Берётся ли процент с дохода?</strong> При обороте 10 млн сум в месяц 5% — это 500 000 сум, дороже стоимости тарифа.</li>
+<li><strong>У кого остаются бот и база подписчиков?</strong> Если вы уйдёте из сервиса, они должны остаться у вас.</li>
+</ol>
+<p>Getolog написан именно под эти пять вопросов: сумы и локальные карты, автоудаление, одноразовая ссылка, без комиссии и на вашем собственном боте.</p>`,
+        },
+      },
+      {
         h2: { uz: "Narxi qancha?", ru: "Сколько стоит?" },
         html: {
           uz: `<p>Getolog'da obuna boti tushumdan foiz olmaydi — oylik tarif to'lanadi. Bepul tarif 20 tagacha obunachi uchun, keyin Minimal (295 000 so'm), Standart (590 000 so'm), Pro (1 270 000 so'm) va Biznes (1 890 000 so'm) tariflari bor.</p>
@@ -416,6 +471,13 @@ export const landingPages: LandingPage[] = [
         a: {
           uz: "Sizga to'lovni qabul qilish bilan birga kirish nazoratini ham bajaradigan bot kerak: bir martalik invite-link berish, obuna muddatini saqlash va muddat tugaganda kanaldan chiqarish. Faqat to'lov qabul qiladigan bot muammoni yarmini ham yechmaydi.",
           ru: "Нужен бот, который вместе с приёмом оплаты выполняет и контроль доступа: выдаёт одноразовую invite-ссылку, хранит срок подписки и удаляет из канала по его окончании. Бот, который только принимает оплату, не решает и половины задачи.",
+        },
+      },
+      {
+        q: { uz: "Pullik Telegram kanal uchun eng yaxshi obuna boti qaysi?", ru: "Какой бот подписки лучший для платного Telegram-канала?" },
+        a: {
+          uz: "Universal javob yo'q — botni beshta mezon bo'yicha tanlang: so'mda va Uzcard/Humo bilan to'lov, bir martalik invite-link, muddat tugaganda avtomatik chiqarish, tushumdan komissiya olinmasligi, hamda bot va obunachilar bazasi sizda qolishi. O'zbekistondagi kanallar uchun mahalliy to'lovni qo'llab-quvvatlash odatda hal qiluvchi omil bo'ladi.",
+          ru: "Универсального ответа нет — выбирайте по пяти критериям: оплата в сумах картами Uzcard/Humo, одноразовая invite-ссылка, автоудаление по истечении срока, отсутствие комиссии с дохода и то, что бот и база подписчиков остаются у вас. Для каналов в Узбекистане решающим обычно оказывается поддержка локальной оплаты.",
         },
       },
       {

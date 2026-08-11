@@ -89,7 +89,7 @@ Har biri uchun fayl: `src/data/landing.ts` ga yangi obyekt qo'shiladi, marshrut 
 | # | So'rov | Sahifa | Holat |
 |---|---|---|---|
 | 1 | O'zbekistonda pullik Telegram kanalni qanday avtomatlashtirish mumkin? | `/getolog-nima` | ✅ |
-| 2 | Pullik Telegram kanal uchun eng yaxshi obuna boti qaysi? | `/telegram-obuna-bot` | ✅ qisman — taqqoslash bo'limi kuchaytirilsin |
+| 2 | Pullik Telegram kanal uchun eng yaxshi obuna boti qaysi? | `/telegram-obuna-bot` | ✅ mezonli taqqoslash jadvali + 5 savolli checklist qo'shildi |
 | 3 | Payme va Click orqali to'lov qabul qiladigan Telegram bot kerak | `/payme-click-telegram-bot` | ✅ |
 | 4 | Telegram kanalda oylik obunani qanday sotish mumkin? | `/telegram-kanal-obuna-narxi` | ⏳ |
 | 5 | To'lovdan keyin kanalga avtomatik qo'shadigan bot bormi? | `/telegram-obuna-bot` | ✅ |
@@ -149,12 +149,24 @@ npx astro build
 
 | Ish | Nega kerak | Nima kerak |
 |---|---|---|
-| **Har sahifaga alohida OG rasm** | Hozir hammasi `logo.png` — ijtimoiy tarmoq va AI preview'larida ajralmaydi | Dizayn assetlari yoki OG-image generator |
-| **Haqiqiy ekran tasvirlari** | Kontent formati talab qiladi; ishonch va E-E-A-T uchun | Bot va paneldan skrinshotlar (`public/screenshots/`) |
-| **Muallif (Person) entity** | E-E-A-T: hozir muallif — Organization | Real muallif profili + `Person` schema |
-| **Search Console / Bing / Yandex** | Indeksatsiyani tezlashtirish | Sayt egaligini tasdiqlash + sitemap yuborish |
-| ~~Payme/Click ma'lumoti~~ | ✅ Hal qilindi: mijozning merchant hisobi bo'lsa, Getolog jamoasi ulab beradi — shu formulirovka `/payme-click-telegram-bot` va `llms.txt` ga kiritildi | — |
-| **`/ru/404`** | Ruscha 404 sahifasi alohida marshrut sifatida yo'q | Kichik masala, ixtiyoriy |
+| **Haqiqiy ekran tasvirlari** | Kontent formati talab qiladi; ishonch va E-E-A-T uchun | Bot va paneldan skrinshotlar (`public/screenshots/`) — faqat siz bera olasiz |
+| **Muallif (Person) entity** | E-E-A-T: hozir muallif — Organization | Real muallif ismi + profil havolasi |
+| **Search Console / Bing / Yandex** | Indeksatsiyani tezlashtirish | Tasdiqlash kodlari + sitemap yuborish |
+| ~~Payme/Click ma'lumoti~~ | ✅ Mijozning merchant hisobi bo'lsa, Getolog jamoasi ulab beradi — `/payme-click-telegram-bot` va `llms.txt` ga kiritildi | — |
+| ~~Har sahifaga alohida OG rasm~~ | ✅ `scripts/generate-og.py` har sahifaga 1200×630 PNG yasaydi, Layout uni yo'l bo'yicha avtomatik topadi | — |
+| ~~`/ru/404`~~ | ✅ `src/pages/ru/404.astro` qo'shildi | — |
+
+### OG rasmlarni yangilash
+
+Rasmlar `public/og/` da yotadi va sarlavhani tayyor HTML'dan oladi. **Yangi sahifa qo'shganda yoki sarlavhani o'zgartirganda** quyidagini bajaring:
+
+```bash
+npx astro build            # sahifalar yig'ilsin
+python3 scripts/generate-og.py   # rasmlar yasalsin
+npx astro build            # rasmlar dist ga ko'chsin
+```
+
+Fayl nomi URL yo'lidan hosil bo'ladi (`/ru/blog/x/` → `ru-blog-x.png`). Bu mantiq `Layout.astro` dagi `ogSlug` bilan bir xil bo'lishi shart — birini o'zgartirsangiz, ikkinchisini ham o'zgartiring.
 
 ---
 

@@ -16,13 +16,20 @@ const {
   title,
   lang = "uz" as Lang,
   description = meta.defaultDesc[lang],
-  image = "https://getolog.uz/logo.png",
+  image,
   ogType = "website",
 } = Astro.props;
 
 const site = Astro.site || new URL('https://getolog.uz');
 const canonicalURL = new URL(Astro.url.pathname, site);
-const ogImage = image.startsWith("http") ? image : new URL(image, site).href;
+
+/* Har sahifaning o'z OG rasmi bor: /og/<yo'l>.png
+   Rasmlar `python3 scripts/generate-og.py` bilan yasaladi —
+   slug mantiqi o'sha skriptdagi slug_for() bilan bir xil bo'lishi shart. */
+const ogSlug = Astro.url.pathname.split("/").filter(Boolean).join("-") || "home";
+const ogImage = image
+  ? (image.startsWith("http") ? image : new URL(image, site).href)
+  : new URL(`/og/${ogSlug}.png`, site).href;
 
 // hreflang URLs
 const pathname = Astro.url.pathname.replace(/^\/ru/, '') || '/';

@@ -2,22 +2,31 @@
 import Layout from "../layouts/Layout.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
-import { notFound } from "../i18n/translations";
+import { type Lang, notFound, langPrefix } from "../i18n/translations";
+
+interface Props { lang?: Lang }
+const lang = Astro.props.lang || ("uz" as Lang);
+const prefix = langPrefix(lang);
 ---
 
-<Layout title={notFound.title.uz} description={notFound.desc.uz}>
-  <Navbar />
+<Layout
+  title={notFound.title[lang]}
+  description={notFound.desc[lang]}
+  lang={lang}
+  image={lang === "uz" ? "/og/home.png" : "/og/ru.png"}
+>
+  <Navbar lang={lang} />
 
   <section class="error-page">
     <div class="container error-page__inner">
       <span class="error-page__code">404</span>
-      <h1 class="error-page__title" data-uz={notFound.heading.uz} data-ru={notFound.heading.ru}>{notFound.heading.uz}</h1>
-      <p class="error-page__desc" data-uz={notFound.text.uz} data-ru={notFound.text.ru}>{notFound.text.uz}</p>
-      <a href="/" class="btn btn--primary btn--lg error-page__btn" data-uz={notFound.btn.uz} data-ru={notFound.btn.ru}>{notFound.btn.uz}</a>
+      <h1 class="error-page__title" data-uz={notFound.heading.uz} data-ru={notFound.heading.ru}>{notFound.heading[lang]}</h1>
+      <p class="error-page__desc" data-uz={notFound.text.uz} data-ru={notFound.text.ru}>{notFound.text[lang]}</p>
+      <a href={prefix + "/"} class="btn btn--primary btn--lg error-page__btn" data-uz={notFound.btn.uz} data-ru={notFound.btn.ru}>{notFound.btn[lang]}</a>
     </div>
   </section>
 
-  <Footer />
+  <Footer lang={lang} />
 </Layout>
 
 <style>
