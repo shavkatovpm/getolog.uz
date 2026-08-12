@@ -1054,6 +1054,254 @@ export const landingPages: LandingPage[] = [
     related: ["telegram-obuna-bot", "getolog-nima", "telegram-kanalga-tolov-qabul-qilish"],
     relatedArticles: ["invite-link-xavfsizligi", "pullik-kanal-uchun-maslahatlar"],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     6. Telegram kanal obunachilarini boshqarish
+     ───────────────────────────────────────────────────────────── */
+  {
+    slug: "telegram-obunachilarini-boshqarish",
+    keyword: { uz: "telegram kanal obunachilarini boshqarish", ru: "управление подписчиками telegram-канала" },
+    title: {
+      uz: "Telegram kanal obunachilarini boshqarish: 100+ pullik obunachi bilan ishlash",
+      ru: "Управление подписчиками Telegram-канала: как вести 100+ платных подписчиков",
+    },
+    h1: {
+      uz: "Telegram kanal obunachilarini qanday boshqarish kerak?",
+      ru: "Как управлять подписчиками Telegram-канала?",
+    },
+    description: {
+      uz: "Pullik Telegram kanalda 100 va undan ortiq obunachini qanday boshqarish mumkin: yagona ro'yxat, muddat nazorati, to'lovlar tarixi va avtomatik chiqarish. Excel va daftar o'rniga bitta panel.",
+      ru: "Как управлять сотней и более подписчиков платного Telegram-канала: единый список, контроль сроков, история платежей и автоудаление. Одна панель вместо Excel и блокнота.",
+    },
+    answer: {
+      uz: "Telegram obunachilarini boshqarish — bu uch ishni bir joyda ushlab turish: kim to'lagan, kimning muddati qachon tugaydi va kim allaqachon chiqarilishi kerak. Getolog panelida har bir obunachi ismi, username'i, holati (faol / muddati tugagan / chiqarilgan), qo'shilgan sanasi va qolgan kunlari bilan ko'rinadi. Muddat tugashidan oldin eslatma avtomatik ketadi, tugagan kuni odam kanaldan chiqariladi.",
+      ru: "Управление подписчиками Telegram — это удержание трёх вещей в одном месте: кто заплатил, у кого когда истекает срок и кого пора удалить. В панели Getolog каждый подписчик виден с именем, username, статусом (активен / истёк / удалён), датой входа и остатком дней. Напоминание уходит автоматически до окончания срока, а в день окончания человек удаляется из канала.",
+    },
+    published: "2026-08-12",
+    updated: "2026-08-12",
+    category: { uz: "Boshqaruv", ru: "Управление" },
+    readTime: { uz: "7 daqiqa", ru: "7 минут" },
+    sections: [
+      {
+        h2: { uz: "100 ta pullik obunachini qanday boshqarish mumkin?", ru: "Как управлять сотней платных подписчиков?" },
+        html: {
+          uz: `<p>Obunachi soni 20 tadan oshgach, qo'lda boshqarish ishlamay qoladi. Sabab arifmetikada: har bir obunachi <strong>o'z sanasida</strong> to'laydi, ya'ni 100 ta obunachi — bu oyiga taxminan 100 ta alohida muddat, 100 ta eslatma va 100 ta tekshiruv.</p>
+<p>Amalda uch xil xato takrorlanadi:</p>
+<ul>
+<li><strong>Muddati tugagan odam kanalda qolib ketadi.</strong> Eng qimmat xato — kontent bepul iste'mol qilinadi.</li>
+<li><strong>To'lagan odam kanalga kiritilmay qoladi.</strong> Chek shaxsiy xabarlar orasida yo'qoladi va mijoz norozi bo'ladi.</li>
+<li><strong>Kim qachon to'laganini eslab bo'lmaydi.</strong> Nizo chiqsa, isbot qiladigan yozuv yo'q.</li>
+</ul>
+<p>Yechim — obunachilar ro'yxatini xotira yoki Excel'da emas, <strong>to'lov bilan bog'langan bitta tizimda</strong> ushlash. Getolog'da ro'yxat <a href="/telegram-obuna-bot">obuna botining</a> o'zi bilan bir manbadan to'ldiriladi: bot kimni kiritgan bo'lsa, panelda o'sha odam ko'rinadi.</p>`,
+          ru: `<p>Когда подписчиков становится больше 20, ручное ведение перестаёт работать. Причина в арифметике: каждый подписчик платит <strong>в свою дату</strong>, то есть 100 подписчиков — это примерно 100 отдельных сроков, 100 напоминаний и 100 проверок в месяц.</p>
+<p>На практике повторяются три ошибки:</p>
+<ul>
+<li><strong>Человек с истёкшим сроком остаётся в канале.</strong> Самая дорогая ошибка — контент потребляется бесплатно.</li>
+<li><strong>Заплативший не попадает в канал.</strong> Чек теряется в личных сообщениях, и клиент остаётся недоволен.</li>
+<li><strong>Невозможно вспомнить, кто когда платил.</strong> При споре нет записи, на которую можно сослаться.</li>
+</ul>
+<p>Решение — держать список подписчиков не в памяти и не в Excel, а <strong>в одной системе, связанной с оплатой</strong>. В Getolog список наполняется из того же источника, что и <a href="/ru/telegram-obuna-bot">бот подписки</a>: кого впустил бот, тот и виден в панели.</p>`,
+        },
+      },
+      {
+        h2: { uz: "Panelda obunachilar qanday ko'rinadi?", ru: "Как подписчики выглядят в панели?" },
+        html: {
+          uz: `<p>Obunachilar bo'limi — bitta ro'yxat. Har bir qatorda quyidagilar bor:</p>
+<ul>
+<li><strong>Ism va username</strong> — odamni tanib olish uchun.</li>
+<li><strong>Holat</strong> — <em>Faol</em>, <em>Muddati tugagan</em> yoki <em>Chiqarilgan</em>.</li>
+<li><strong>Qo'shilgan sana</strong> — obunachi kanalga qachon kirgani.</li>
+<li><strong>Tugash sanasi va qolgan kun</strong> — muddat qachon yakunlanishi.</li>
+</ul>
+<p>Ro'yxat ustida ikkita amaliy vosita turadi:</p>
+<ol>
+<li><strong>Qidiruv</strong> — ism, username yoki Telegram ID bo'yicha. Obunachi "men to'laganman" deb yozsa, uni bir necha soniyada topasiz.</li>
+<li><strong>Holat bo'yicha filtr</strong> — faqat faollarni yoki faqat muddati tugaganlarni ko'rish. Har bir holat uchun sonlar ham ko'rsatiladi, ya'ni "hozir nechta faol obunachim bor" degan savolga javob ro'yxatning tepasida turadi.</li>
+</ol>
+<p>Ro'yxat bo'laklab yuklanadi, shuning uchun obunachi soni yuzdan oshganda ham sahifa sekinlashmaydi.</p>`,
+          ru: `<p>Раздел «Подписчики» — это один список. В каждой строке:</p>
+<ul>
+<li><strong>Имя и username</strong> — чтобы узнать человека.</li>
+<li><strong>Статус</strong> — <em>Активен</em>, <em>Срок истёк</em> или <em>Удалён</em>.</li>
+<li><strong>Дата входа</strong> — когда подписчик попал в канал.</li>
+<li><strong>Дата окончания и остаток дней</strong> — когда срок закончится.</li>
+</ul>
+<p>Над списком — два практических инструмента:</p>
+<ol>
+<li><strong>Поиск</strong> — по имени, username или Telegram ID. Если подписчик пишет «я оплатил», вы находите его за несколько секунд.</li>
+<li><strong>Фильтр по статусу</strong> — показать только активных или только тех, у кого истёк срок. Рядом с каждым статусом стоит количество, так что ответ на вопрос «сколько у меня сейчас активных подписчиков» виден прямо над списком.</li>
+</ol>
+<p>Список подгружается частями, поэтому страница не тормозит и когда подписчиков больше сотни.</p>`,
+        },
+      },
+      {
+        h2: { uz: "Muddatlarni kim kuzatadi — siz yoki tizim?", ru: "Кто следит за сроками — вы или система?" },
+        html: {
+          uz: `<p>Tizim. Har bir obunachining tugash sanasi to'lov tasdiqlangan paytda hisoblanadi va shundan keyin qo'lda tekshirish shart emas:</p>
+<ul>
+<li><strong>Muddat tugashidan oldin</strong> obunachiga eslatma yuboriladi — u yangilash imkoniyatini o'tkazib yubormaydi.</li>
+<li><strong>Muddat tugagan kuni</strong> foydalanuvchi kanaldan avtomatik chiqariladi. Bu qanday ishlashi <a href="/obuna-tugaganda-kanaldan-chiqarish">alohida sahifada</a> batafsil yozilgan.</li>
+<li><strong>Qayta to'lasa</strong> — bot yangi bir martalik havola beradi va odam qaytadan kiritiladi.</li>
+</ul>
+<p>Ayni paytda sizda <strong>qo'lda aralashish imkoni</strong> ham qoladi: obunachining muddatini panel orqali o'zgartirish mumkin. Bu kerak bo'ladigan holatlar — to'lov kechikkan, texnik nosozlik bo'lgan yoki sodiq mijozga bir necha kun sovg'a qilmoqchisiz. Sanani o'zgartirsangiz, eslatma va chiqarish yangi sanaga qarab ishlaydi.</p>`,
+          ru: `<p>Система. Дата окончания у каждого подписчика рассчитывается в момент подтверждения оплаты, и дальше проверять вручную не нужно:</p>
+<ul>
+<li><strong>Перед окончанием срока</strong> подписчику уходит напоминание — он не пропускает возможность продлить.</li>
+<li><strong>В день окончания</strong> пользователь автоматически удаляется из канала. Как это устроено, подробно описано на <a href="/ru/obuna-tugaganda-kanaldan-chiqarish">отдельной странице</a>.</li>
+<li><strong>При повторной оплате</strong> бот выдаёт новую одноразовую ссылку, и человек возвращается в канал.</li>
+</ul>
+<p>При этом <strong>ручное вмешательство</strong> остаётся возможным: срок подписчика можно изменить через панель. Это нужно, когда оплата задержалась, произошёл технический сбой или вы хотите подарить лояльному клиенту несколько дней. После смены даты напоминание и удаление ориентируются уже на неё.</p>`,
+        },
+      },
+      {
+        h2: { uz: "To'lovlar tarixi nima uchun kerak?", ru: "Зачем нужна история платежей?" },
+        html: {
+          uz: `<p>Obunachilar ro'yxati "kim kanalda" degan savolga javob beradi, to'lovlar tarixi esa "nega u kanalda" degan savolga. Panelda har bir to'lov holati bilan saqlanadi: <em>kutilmoqda</em>, <em>tasdiqlangan</em>, <em>rad etilgan</em>.</p>
+<p>Bu uchta amaliy foyda beradi:</p>
+<ul>
+<li><strong>Nizolar hal bo'ladi.</strong> "Men to'lagandim" degan da'voni chek va sana bilan tekshirasiz.</li>
+<li><strong>Yangi to'lovlar ko'zdan qochmaydi.</strong> Kutilayotgan cheklar alohida filtrda turadi — tasdiqlash navbati ko'rinib turadi.</li>
+<li><strong>Tushum hisobi aniq bo'ladi.</strong> Oy davomida nechta to'lov tasdiqlangani ro'yxatdan ko'rinadi.</li>
+</ul>
+<p>To'lovni qabul qilishning o'zi qanday tashkil qilinishi — <a href="/telegram-kanalga-tolov-qabul-qilish">to'lov qabul qilish sahifasida</a>.</p>`,
+          ru: `<p>Список подписчиков отвечает на вопрос «кто в канале», а история платежей — на вопрос «почему он там». В панели каждый платёж хранится со статусом: <em>ожидает</em>, <em>подтверждён</em>, <em>отклонён</em>.</p>
+<p>Это даёт три практические вещи:</p>
+<ul>
+<li><strong>Споры решаются.</strong> Заявление «я же оплатил» проверяется по чеку и дате.</li>
+<li><strong>Новые платежи не теряются.</strong> Ожидающие чеки стоят в отдельном фильтре — очередь на подтверждение видна.</li>
+<li><strong>Учёт дохода становится точным.</strong> Из списка видно, сколько платежей подтверждено за месяц.</li>
+</ul>
+<p>Как организовать сам приём оплаты — на <a href="/ru/telegram-kanalga-tolov-qabul-qilish">странице приёма платежей</a>.</p>`,
+        },
+      },
+      {
+        h2: { uz: "Obunachilar o'sishini qanday kuzatasiz?", ru: "Как отслеживать рост подписчиков?" },
+        html: {
+          uz: `<p>Bosh sahifada ikkita raqam va bitta grafik turadi: <strong>faol obunachilar soni</strong>, <strong>muddati yaqinda tugaydiganlar</strong> va <strong>obunachilar o'sishi</strong> grafigi.</p>
+<p>Bu uchtasi birgalikda kanalning sog'lig'ini ko'rsatadi. Amaliy o'qish shunday:</p>
+<ul>
+<li><strong>Faol soni o'sib, o'sish grafigi tekis</strong> — kanal barqaror, yangi obunachi doimiy kelmoqda.</li>
+<li><strong>Faol soni turgan joyida</strong> — yangi kelganlar chiqib ketganlarni endigina qoplayapti; kontent yoki narxni ko'rib chiqish vaqti.</li>
+<li><strong>Muddati tugayotganlar ko'p</strong> — yaqin kunlarda yangilash to'lqini bo'ladi; shu paytda kanalda kuchli kontent chiqarish yangilanish foizini oshiradi.</li>
+</ul>
+<p>Faol obunachi soni yana bir sabab bilan muhim: <a href="/price">tarifingiz</a> aynan shu songa bog'langan. Panelda limitgacha qancha joy qolgani ham ko'rinadi.</p>`,
+          ru: `<p>На главной странице — две цифры и один график: <strong>количество активных подписчиков</strong>, <strong>у кого срок истекает в ближайшее время</strong> и график <strong>роста подписчиков</strong>.</p>
+<p>Вместе они показывают состояние канала. Как это читать:</p>
+<ul>
+<li><strong>Активных больше, график ровный</strong> — канал стабилен, новые подписчики приходят регулярно.</li>
+<li><strong>Число активных стоит на месте</strong> — приходящие лишь компенсируют уходящих; пора пересмотреть контент или цену.</li>
+<li><strong>Много истекающих сроков</strong> — в ближайшие дни будет волна продлений; сильный контент именно в эти дни поднимает процент продлений.</li>
+</ul>
+<p>Число активных подписчиков важно и по другой причине: от него зависит <a href="/ru/price">ваш тариф</a>. В панели видно и то, сколько места осталось до лимита.</p>`,
+        },
+      },
+      {
+        h2: { uz: "Boshlash uchun nima kerak?", ru: "Что нужно, чтобы начать?" },
+        html: {
+          uz: `<p>Agar kanalingiz allaqachon ishlayotgan va obunachilaringiz bo'lsa, ularni bittalab ko'chirib o'tirish shart emas — tizim <strong>yangi to'lovlardan boshlab</strong> ro'yxatni to'ldiradi. Eski obunachilarning muddatini esa panel orqali qo'lda kiritib qo'yish mumkin.</p>
+<ol>
+<li><a href="https://t.me/getologbot" target="_blank" rel="noopener noreferrer">@getologbot</a> ga <code>/start</code> yuborasiz.</li>
+<li><code>@BotFather</code> dan olingan tokeningizni kiritasiz.</li>
+<li>Kanalingizni ulaysiz va botni administrator qilasiz.</li>
+<li>Tariflarni kiritasiz — shu daqiqadan boshlab har bir yangi obunachi ro'yxatga tushadi.</li>
+</ol>
+<p>Sozlashda savol tug'ilsa — <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a> support botiga yozing yoki <a href="/ariza">ariza qoldiring</a>. Xizmatning umumiy tavsifi — <a href="/getolog-nima">Getolog nima</a> sahifasida.</p>`,
+          ru: `<p>Если канал уже работает и подписчики есть, переносить их по одному не нужно — система наполняет список <strong>начиная с новых оплат</strong>. Сроки старых подписчиков можно внести вручную через панель.</p>
+<ol>
+<li>Отправьте <code>/start</code> боту <a href="https://t.me/getologbot" target="_blank" rel="noopener noreferrer">@getologbot</a>.</li>
+<li>Введите токен, полученный у <code>@BotFather</code>.</li>
+<li>Подключите канал и сделайте бота администратором.</li>
+<li>Задайте тарифы — с этого момента каждый новый подписчик попадает в список.</li>
+</ol>
+<p>Если при настройке появятся вопросы — напишите в support-бот <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a> или <a href="/ru/ariza">оставьте заявку</a>. Общее описание сервиса — на странице <a href="/ru/getolog-nima">Что такое Getolog</a>.</p>`,
+        },
+      },
+    ],
+    compare: {
+      title: {
+        uz: "100 ta obunachini boshqarish: Excel va Getolog paneli",
+        ru: "Управление сотней подписчиков: Excel и панель Getolog",
+      },
+      rows: [
+        {
+          label: { uz: "Obunachini topish", ru: "Найти подписчика" },
+          manual: { uz: "Excel'da qidirasiz — username o'zgargan bo'lsa topilmaydi", ru: "Ищете в Excel — если username сменился, не найдёте" },
+          getolog: { uz: "Ism, username yoki Telegram ID bo'yicha qidiruv", ru: "Поиск по имени, username или Telegram ID" },
+        },
+        {
+          label: { uz: "Kimning muddati tugayapti?", ru: "У кого истекает срок?" },
+          manual: { uz: "Har kuni jadvalni ko'zdan kechirasiz", ru: "Каждый день просматриваете таблицу" },
+          getolog: { uz: "Filtr va \"qolgan kun\" ustuni — bir qarashda ko'rinadi", ru: "Фильтр и колонка «осталось дней» — видно с первого взгляда" },
+        },
+        {
+          label: { uz: "Eslatma yuborish", ru: "Отправка напоминаний" },
+          manual: { uz: "Har biriga qo'lda yozasiz", ru: "Пишете каждому вручную" },
+          getolog: { uz: "Muddat tugashidan oldin avtomatik ketadi", ru: "Уходит автоматически перед окончанием срока" },
+        },
+        {
+          label: { uz: "Muddati tugaganni chiqarish", ru: "Удаление по истечении срока" },
+          manual: { uz: "Yodda tutish kerak — ko'pincha unutiladi", ru: "Нужно помнить — часто забывается" },
+          getolog: { uz: "Tugagan kuni avtomatik chiqariladi", ru: "Удаляется автоматически в день окончания" },
+        },
+        {
+          label: { uz: "To'lov isboti", ru: "Подтверждение оплаты" },
+          manual: { uz: "Chek shaxsiy xabarlar orasida qoladi", ru: "Чек остаётся где-то в личных сообщениях" },
+          getolog: { uz: "To'lovlar tarixi holat va sana bilan saqlanadi", ru: "История платежей хранится со статусом и датой" },
+        },
+        {
+          label: { uz: "Imtiyoz yoki uzaytirish", ru: "Отсрочка или продление" },
+          manual: { uz: "Alohida eslatma yozib qo'yasiz", ru: "Записываете себе отдельную заметку" },
+          getolog: { uz: "Muddatni panelda o'zgartirasiz — tizim yangi sanaga o'tadi", ru: "Меняете срок в панели — система переходит на новую дату" },
+        },
+      ],
+    },
+    faq: [
+      {
+        q: { uz: "Kanalimda hozir 80 ta obunachi bor. Ularni tizimga ko'chirish kerakmi?", ru: "У меня сейчас 80 подписчиков. Нужно ли переносить их в систему?" },
+        a: {
+          uz: "Bittalab ko'chirish shart emas. Ro'yxat yangi to'lovlardan boshlab avtomatik to'ladi, mavjud obunachilarning muddatini esa panel orqali qo'lda kiritib qo'yish mumkin. Ko'pchilik eski obunachilar birinchi yangilash paytida o'zi tizimga o'tadi.",
+          ru: "Переносить по одному не нужно. Список наполняется автоматически начиная с новых оплат, а сроки уже имеющихся подписчиков можно внести вручную через панель. Большинство старых подписчиков попадает в систему само при первом продлении.",
+        },
+      },
+      {
+        q: { uz: "Obunachining muddatini qo'lda uzaytirish mumkinmi?", ru: "Можно ли продлить срок подписчику вручную?" },
+        a: {
+          uz: "Ha. Har bir obunachining tugash sanasini panel orqali o'zgartirish mumkin — uzaytirish ham, qisqartirish ham. Eslatma va avtomatik chiqarish shundan keyin yangi sanaga qarab ishlaydi.",
+          ru: "Да. Дату окончания у каждого подписчика можно изменить через панель — как продлить, так и сократить. Напоминание и автоудаление после этого ориентируются на новую дату.",
+        },
+      },
+      {
+        q: { uz: "Kanaldan chiqarilgan odam ro'yxatda qoladimi?", ru: "Остаётся ли в списке удалённый из канала человек?" },
+        a: {
+          uz: "Ha, u \"chiqarilgan\" holati bilan ro'yxatda qoladi. Bu qaytib kelganlarni kuzatish va kim qachon ketganini bilish uchun kerak. Qayta to'lasa, bot unga yangi bir martalik havola yuboradi.",
+          ru: "Да, он остаётся в списке со статусом «удалён». Это нужно, чтобы отслеживать вернувшихся и знать, кто когда ушёл. При повторной оплате бот отправит ему новую одноразовую ссылку.",
+        },
+      },
+      {
+        q: { uz: "Obunachilar ro'yxatini boshqa odam ko'ra oladimi?", ru: "Может ли список подписчиков увидеть кто-то ещё?" },
+        a: {
+          uz: "Ro'yxatni faqat kanal egasi va u qo'shgan administratorlar ko'radi. Har bir kanal o'z paneliga ega — boshqa kanal egalari sizning obunachilaringizni ko'rmaydi.",
+          ru: "Список видят только владелец канала и добавленные им администраторы. У каждого канала своя панель — другие владельцы каналов ваших подписчиков не видят.",
+        },
+      },
+      {
+        q: { uz: "Faol obunachilar soni tarifga qanday ta'sir qiladi?", ru: "Как количество активных подписчиков влияет на тариф?" },
+        a: {
+          uz: "Tariflar aynan faol obunachi soniga qarab bo'lingan: bepul — 20 tagacha, Minimal — 100, Standart — 200, Pro — 500, Biznes — 1000 tagacha. Muddati tugagan va chiqarilganlar bu songa kirmaydi. To'liq taqqoslash /price sahifasida.",
+          ru: "Тарифы разделены именно по количеству активных подписчиков: бесплатный — до 20, Минимал — 100, Стандарт — 200, Про — 500, Бизнес — до 1000. Подписчики с истёкшим сроком и удалённые в это число не входят. Полное сравнение — на странице /price.",
+        },
+      },
+      {
+        q: { uz: "Bir nechta kanalim bo'lsa, obunachilar aralashib ketmaydimi?", ru: "Если у меня несколько каналов, не перемешаются ли подписчики?" },
+        a: {
+          uz: "Yo'q. Har bir kanalning obunachilari, to'lovlari va tariflari alohida yuritiladi. Bir odam ikkita kanalingizga obuna bo'lsa, u ikkala ro'yxatda o'z muddati bilan alohida ko'rinadi.",
+          ru: "Нет. Подписчики, платежи и тарифы каждого канала ведутся отдельно. Если один человек подписан на два ваших канала, он будет виден в обоих списках со своим отдельным сроком.",
+        },
+      },
+    ],
+    related: ["obuna-tugaganda-kanaldan-chiqarish", "telegram-obuna-bot", "telegram-kanalga-tolov-qabul-qilish", "getolog-nima"],
+    relatedArticles: ["obuna-bot-sozlash", "pullik-kanal-uchun-maslahatlar"],
+  },
 ];
 
 export function getLandingPage(slug: string): LandingPage | undefined {

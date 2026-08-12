@@ -49,6 +49,7 @@ Bepul tarifda Getolog brendi ko'rsatiladi. Tarif to'lovi obunachilardan tushgan 
 - **Getolog to'lovdan komissiya oladimi?** Yo'q. Pul to'g'ridan-to'g'ri kanal egasining kartasiga tushadi.
 - **Dasturlashni bilish kerakmi?** Yo'q, kod yozilmaydi.
 - **Guruh uchun ham ishlaydimi?** Ha, yopiq Telegram guruhlar ham qo'llab-quvvatlanadi.
+- **Ko'p sonli obunachini qanday boshqarish mumkin?** Panelda barcha obunachilar bitta ro'yxatda ko'rinadi: ism, username, holat (faol / muddati tugagan / chiqarilgan), qo'shilgan sana va qolgan kun. Ism, username yoki Telegram ID bo'yicha qidiruv va holat bo'yicha filtr bor; obunachining muddatini qo'lda o'zgartirish ham mumkin.
 - **Payme yoki Click ulash mumkinmi?** Ha. Mijozning merchant hisobi bo'lsa, Getolog jamoasi Payme yoki Click'ni botga ulab beradi. Merchant bo'lmasa, karta o'tkazmasi va chek tasdiqlash bilan ishlanadi.
 
 ## Sahifalar (Pages)
@@ -59,6 +60,7 @@ Bepul tarifda Getolog brendi ko'rsatiladi. Tarif to'lovi obunachilardan tushgan 
 - [Telegram kanalga to'lov qabul qilish](https://getolog.uz/telegram-kanalga-tolov-qabul-qilish): karta, Payme va Click orqali to'lov olish variantlari
 - [Payme va Click Telegram bot](https://getolog.uz/payme-click-telegram-bot): merchant talablari, jarayon va alternativa
 - [Obuna tugaganda kanaldan chiqarish](https://getolog.uz/obuna-tugaganda-kanaldan-chiqarish): muddat nazorati, eslatma va avtomatik chiqarish
+- [Telegram obunachilarini boshqarish](https://getolog.uz/telegram-obunachilarini-boshqarish): obunachilar ro'yxati, qidiruv va filtr, to'lovlar tarixi, o'sish statistikasi
 - [Tariflar](https://getolog.uz/price): barcha tariflarning to'liq taqqoslanishi
 - [Maqolalar](https://getolog.uz/blog): Telegram monetizatsiyasi bo'yicha qo'llanmalar
 - [Ma'lumot](https://getolog.uz/info): xizmat haqida batafsil
