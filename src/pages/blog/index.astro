@@ -28,6 +28,21 @@ const blogMeta = {
 };
 
 const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
+
+/* Qo'llanmalar ham yangilaridan boshlab: avval yangilangan sana, teng bo'lsa chop etilgan sana */
+const guides = [...landingPages].sort(
+  (a, b) => (b.updated || b.published).localeCompare(a.updated || a.published)
+    || b.published.localeCompare(a.published),
+);
+
+const updatedLabel = { uz: "yangilandi", ru: "обновлено" };
+
+const fmtDate = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === "uz" ? "uz-UZ" : "ru-RU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 ---
 
 <Layout title={blogMeta.title[lang]} description={blogMeta.desc[lang]} lang={lang}>
@@ -57,7 +72,7 @@ const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
             "name": a.title[lang],
             "url": `https://getolog.uz${prefix}/blog/${a.slug}`,
           })),
-          ...landingPages.map((p, i) => ({
+          ...guides.map((p, i) => ({
             "@type": "ListItem",
             "position": sorted.length + i + 1,
             "name": p.h1[lang],
@@ -79,12 +94,20 @@ const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
     <div class="container">
       <h2 class="blog-guides__title">{guidesTitle[lang]}</h2>
       <div class="blog-guides__grid">
-        {landingPages.map((p) => (
-          <a href={`${prefix}/${p.slug}`} class="blog-guides__item">
-            <span class="blog-guides__cat">{p.category[lang]}</span>
-            <span class="blog-guides__name">{p.h1[lang]}</span>
-          </a>
-        ))}
+        {guides.map((p) => {
+          const isUpdated = Boolean(p.updated) && p.updated !== p.published;
+          return (
+            <a href={`${prefix}/${p.slug}`} class="blog-guides__item">
+              <span class="blog-guides__meta">
+                <span class="blog-guides__cat">{p.category[lang]}</span>
+                <time class="blog-guides__date" datetime={p.updated || p.published}>
+                  {isUpdated ? `${updatedLabel[lang]}: ` : ""}{fmtDate(p.updated || p.published)}
+                </time>
+              </span>
+              <span class="blog-guides__name">{p.h1[lang]}</span>
+            </a>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -93,17 +116,11 @@ const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
     <div class="container">
       <div class="blog-grid">
         {sorted.map((article) => {
-          const dateObj = new Date(article.date);
-          const dateStr = dateObj.toLocaleDateString(lang === "uz" ? "uz-UZ" : "ru-RU", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
           return (
             <a href={`${prefix}/blog/${article.slug}`} class="blog-card">
               <div class="blog-card__meta">
                 <span class="blog-card__category">{article.category[lang]}</span>
-                <span class="blog-card__date">{dateStr}</span>
+                <time class="blog-card__date" datetime={article.date}>{fmtDate(article.date)}</time>
               </div>
               <h2 class="blog-card__title">{article.title[lang]}</h2>
               <p class="blog-card__desc">{article.description[lang]}</p>
@@ -150,6 +167,19 @@ const sorted = [...articles].sort((a, b) => b.date.localeCompare(a.date));
   .blog-guides__item:hover {
     border-color: rgba(91, 107, 122, 0.28);
     transform: translateY(-2px);
+  }
+
+  .blog-guides__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .blog-guides__date {
+    font-size: 0.72rem;
+    color: var(--light-400);
+    white-space: nowrap;
   }
 
   .blog-guides__cat {
