@@ -1059,7 +1059,7 @@ export const landingPages: LandingPage[] = [
      6. Telegram kanal obunachilarini boshqarish
      ───────────────────────────────────────────────────────────── */
   {
-    slug: "telegram-obunachilarini-boshqarish",
+    slug: "telegram-kanal-obunachilarini-boshqarish",
     keyword: { uz: "telegram kanal obunachilarini boshqarish", ru: "управление подписчиками telegram-канала" },
     title: {
       uz: "Telegram kanal obunachilarini boshqarish: 100+ pullik obunachi bilan ishlash",

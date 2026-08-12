@@ -29,7 +29,7 @@
 | `/telegram-kanalga-tolov-qabul-qilish` | telegram kanalga to'lov qabul qilish | Tijoriy |
 | `/payme-click-telegram-bot` | Payme Click Telegram bot | Yuqori xarid niyati |
 | `/obuna-tugaganda-kanaldan-chiqarish` | obuna tugaganda chiqarish | Muammo yechimi |
-| `/telegram-obunachilarini-boshqarish` | telegram kanal obunachilarini boshqarish | Tijoriy (2026-08-12) |
+| `/telegram-kanal-obunachilarini-boshqarish` | telegram kanal obunachilarini boshqarish | Tijoriy (2026-08-12) |
 
 ---
 
@@ -40,7 +40,7 @@ Har biri uchun fayl: `src/data/landing.ts` ga yangi obyekt qo'shiladi, marshrut 
 ### Navbat 2 (keyingi 5 ta)
 | # | URL | Keyword | Niyat | Eslatma |
 |---|---|---|---|---|
-| ~~1~~ | ~~`/telegram-obunachilarini-boshqarish`~~ | telegram kanal obunachilarini boshqarish | Tijoriy | ✅ 2026-08-12 da yozildi. Faqat panelda **haqiqatan mavjud** imkoniyatlar yozildi: ro'yxat (ism/username/holat/sana/qolgan kun), qidiruv, holat filtri, muddatni qo'lda o'zgartirish, to'lovlar tarixi, o'sish grafigi. CSV eksport, segmentatsiya, ommaviy xabar va mini-CRM **va'da qilinmadi** |
+| ~~1~~ | ~~`/telegram-kanal-obunachilarini-boshqarish`~~ | telegram kanal obunachilarini boshqarish | Tijoriy | ✅ 2026-08-12 da yozildi. Faqat panelda **haqiqatan mavjud** imkoniyatlar yozildi: ro'yxat (ism/username/holat/sana/qolgan kun), qidiruv, holat filtri, muddatni qo'lda o'zgartirish, to'lovlar tarixi, o'sish grafigi. CSV eksport, segmentatsiya, ommaviy xabar va mini-CRM **va'da qilinmadi** |
 | 2 | `/online-kurs-uchun-telegram-bot` | online kurs uchun telegram bot | Segmentli xarid | O'qituvchi/kurs egasi segmenti — eng kuchli auditoriya |
 | 3 | `/telegram-kanal-obuna-narxi` | telegram kanal obuna narxi | Tijoriy | Narx belgilash metodikasi + hisob-kitob misollari |
 | 4 | `/telegram-stars-yoki-payme-click` | Telegram Stars yoki Payme/Click | Taqqoslash (GEO) | AI javoblarida ko'p iqtibos qilinadigan format |
@@ -75,7 +75,7 @@ Har biri uchun fayl: `src/data/landing.ts` ga yangi obyekt qo'shiladi, marshrut 
 | 9 | telegram kanalga pullik kirish | `/telegram-kanalga-pullik-kirish` | ⏳ navbat 3 |
 | 10 | telegram invite link bot | `/telegram-invite-link-bot` | ⏳ navbat 3 |
 | 11 | bir martalik telegram havola | `/blog/invite-link-xavfsizligi` | ✅ mavjud |
-| 12 | telegram kanal obunachilarini boshqarish | `/telegram-obunachilarini-boshqarish` | ✅ |
+| 12 | telegram kanal obunachilarini boshqarish | `/telegram-kanal-obunachilarini-boshqarish` | ✅ |
 | 13 | obuna muddati tugaganda kanaldan chiqarish | `/obuna-tugaganda-kanaldan-chiqarish` | ✅ |
 | 14 | telegram kanal monetizatsiyasi | `/blog/telegram-kanalni-pullik-qilish` | ✅ mavjud |
 | 15 | telegram kanal orqali pul ishlash | `/telegram-kanal-orqali-pul-ishlash` | ⏳ navbat 3 |
@@ -102,10 +102,10 @@ Har biri uchun fayl: `src/data/landing.ts` ga yangi obyekt qo'shiladi, marshrut 
 | 11 | Avtomatik obuna tizimi qancha turadi? | `/price` + `/telegram-kanal-obuna-narxi` | ⏳ qisman |
 | 12 | To'lov chekini qanday tasdiqlash mumkin? | `/telegram-kanalga-tolov-qabul-qilish` | ✅ |
 | 13 | Xavfsiz bir martalik havola qanday beriladi? | `/blog/invite-link-xavfsizligi` | ✅ |
-| 14 | 100 ta pullik obunachini qanday boshqarish mumkin? | `/telegram-obunachilarini-boshqarish` | ✅ |
+| 14 | 100 ta pullik obunachini qanday boshqarish mumkin? | `/telegram-kanal-obunachilarini-boshqarish` | ✅ |
 | 15 | Oylik/uch oylik/yillik tariflarni qanday sozlash kerak? | `/telegram-kanal-obuna-narxi` | ⏳ |
 | 16 | Obunachilarga avtomatik eslatma yuborish mumkinmi? | `/obuna-tugaganda-kanaldan-chiqarish` | ✅ |
-| 17 | Daromad va obunachilar statistikasini qanday ko'rish mumkin? | `/telegram-obunachilarini-boshqarish` | ✅ (o'sish grafigi + to'lovlar tarixi darajasida) |
+| 17 | Daromad va obunachilar statistikasini qanday ko'rish mumkin? | `/telegram-kanal-obunachilarini-boshqarish` | ✅ (o'sish grafigi + to'lovlar tarixi darajasida) |
 | 18 | Ingliz tili kursi uchun pullik kanal qanday yaratiladi? | `/online-kurs-uchun-telegram-bot` | ⏳ |
 | 19 | Telegram kanal uchun referral tizimi qanday ishlaydi? | `/telegram-kanal-referral-tizimi` | ⏳ funksiya chiqqandan keyin |
 | 20 | Getolog nima va qanday ishlaydi? | `/getolog-nima` | ✅ |

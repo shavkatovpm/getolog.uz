@@ -60,7 +60,7 @@ Bepul tarifda Getolog brendi ko'rsatiladi. Tarif to'lovi obunachilardan tushgan 
 - [Telegram kanalga to'lov qabul qilish](https://getolog.uz/telegram-kanalga-tolov-qabul-qilish): karta, Payme va Click orqali to'lov olish variantlari
 - [Payme va Click Telegram bot](https://getolog.uz/payme-click-telegram-bot): merchant talablari, jarayon va alternativa
 - [Obuna tugaganda kanaldan chiqarish](https://getolog.uz/obuna-tugaganda-kanaldan-chiqarish): muddat nazorati, eslatma va avtomatik chiqarish
-- [Telegram obunachilarini boshqarish](https://getolog.uz/telegram-obunachilarini-boshqarish): obunachilar ro'yxati, qidiruv va filtr, to'lovlar tarixi, o'sish statistikasi
+- [Telegram kanal obunachilarini boshqarish](https://getolog.uz/telegram-kanal-obunachilarini-boshqarish): obunachilar ro'yxati, qidiruv va filtr, to'lovlar tarixi, o'sish statistikasi
 - [Tariflar](https://getolog.uz/price): barcha tariflarning to'liq taqqoslanishi
 - [Maqolalar](https://getolog.uz/blog): Telegram monetizatsiyasi bo'yicha qo'llanmalar
 - [Ma'lumot](https://getolog.uz/info): xizmat haqida batafsil
