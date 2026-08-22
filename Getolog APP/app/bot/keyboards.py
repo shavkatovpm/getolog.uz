@@ -53,6 +53,7 @@ def start_menu_keyboard(*, has_bots: bool, any_pending: bool = False) -> InlineK
 
     if any_pending:
         builder.row(InlineKeyboardButton(text="✅ Admin qildim", callback_data="check_admin"))
+        builder.row(InlineKeyboardButton(text="🆘 Yordam kerak", callback_data="request_help"))
         return builder.as_markup()
 
     builder.row(
@@ -61,6 +62,14 @@ def start_menu_keyboard(*, has_bots: bool, any_pending: bool = False) -> InlineK
         )
     )
     builder.row(InlineKeyboardButton(text="➕ Bot qo'shish", callback_data="add_bot"))
+    return builder.as_markup()
+
+
+def help_button_keyboard() -> InlineKeyboardMarkup:
+    """Bot ulash bosqichida chalkashib qolgan foydalanuvchi uchun — bosilsa
+    sovuq murojaat emas, o'zi so'ragan yordam sifatida super adminga xabar boradi."""
+    builder = InlineKeyboardBuilder()
+    builder.row(InlineKeyboardButton(text="🆘 Yordam kerak", callback_data="request_help"))
     return builder.as_markup()
 
 

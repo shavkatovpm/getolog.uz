@@ -19,7 +19,7 @@ from aiogram import Bot, F, Router
 from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, ChatMemberAdministrator, ChatMemberUpdated, Message
+from aiogram.types import CallbackQuery, ChatMemberAdministrator, ChatMemberUpdated, Message, User
 from aiogram.utils.token import TokenValidationError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -39,10 +39,45 @@ logger = logging.getLogger(__name__)
 main_router = Router(name="onboarding_main")
 child_router = Router(name="onboarding_child")
 
+# BotFather orqali token olish ko'plab (texnik bo'lmagan) foydalanuvchi uchun
+# onboarding'dagi eng chalkash bosqich — shuning uchun bitta qatorli buyruq
+# emas, raqamlangan qadamlar sifatida beriladi.
+BOT_TOKEN_INSTRUCTIONS = (
+    "Endi shaxsiy botingizni yarating:\n\n"
+    "1. @BotFather ga o'ting va /newbot buyrug'ini yuboring\n"
+    "2. Bot uchun istalgan ism, so'ng username kiriting (username \"bot\" bilan "
+    "tugashi shart, masalan: mening_kursim_bot)\n"
+    "3. BotFather sizga token yuboradi (raqam va harflardan iborat qator) — "
+    "uni to'liq nusxalab shu yerga yuboring"
+)
+
 
 async def _get_admin(session: AsyncSession, telegram_id: int) -> Admin | None:
     result = await session.execute(select(Admin).where(Admin.telegram_id == telegram_id))
     return result.scalar_one_or_none()
+
+
+async def _notify_owner(text: str) -> None:
+    main_bot = registry.get_main_bot()
+    try:
+        await main_bot.send_message(settings.owner_telegram_id, text)
+    except TelegramAPIError:
+        pass
+
+
+async def _notify_owner_new_start(user: User) -> None:
+    """Hali ro'yxatdan o'tmagan foydalanuvchi birinchi marta /start bosganda
+    super adminga kuzatuv xabari beradi. Faqat xabar berish uchun — foydalanuvchiga
+    o'zi murojaat qilish so'ralmaydi (sovuq yozish spam sifatida ko'rinishi mumkin,
+    shuning uchun bog'lanish faqat "🆘 Yordam kerak" tugmasi orqali, foydalanuvchi
+    o'zi so'raganda amalga oshadi)."""
+    username = f"@{user.username}" if user.username else "username yo'q"
+    await _notify_owner(
+        "🆕 Yangi foydalanuvchi /start bosdi\n\n"
+        f"Ism: {user.full_name}\n"
+        f"Username: {username}\n"
+        f"Telegram ID: {user.id}"
+    )
 
 
 async def _send_login_code(message: Message, telegram_id: int) -> None:
@@ -73,6 +108,10 @@ async def cmd_start(
     admin = await _get_admin(session, message.from_user.id)
 
     if admin is None:
+        # Holat hali bo'sh bo'lsa — bu shu odamning birinchi /start bosishi
+        # (qayta bosishlarda takroriy xabar yuborilmaydi).
+        if await state.get_state() is None:
+            await _notify_owner_new_start(message.from_user)
         await message.answer(
             "Assalomu alaykum! GETOLOG — yopiq Telegram kanalingiz uchun "
             "obuna boshqaruvi platformasi.\n\n"
@@ -186,10 +225,30 @@ async def _send_start_menu(
 async def on_add_bot_pressed(callback: CallbackQuery, state: FSMContext) -> None:
     assert isinstance(callback.message, Message)
     await callback.message.answer(
-        "@BotFather orqali yangi bot yarating (/newbot) va u bergan tokenni shu yerga yuboring:"
+        BOT_TOKEN_INSTRUCTIONS, reply_markup=keyboards.help_button_keyboard()
     )
     await state.set_state(OnboardingStates.waiting_for_bot_token)
     await callback.answer()
+
+
+@main_router.callback_query(F.data == "request_help")
+async def on_help_requested(callback: CallbackQuery, session: AsyncSession) -> None:
+    """Foydalanuvchi bot ulash jarayonida "🆘 Yordam kerak" tugmasini bosganda —
+    bu sovuq murojaat emas, o'zi so'ragan holat, shuning uchun super adminga
+    to'g'ridan-to'g'ri yozish o'rniga shu orqali bog'lanish tavsiya etiladi."""
+    admin = await _get_admin(session, callback.from_user.id)
+    username = f"@{callback.from_user.username}" if callback.from_user.username else "username yo'q"
+    name = admin.full_name if admin is not None else callback.from_user.full_name
+    await _notify_owner(
+        "🆘 Yordam so'rovi\n\n"
+        f"Ism: {name}\n"
+        f"Username: {username}\n"
+        f"Telegram ID: {callback.from_user.id}\n\n"
+        "Bot ulash jarayonida yordam so'radi."
+    )
+    await callback.answer(
+        "So'rovingiz yuborildi, tez orada siz bilan bog'lanishadi.", show_alert=True
+    )
 
 
 @main_router.callback_query(F.data == "check_admin")
@@ -223,9 +282,8 @@ async def process_name(message: Message, state: FSMContext, session: AsyncSessio
     await session.commit()
 
     await message.answer(
-        f"Rahmat, {full_name}!\n\n"
-        "Endi @BotFather orqali yangi bot yarating (/newbot) va u bergan "
-        "tokenni shu yerga yuboring:"
+        f"Rahmat, {full_name}!\n\n{BOT_TOKEN_INSTRUCTIONS}",
+        reply_markup=keyboards.help_button_keyboard(),
     )
     await state.set_state(OnboardingStates.waiting_for_bot_token)
 
