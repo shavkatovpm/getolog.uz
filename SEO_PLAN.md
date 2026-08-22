@@ -30,6 +30,7 @@
 | `/payme-click-telegram-bot` | Payme Click Telegram bot | Yuqori xarid niyati |
 | `/obuna-tugaganda-kanaldan-chiqarish` | obuna tugaganda chiqarish | Muammo yechimi |
 | `/telegram-kanal-obunachilarini-boshqarish` | telegram kanal obunachilarini boshqarish | Tijoriy (2026-08-12) |
+| `/online-kurs-uchun-telegram-bot` | online kurs uchun telegram bot | Segmentli xarid (2026-08-22) |
 
 ---
 
@@ -41,7 +42,7 @@ Har biri uchun fayl: `src/data/landing.ts` ga yangi obyekt qo'shiladi, marshrut 
 | # | URL | Keyword | Niyat | Eslatma |
 |---|---|---|---|---|
 | ~~1~~ | ~~`/telegram-kanal-obunachilarini-boshqarish`~~ | telegram kanal obunachilarini boshqarish | Tijoriy | ✅ 2026-08-12 da yozildi. Faqat panelda **haqiqatan mavjud** imkoniyatlar yozildi: ro'yxat (ism/username/holat/sana/qolgan kun), qidiruv, holat filtri, muddatni qo'lda o'zgartirish, to'lovlar tarixi, o'sish grafigi. CSV eksport, segmentatsiya, ommaviy xabar va mini-CRM **va'da qilinmadi** |
-| 2 | `/online-kurs-uchun-telegram-bot` | online kurs uchun telegram bot | Segmentli xarid | O'qituvchi/kurs egasi segmenti — eng kuchli auditoriya |
+| ~~2~~ | ~~`/online-kurs-uchun-telegram-bot`~~ | online kurs uchun telegram bot | Segmentli xarid | ✅ 2026-08-22 da yozildi. Kurs muddatiga mos tarif (bitta oqim vs oylik yangilanish), tarif hisob-kitobi (obunachi soni bo'yicha), kurs tugagach avtomatik chiqarish, karta/Payme/Click. Modul/cohort guruhlash kabi mavjud bo'lmagan imkoniyatlar **va'da qilinmadi** |
 | 3 | `/telegram-kanal-obuna-narxi` | telegram kanal obuna narxi | Tijoriy | Narx belgilash metodikasi + hisob-kitob misollari |
 | 4 | `/telegram-stars-yoki-payme-click` | Telegram Stars yoki Payme/Click | Taqqoslash (GEO) | AI javoblarida ko'p iqtibos qilinadigan format |
 | 5 | `/telegram-kanal-referral-tizimi` | telegram kanal referral tizimi | Tijoriy | **Diqqat:** referral ilovada hali ishlab chiqilmagan — funksiya chiqqandan keyin yozilsin |
@@ -81,7 +82,7 @@ Har biri uchun fayl: `src/data/landing.ts` ga yangi obyekt qo'shiladi, marshrut 
 | 15 | telegram kanal orqali pul ishlash | `/telegram-kanal-orqali-pul-ishlash` | ⏳ navbat 3 |
 | 16 | premium telegram kanal yaratish | `/premium-telegram-kanal-yaratish` | ⏳ navbat 3 |
 | 17 | telegram guruhni pullik qilish | `/telegram-guruhni-pullik-qilish` | ⏳ navbat 3 |
-| 18 | online kurs uchun telegram bot | `/online-kurs-uchun-telegram-bot` | ⏳ **navbat 2** |
+| 18 | online kurs uchun telegram bot | `/online-kurs-uchun-telegram-bot` | ✅ |
 | 19 | o'quvchilar uchun yopiq telegram kanal | `/oquvchilar-uchun-yopiq-telegram-kanal` | ⏳ navbat 3 |
 | 20 | telegram kanal obuna narxi | `/telegram-kanal-obuna-narxi` | ⏳ **navbat 2** |
 
@@ -96,7 +97,7 @@ Har biri uchun fayl: `src/data/landing.ts` ga yangi obyekt qo'shiladi, marshrut 
 | 5 | To'lovdan keyin kanalga avtomatik qo'shadigan bot bormi? | `/telegram-obuna-bot` | ✅ |
 | 6 | Obuna tugaganda foydalanuvchini avtomatik chiqarish mumkinmi? | `/obuna-tugaganda-kanaldan-chiqarish` | ✅ |
 | 7 | Dasturlashsiz pullik Telegram kanal ochish mumkinmi? | `/yopiq-telegram-kanal-ochish` | ⏳ (FAQ sifatida `/getolog-nima` da bor) |
-| 8 | Onlayn kursni Telegram kanal orqali qanday sotish mumkin? | `/online-kurs-uchun-telegram-bot` | ⏳ |
+| 8 | Onlayn kursni Telegram kanal orqali qanday sotish mumkin? | `/online-kurs-uchun-telegram-bot` | ✅ |
 | 9 | Telegram Stars yoki Payme/Click — qaysi biri yaxshi? | `/telegram-stars-yoki-payme-click` | ⏳ |
 | 10 | O'zbekistondagi eng yaxshi monetizatsiya platformalari | `/telegram-kanal-monetizatsiya-platformalari` | ⏳ navbat 3 |
 | 11 | Avtomatik obuna tizimi qancha turadi? | `/price` + `/telegram-kanal-obuna-narxi` | ⏳ qisman |
@@ -106,7 +107,7 @@ Har biri uchun fayl: `src/data/landing.ts` ga yangi obyekt qo'shiladi, marshrut 
 | 15 | Oylik/uch oylik/yillik tariflarni qanday sozlash kerak? | `/telegram-kanal-obuna-narxi` | ⏳ |
 | 16 | Obunachilarga avtomatik eslatma yuborish mumkinmi? | `/obuna-tugaganda-kanaldan-chiqarish` | ✅ |
 | 17 | Daromad va obunachilar statistikasini qanday ko'rish mumkin? | `/telegram-kanal-obunachilarini-boshqarish` | ✅ (o'sish grafigi + to'lovlar tarixi darajasida) |
-| 18 | Ingliz tili kursi uchun pullik kanal qanday yaratiladi? | `/online-kurs-uchun-telegram-bot` | ⏳ |
+| 18 | Ingliz tili kursi uchun pullik kanal qanday yaratiladi? | `/online-kurs-uchun-telegram-bot` | ✅ qisman (umumiy misol sifatida qamrab olindi) |
 | 19 | Telegram kanal uchun referral tizimi qanday ishlaydi? | `/telegram-kanal-referral-tizimi` | ⏳ funksiya chiqqandan keyin |
 | 20 | Getolog nima va qanday ishlaydi? | `/getolog-nima` | ✅ |
 

@@ -1302,6 +1302,226 @@ export const landingPages: LandingPage[] = [
     related: ["obuna-tugaganda-kanaldan-chiqarish", "telegram-obuna-bot", "telegram-kanalga-tolov-qabul-qilish", "getolog-nima"],
     relatedArticles: ["obuna-bot-sozlash", "pullik-kanal-uchun-maslahatlar"],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     7. Onlayn kurs uchun Telegram bot — segmentli xarid (o'qituvchi / kurs egasi)
+     ───────────────────────────────────────────────────────────── */
+  {
+    slug: "online-kurs-uchun-telegram-bot",
+    keyword: { uz: "online kurs uchun telegram bot", ru: "телеграм-бот для онлайн-курса" },
+    title: {
+      uz: "Onlayn kurs uchun Telegram bot: talabalarni avtomatik boshqarish",
+      ru: "Телеграм-бот для онлайн-курса: как автоматически вести учеников",
+    },
+    h1: {
+      uz: "Onlayn kurs uchun qanday Telegram bot kerak?",
+      ru: "Какой телеграм-бот нужен для онлайн-курса?",
+    },
+    description: {
+      uz: "Onlayn kurs — ingliz tili, IT, matematika — uchun Telegram bot qanday tanlanadi: to'lovni qabul qilish, talabani kanalga kiritish, kurs tugaganda avtomatik chiqarish. Amaliy misollar va tarif hisob-kitobi.",
+      ru: "Как выбрать Telegram-бота для онлайн-курса — английский, IT, математика: приём оплаты, автоматический доступ ученика в канал и удаление по окончании курса. Практические примеры и расчёт тарифа.",
+    },
+    answer: {
+      uz: "Onlayn kurs uchun Telegram bot — talabani to'lovdan so'ng yopiq kanalga avtomatik kiritadigan va kurs muddati tugaganda chiqaradigan tizim. Getolog'da kurs davomiyligiga mos tarif (masalan, 2 oy yoki 3 oy) yaratiladi, talaba botda shuni tanlab to'laydi, bir martalik havola oladi va muddat tugagach kanaldan avtomatik chiqariladi.",
+      ru: "Телеграм-бот для онлайн-курса — это система, которая после оплаты автоматически впускает ученика в закрытый канал, а по окончании курса удаляет его. В Getolog создаётся тариф по длительности курса (например, 2 или 3 месяца), ученик выбирает его в боте, получает одноразовую ссылку и по истечении срока автоматически исключается из канала.",
+    },
+    published: "2026-08-22",
+    updated: "2026-08-22",
+    category: { uz: "Kurslar", ru: "Курсы" },
+    readTime: { uz: "6 daqiqa", ru: "6 минут" },
+    sections: [
+      {
+        h2: { uz: "Onlayn kursni Telegram kanal orqali qanday sotish mumkin?", ru: "Как продавать онлайн-курс через Telegram-канал?" },
+        html: {
+          uz: `<p>O'zbekistonda ko'plab onlayn kurs — ingliz tili, IT, matematika, marketing — darslari, materiallari va jonli efirlari bilan yopiq Telegram kanal yoki guruhda o'tkaziladi. Talaba to'lov qilgach kanalga kiradi, kurs davomida shu yerda o'qiydi.</p>
+<p>Bunday formatning qiyin joyi pul emas, balki <strong>kirish-chiqishni boshqarish</strong>: kim to'lagan, kimning kursi qachon tugaydi, kimni kanaldan chiqarish kerak. 10–15 talabagacha buni jadvalda kuzatish mumkin, lekin sonlar oshgach xatolar boshlanadi — to'lamagan odam kanalda qolib ketadi yoki to'lagan odam unutilib, kiritilmaydi.</p>
+<p>Getolog bu jarayonni <a href="/telegram-obuna-bot">obuna boti</a> orqali avtomatlashtiradi: talaba botga to'laydi, bot bir martalik havola beradi, kurs muddati tugaganda odam kanaldan avtomatik chiqariladi — o'qituvchi qo'lda kuzatib o'tirmaydi.</p>`,
+          ru: `<p>В Узбекистане многие онлайн-курсы — английский язык, IT, математика, маркетинг — ведутся в закрытом Telegram-канале или группе: там же уроки, материалы и прямые эфиры. Ученик попадает в канал после оплаты и учится там весь курс.</p>
+<p>Сложность такого формата не в деньгах, а в <strong>управлении входом и выходом</strong>: кто оплатил, у кого когда заканчивается курс, кого пора удалить. До 10–15 учеников это ещё можно вести в таблице, но с ростом числа начинаются ошибки — неоплативший остаётся в канале, а оплативший забывается и не попадает внутрь.</p>
+<p>Getolog автоматизирует этот процесс через <a href="/ru/telegram-obuna-bot">бота подписки</a>: ученик платит боту, бот выдаёт одноразовую ссылку, а по окончании курса человек автоматически удаляется из канала — преподавателю не нужно следить вручную.</p>`,
+        },
+      },
+      {
+        h2: { uz: "Kurs narxi va muddatini botda qanday sozlash kerak?", ru: "Как настроить цену и срок курса в боте?" },
+        html: {
+          uz: `<p>Getolog panelida istalgan muddat va narxda tarif yaratish mumkin — 2 haftalik intensivdan 6 oylik dasturgacha. Odatda kurs egalari ikki modeldan birini tanlaydi:</p>
+<ul>
+<li><strong>Bitta oqim, bitta muddat.</strong> Masalan, "8 haftalik marketing kursi" uchun bitta tarif ochiladi: 8 hafta, belgilangan narx. Kurs tugaganda barcha talabalar bir vaqtda avtomatik chiqariladi.</li>
+<li><strong>Davomiy dastur, oylik yangilanish.</strong> Masalan, ingliz tili kursi har oy yangi mavzu bilan davom etadi. Talaba botda oylik tarifni tanlaydi; yangilamasa, muddat tugagan kuni kanaldan chiqadi.</li>
+</ul>
+<p>Bot bir nechta muddat variantini bir vaqtda taklif qilishi mumkin (masalan, 1 oy, 3 oy, 6 oy — har biri o'z narxida), talaba shulardan birini tanlab to'laydi. Narx va muddatlarni istalgan vaqt panel orqali o'zgartirish mumkin — bu <a href="/price">tariflar sahifasida</a> ko'rsatilgan Getolog tarifidan alohida: u yerda siz o'zingiz Getolog'ga to'laysiz, bu yerda esa o'z talabalaringiz uchun narx belgilaysiz.</p>`,
+          ru: `<p>В панели Getolog можно создать тариф с любой длительностью и ценой — от двухнедельного интенсива до полугодовой программы. Обычно владельцы курсов выбирают одну из двух моделей:</p>
+<ul>
+<li><strong>Один поток, один срок.</strong> Например, для «8-недельного курса маркетинга» открывается один тариф: 8 недель, фиксированная цена. По окончании курса все ученики удаляются одновременно.</li>
+<li><strong>Постоянная программа, ежемесячное продление.</strong> Например, курс английского продолжается каждый месяц с новой темой. Ученик выбирает в боте месячный тариф; если не продлевает — в день окончания срока удаляется из канала.</li>
+</ul>
+<p>Бот может одновременно предлагать несколько вариантов срока (например, 1, 3 и 6 месяцев — каждый по своей цене), ученик выбирает и платит за один из них. Цену и сроки можно менять в панели в любой момент — это отдельная система от тарифа Getolog, показанного на <a href="/ru/price">странице тарифов</a>: там вы платите самому Getolog, а здесь задаёте цену для своих учеников.</p>`,
+        },
+      },
+      {
+        h2: { uz: "Necha talaba bo'lsa qaysi Getolog tarifi kifoya qiladi?", ru: "Сколько учеников — какой тариф Getolog нужен?" },
+        html: {
+          uz: `<p>Getolog tarifi <strong>faol talabalar soniga</strong> qarab tanlanadi, kurs narxiga emas:</p>
+<table>
+<thead><tr><th>Tarif</th><th>Narxi</th><th>Faol talaba</th></tr></thead>
+<tbody>
+<tr><td>Bepul</td><td>0 so'm</td><td>20 tagacha</td></tr>
+<tr><td>Minimal</td><td>295 000 so'm</td><td>100 tagacha</td></tr>
+<tr><td>Standart</td><td>590 000 so'm</td><td>200 tagacha</td></tr>
+<tr><td>Pro</td><td>1 270 000 so'm</td><td>500 tagacha</td></tr>
+<tr><td>Biznes</td><td>1 890 000 so'm</td><td>1000 tagacha</td></tr>
+</tbody>
+</table>
+<p>Misol: kursingiz narxi 300 000 so'm/oy va 40 ta talaba bo'lsa, Minimal tarif (295 000 so'm) atigi bitta talabaning puliga teng — qolgan 39 tasi to'liq foyda. Kurs tugab, talaba kanaldan chiqarilgach, u faol hisobdan o'chadi va o'rniga yangi oqim talabalarini qo'shish mumkin.</p>`,
+          ru: `<p>Тариф Getolog выбирается по <strong>числу активных учеников</strong>, а не по цене курса:</p>
+<table>
+<thead><tr><th>Тариф</th><th>Цена</th><th>Активных учеников</th></tr></thead>
+<tbody>
+<tr><td>Бесплатный</td><td>0 сум</td><td>до 20</td></tr>
+<tr><td>Минимал</td><td>295 000 сум</td><td>до 100</td></tr>
+<tr><td>Стандарт</td><td>590 000 сум</td><td>до 200</td></tr>
+<tr><td>Про</td><td>1 270 000 сум</td><td>до 500</td></tr>
+<tr><td>Бизнес</td><td>1 890 000 сум</td><td>до 1000</td></tr>
+</tbody>
+</table>
+<p>Пример: если курс стоит 300 000 сум/мес и учеников 40, тариф Минимал (295 000 сум) равен плате всего одного ученика — остальные 39 приносят чистую прибыль. Когда курс заканчивается и ученик удаляется из канала, он перестаёт учитываться как активный, и на его место можно добавить учеников нового потока.</p>`,
+        },
+      },
+      {
+        h2: { uz: "Kurs tugagach talabalarni kanaldan qanday chiqarasiz?", ru: "Как удалить учеников из канала по окончании курса?" },
+        html: {
+          uz: `<p>Qo'lda qilinganda bu bosqich ko'pincha unutiladi — o'qituvchi band bo'ladi, talaba esa materiallardan bepul foydalanishda davom etadi. Getolog'da bu avtomatik: har bir talabaning tugash sanasi to'lov tasdiqlangan paytda hisoblanadi va shu kuni odam kanaldan chiqariladi. Bu qanday ishlashi <a href="/obuna-tugaganda-kanaldan-chiqarish">alohida sahifada</a> batafsil yozilgan.</p>
+<ul>
+<li><strong>Kurs to'liq yakunlanadi</strong> — barcha talabalar bir kunda chiqariladi, keyingi oqim uchun kanal bo'shaydi.</li>
+<li><strong>Talaba keyingi bosqichga o'tmoqchi</strong> — u yangi tarifni tanlab to'laydi, bot yangi bir martalik havola beradi va muddati yangilanadi.</li>
+</ul>
+<p>Muddatni panel orqali qo'lda ham o'zgartirish mumkin — masalan, imtihon tufayli bir necha kun kechikkan talabaga muddatni uzaytirib berish uchun.</p>`,
+          ru: `<p>При ручном ведении этот шаг часто забывают — преподаватель занят, а ученик продолжает бесплатно пользоваться материалами. В Getolog это происходит автоматически: дата окончания у каждого ученика рассчитывается в момент подтверждения оплаты, и в этот день человек удаляется из канала. Подробно об этом — на <a href="/ru/obuna-tugaganda-kanaldan-chiqarish">отдельной странице</a>.</p>
+<ul>
+<li><strong>Курс полностью завершается</strong> — все ученики удаляются в один день, канал освобождается под новый поток.</li>
+<li><strong>Ученик переходит на следующий этап</strong> — он выбирает новый тариф и оплачивает, бот выдаёт новую одноразовую ссылку, а срок обновляется.</li>
+</ul>
+<p>Срок можно изменить вручную через панель — например, продлить ученику на несколько дней при задержке из-за экзамена.</p>`,
+        },
+      },
+      {
+        h2: { uz: "To'lovni qanday qabul qilish kerak — karta, Payme yoki Click?", ru: "Как принимать оплату — карта, Payme или Click?" },
+        html: {
+          uz: `<p>Aksariyat o'qituvchi va kurs egasida <strong>yuridik shaxs yo'q</strong>, shuning uchun eng tez yo'l — karta o'tkazmasi: talaba Uzcard yoki Humo kartasidan o'tkazadi, chekni botga yuboradi, siz bitta tugma bilan tasdiqlaysiz. Bu qanday ishlashi <a href="/telegram-kanalga-tolov-qabul-qilish">to'lov qabul qilish sahifasida</a> yozilgan.</p>
+<p>Agar sizda Payme yoki Click merchant hisobi bo'lsa (yoki ochish rejasi bo'lsa), Getolog jamoasi uni botga ulab beradi — talaba to'lovni ilovadan to'g'ridan-to'g'ri, chek yubormasdan amalga oshiradi. Bu — <a href="/payme-click-telegram-bot">Payme/Click integratsiyasi sahifasida</a> batafsil.</p>
+<p>Ko'pchilik kichik va o'rta kurslar karta + chek usulidan boshlaydi, talabalar soni oshgach Payme/Click'ga o'tadi — ikkalasi ham bitta botda ishlaydi, talaba faqat qulayini tanlab to'laydi.</p>`,
+          ru: `<p>У большинства преподавателей и владельцев курсов <strong>нет юридического лица</strong>, поэтому самый быстрый способ — перевод на карту: ученик переводит с Uzcard или Humo, отправляет чек боту, вы подтверждаете одной кнопкой. Как это работает — на <a href="/ru/telegram-kanalga-tolov-qabul-qilish">странице приёма платежей</a>.</p>
+<p>Если у вас есть мерчант-аккаунт Payme или Click (или вы планируете его открыть), команда Getolog подключит его к боту — ученик оплачивает прямо из приложения, без отправки чека. Подробнее — на <a href="/ru/payme-click-telegram-bot">странице интеграции Payme/Click</a>.</p>
+<p>Многие небольшие и средние курсы начинают со связки «карта + чек», а с ростом числа учеников переходят на Payme/Click — оба способа работают в одном боте, ученик просто выбирает удобный.</p>`,
+        },
+      },
+      {
+        h2: { uz: "Boshlash uchun nima kerak?", ru: "Что нужно, чтобы начать?" },
+        html: {
+          uz: `<p>Agar kursingiz allaqachon Telegram kanalda ishlayotgan bo'lsa, uni ko'chirish shart emas — botni shu kanalga ulaysiz va yangi to'lovlardan boshlab tizim ishlay boshlaydi.</p>
+<ol>
+<li><a href="https://t.me/getologbot" target="_blank" rel="noopener noreferrer">@getologbot</a> ga <code>/start</code> yuborasiz.</li>
+<li><code>@BotFather</code> dan olingan tokeningizni kiritasiz.</li>
+<li>Kurs kanalingizni ulaysiz va botni administrator qilasiz.</li>
+<li>Kurs muddatiga mos tarif(lar)ni kiritasiz — shu daqiqadan har bir yangi talaba avtomatik boshqariladi.</li>
+</ol>
+<p>Sozlashda savol tug'ilsa — <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a> support botiga yozing yoki <a href="/ariza">ariza qoldiring</a>. Xizmatning umumiy tavsifi — <a href="/getolog-nima">Getolog nima</a> sahifasida.</p>`,
+          ru: `<p>Если ваш курс уже ведётся в Telegram-канале, переносить его не нужно — вы подключаете бота к этому же каналу, и система начинает работать с новых оплат.</p>
+<ol>
+<li>Отправьте <code>/start</code> боту <a href="https://t.me/getologbot" target="_blank" rel="noopener noreferrer">@getologbot</a>.</li>
+<li>Введите токен, полученный у <code>@BotFather</code>.</li>
+<li>Подключите канал курса и сделайте бота администратором.</li>
+<li>Задайте тариф(ы) под длительность курса — с этого момента каждый новый ученик управляется автоматически.</li>
+</ol>
+<p>Если при настройке появятся вопросы — напишите в support-бот <a href="https://t.me/getolog_bot" target="_blank" rel="noopener noreferrer">@getolog_bot</a> или <a href="/ru/ariza">оставьте заявку</a>. Общее описание сервиса — на странице <a href="/ru/getolog-nima">Что такое Getolog</a>.</p>`,
+        },
+      },
+    ],
+    compare: {
+      title: {
+        uz: "Onlayn kursni qo'lda yuritish va Getolog orqali",
+        ru: "Ручное ведение онлайн-курса и через Getolog",
+      },
+      rows: [
+        {
+          label: { uz: "Talabani kursga kiritish", ru: "Добавление ученика в курс" },
+          manual: { uz: "Havolani qo'lda yuborasiz, chekni o'zingiz tekshirasiz", ru: "Отправляете ссылку вручную, чек проверяете сами" },
+          getolog: { uz: "Bot to'lovni tekshiradi va bir martalik havolani avtomatik yuboradi", ru: "Бот проверяет оплату и автоматически высылает одноразовую ссылку" },
+        },
+        {
+          label: { uz: "Kurs muddatini kuzatish", ru: "Отслеживание срока курса" },
+          manual: { uz: "Har bir talabaning sanasini jadvalda yozib borasiz", ru: "Записываете дату каждого ученика в таблицу" },
+          getolog: { uz: "Har bir talabaning qolgan kuni panelda avtomatik ko'rinadi", ru: "Остаток дней каждого ученика виден в панели автоматически" },
+        },
+        {
+          label: { uz: "Kurs tugagach chiqarish", ru: "Удаление по окончании курса" },
+          manual: { uz: "Ko'pincha unutiladi, talaba bepul qolib ketadi", ru: "Часто забывается, ученик остаётся бесплатно" },
+          getolog: { uz: "Muddat tugagan kuni avtomatik chiqariladi", ru: "Удаляется автоматически в день окончания" },
+        },
+        {
+          label: { uz: "Keyingi oqimga qayta yozish", ru: "Запись на новый поток" },
+          manual: { uz: "Eski ro'yxatni tozalab, yangisini boshdan tuzasiz", ru: "Очищаете старый список и составляете новый вручную" },
+          getolog: { uz: "Talaba yangi tarifni tanlaydi, bot avtomatik qayta qo'shadi", ru: "Ученик выбирает новый тариф, бот добавляет его автоматически" },
+        },
+        {
+          label: { uz: "To'lov tarixi", ru: "История платежей" },
+          manual: { uz: "Cheklar shaxsiy xabarlar orasida yo'qoladi", ru: "Чеки теряются в личных сообщениях" },
+          getolog: { uz: "Har bir to'lov sana va holati bilan saqlanadi", ru: "Каждый платёж хранится с датой и статусом" },
+        },
+        {
+          label: { uz: "Talabalar sonini kuzatish", ru: "Учёт числа учеников" },
+          manual: { uz: "Qo'lda sanaysiz", ru: "Считаете вручную" },
+          getolog: { uz: "Faol talabalar soni va o'sish grafigi panelda", ru: "Число активных учеников и график роста — в панели" },
+        },
+      ],
+    },
+    faq: [
+      {
+        q: { uz: "Kursim 2 oyga mo'ljallangan, obuna ham aynan 2 oy bo'lishi kerakmi?", ru: "Мой курс рассчитан на 2 месяца, обязательно ли подписка тоже на 2 месяца?" },
+        a: {
+          uz: "Ha, tarif muddatini kurs davomiyligiga mos qilib o'rnatasiz — masalan, 2 oy, belgilangan narxda. Talaba shu tarifni tanlab to'laydi va aynan 2 oy davomida kanalda bo'ladi, muddat tugagach avtomatik chiqariladi.",
+          ru: "Да, срок тарифа настраивается под длительность курса — например, 2 месяца по фиксированной цене. Ученик выбирает этот тариф, платит и остаётся в канале ровно 2 месяца, после чего автоматически удаляется.",
+        },
+      },
+      {
+        q: { uz: "Har oy yangi oqim ochsam, eski va yangi talabalar aralashib ketmaydimi?", ru: "Если каждый месяц открываю новый поток, не перепутаются ли старые и новые ученики?" },
+        a: {
+          uz: "Yo'q. Har bir talaba o'zining alohida kirish va tugash sanasi bilan ro'yxatda turadi, kanal bitta bo'lsa ham. Panelda ismi, holati va qolgan kuni bo'yicha ko'rish va qidirish mumkin, shuning uchun eski va yangi oqim talabalari chalkashmaydi.",
+          ru: "Нет. Каждый ученик числится в списке со своей отдельной датой входа и окончания, даже если канал один. В панели можно смотреть и искать по имени, статусу и оставшимся дням, поэтому ученики старого и нового потока не путаются.",
+        },
+      },
+      {
+        q: { uz: "Talaba kursni yakunlab, keyingi bosqichga o'tmoqchi bo'lsa nima qilish kerak?", ru: "Ученик закончил курс и хочет перейти на следующий этап — что делать?" },
+        a: {
+          uz: "Talaba botda yangi tarifni tanlab to'laydi, bot esa unga yangi bir martalik havola beradi va muddatini yangilaydi. Alohida ariza yoki qo'lda qo'shish shart emas.",
+          ru: "Ученик выбирает в боте новый тариф и оплачивает, бот выдаёт ему новую одноразовую ссылку и обновляет срок. Отдельная заявка или ручное добавление не требуются.",
+        },
+      },
+      {
+        q: { uz: "Kursning bepul namunaviy darsini qanday taqdim qilaman?", ru: "Как предложить бесплатный пробный урок курса?" },
+        a: {
+          uz: "Getolog faqat pullik kanalga kirish-chiqishni boshqaradi, shuning uchun namunaviy darsni alohida ochiq kanalda yoki postda joylashtirish qulay — u pullik kanaldan tashqarida turadi. To'lov qilgan talaba esa bot orqali yopiq kanalga kiradi.",
+          ru: "Getolog управляет только входом и выходом из платного канала, поэтому пробный урок удобнее выложить в отдельном открытом канале или посте — он находится вне платного канала. А оплативший ученик попадает в закрытый канал уже через бота.",
+        },
+      },
+      {
+        q: { uz: "Talaba soxta chek yuborsa nima bo'ladi?", ru: "Что если ученик отправит поддельный чек?" },
+        a: {
+          uz: "To'lov «kutilmoqda» holatida turadi, kanalga hech kim avtomatik kiritilmaydi. Chekni faqat siz ko'rib, tasdiqlaysiz yoki rad etasiz — tasdiqlangandan keyingina bot havola yuboradi.",
+          ru: "Платёж остаётся в статусе «ожидает», и в канал никто автоматически не попадает. Чек видите и проверяете только вы — подтверждаете или отклоняете, и лишь после подтверждения бот высылает ссылку.",
+        },
+      },
+      {
+        q: { uz: "Bir nechta kursim bo'lsa (masalan, ingliz tili va IT), bittasi botda ikkalasini ham boshqarsa bo'ladimi?", ru: "Если у меня несколько курсов (например, английский и IT), может ли один бот вести оба?" },
+        a: {
+          uz: "Yo'q, har bir Telegram kanal — o'z alohida paneli, obunachilari va tariflari bilan ishlaydi. Ikkita kurs uchun ikkita kanal va shunga mos ikkita ulanish kerak bo'ladi, lekin ikkalasi ham bitta @getologbot orqali sozlanadi.",
+          ru: "Нет, каждый Telegram-канал работает со своей отдельной панелью, подписчиками и тарифами. Для двух курсов нужны два канала с отдельным подключением, но оба настраиваются через одного и того же @getologbot.",
+        },
+      },
+    ],
+    related: ["telegram-obuna-bot", "telegram-kanalga-tolov-qabul-qilish", "obuna-tugaganda-kanaldan-chiqarish", "getolog-nima"],
+    relatedArticles: ["telegram-kanalni-pullik-qilish", "pullik-kanal-uchun-maslahatlar"],
+  },
 ];
 
 export function getLandingPage(slug: string): LandingPage | undefined {
